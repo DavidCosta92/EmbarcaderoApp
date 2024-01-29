@@ -18,9 +18,6 @@ public class Motor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(mappedBy = "motor")
-    private Embarcacion embarcacion;
-
     //@Enumerated(EnumType.STRING)
     private Tipo_motor tipo_motor;
     private String numero_motor;

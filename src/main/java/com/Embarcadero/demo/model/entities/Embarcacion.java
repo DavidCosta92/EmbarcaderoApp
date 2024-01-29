@@ -17,8 +17,6 @@ public class Embarcacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(mappedBy = "embarcacion")
-    private Matricula matricula;
     @OneToOne
     @JoinColumn(name="motor_id", referencedColumnName="id")
     private Motor motor;
