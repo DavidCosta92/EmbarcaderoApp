@@ -1,7 +1,11 @@
 package com.Embarcadero.demo.services;
 
+import com.Embarcadero.demo.model.dtos.MatriculaAddDto;
+import com.Embarcadero.demo.model.dtos.MatriculaReadDto;
 import com.Embarcadero.demo.model.dtos.MatriculasArrayDto;
+import com.Embarcadero.demo.model.entities.Embarcacion;
 import com.Embarcadero.demo.model.entities.Matricula;
+import com.Embarcadero.demo.model.entities.Persona;
 import com.Embarcadero.demo.model.mappers.MatriculaMapper;
 import com.Embarcadero.demo.model.repositories.MatriculaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,11 @@ public class MatriculasService {
     private MatriculaRepository matriculaRepository;
     @Autowired
     private MatriculaMapper matriculaMapper;
+
+    @Autowired
+    private EmbarcacionService embarcacionService;
+    @Autowired
+    private PersonaService personaService;
 
     public MatriculasArrayDto findAll (String matricula, Integer pageNumber, Integer pageSize, String sortBy){
 
@@ -41,5 +50,33 @@ public class MatriculasService {
                 .sort_by(sortBy)
                 .build();
     }
+    public MatriculaReadDto addMatricula (MatriculaAddDto matriculaAddDto){
+        validateNewMatricula(matriculaAddDto);
 
+        Embarcacion embarcacion = embarcacionService.addEmbarcacion(matriculaAddDto.getEmbarcacion());
+        Persona persona = personaService.getOrAddPersona(matriculaAddDto.getDuenio());
+
+        Matricula matricula = Matricula.builder()
+                .matricula(matriculaAddDto.getMatricula())
+                .embarcacion(embarcacion)
+                .duenio(persona)
+                .estadoEnum(matriculaAddDto.getEstadoEnum())
+                .build();
+        // matriculaRepository.save(matriculaMapper.addDtoToEntity(matriculaAddDto));
+        matriculaRepository.save(matricula);
+        return matriculaMapper.entityToReadDTO(matricula);
+    }
+
+    public void validateNewMatricula(MatriculaAddDto matriculaAddDto){
+        /*
+        // TODO VALIDAR matriculaAddDto completa !!
+            "matricula": null,
+            "embarcacion": { .. ya validado .. },
+            "duenio": { .. ya validado .. },
+            "estado": "BAJA"
+        }*/
+
+        embarcacionService.validateNewEmbarcacion(matriculaAddDto.getEmbarcacion());
+        personaService.validatePersonaNewMatricula(matriculaAddDto.getDuenio());
+    }
 }

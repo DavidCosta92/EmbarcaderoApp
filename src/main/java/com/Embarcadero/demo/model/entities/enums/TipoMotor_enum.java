@@ -1,12 +1,11 @@
-package com.Embarcadero.demo.model.entities;
+package com.Embarcadero.demo.model.entities.enums;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Tipo_motor {
+public enum TipoMotor_enum {
     MOTOR_INTERNO,
     FUERA_DE_BORDA ,
     SIN_MOTOR,

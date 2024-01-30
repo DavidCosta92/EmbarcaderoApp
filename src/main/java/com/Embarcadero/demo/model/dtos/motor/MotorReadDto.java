@@ -1,29 +1,19 @@
-package com.Embarcadero.demo.model.entities;
+package com.Embarcadero.demo.model.dtos.motor;
 
 import com.Embarcadero.demo.model.entities.enums.TipoMotor_enum;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-
-public class Motor {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@AllArgsConstructor
+public class MotorReadDto {
     private Integer id;
-
-    //@Enumerated(EnumType.STRING)
     private TipoMotor_enum tipo_motorenum;
-
-    @Column(unique = true)
-    private String numeroMotor;
+    private String numero_motor;
     private String cilindrada;
     private String observaciones;
 }

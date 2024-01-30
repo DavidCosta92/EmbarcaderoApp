@@ -1,5 +1,6 @@
 package com.Embarcadero.demo.model.entities;
 
+import com.Embarcadero.demo.model.entities.enums.Estado_enum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,5 +30,5 @@ public class Matricula {
     @JoinColumn(name = "id_duenio_fk" , nullable = false)
     private Persona duenio;
 
-    private Estado estado;
+    private Estado_enum estadoEnum;
 }

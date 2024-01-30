@@ -1,7 +1,7 @@
 package com.Embarcadero.demo.model.dtos;
 
 import com.Embarcadero.demo.model.entities.Embarcacion;
-import com.Embarcadero.demo.model.entities.Estado;
+import com.Embarcadero.demo.model.entities.enums.Estado_enum;
 import com.Embarcadero.demo.model.entities.Persona;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,5 +17,5 @@ public class MatriculaReadDto {
     private String matricula;
     private Embarcacion embarcacion;
     private Persona duenio;
-    private Estado estado;
+    private Estado_enum estadoEnum;
 }
