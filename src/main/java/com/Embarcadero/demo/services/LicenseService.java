@@ -50,6 +50,13 @@ public class LicenseService {
                 .sort_by(sortBy)
                 .build();
     }
+    public LicenseReadDto findById(Integer id){
+        // TODO
+        // TODO
+        // TODO
+        // TODO
+        return new LicenseReadDto();
+    }
     public LicenseReadDto addLicense(LicenseAddDto licenseAddDto){
         validateNewLicense(licenseAddDto);
 

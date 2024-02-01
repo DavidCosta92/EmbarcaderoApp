@@ -27,10 +27,15 @@ public class LicenseController {
         return new ResponseEntity<>(licenseService.findAll(licenseCode, page, size, sortBy), HttpStatus.OK);
     }
 
-
     @PostMapping
     // @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
     public ResponseEntity<LicenseReadDto> addLicence (@Valid @RequestBody LicenseAddDto licenseAddDto){
         return new ResponseEntity<>(licenseService.addLicense(licenseAddDto) , HttpStatus.CREATED);
     }
+    @GetMapping("{id}")
+    @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
+    public ResponseEntity<LicenseReadDto> showById(@PathVariable Integer id) {
+        return new ResponseEntity<>(licenseService.findById(id), HttpStatus.OK);
+    }
+
 }
