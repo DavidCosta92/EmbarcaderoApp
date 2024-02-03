@@ -18,20 +18,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity (securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
-
     @Autowired
     private AuthenticationProvider authProvider;
-
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
                 .csrf(csrf-> csrf.disable()).headers().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/licences/").permitAll()
+                        .requestMatchers("/licences/**").permitAll()
                         .requestMatchers("auth/restorePassword").permitAll()
                         .requestMatchers("auth/setNewPassword").permitAll()
                         .requestMatchers("/docs/**").permitAll()
