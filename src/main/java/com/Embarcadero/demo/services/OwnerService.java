@@ -2,6 +2,7 @@ package com.Embarcadero.demo.services;
 
 import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
 import com.Embarcadero.demo.model.dtos.owner.OwnerAddDto;
+import com.Embarcadero.demo.model.dtos.owner.OwnerUpdateDto;
 import com.Embarcadero.demo.model.entities.Owner;
 import com.Embarcadero.demo.model.mappers.OwnerMapper;
 import com.Embarcadero.demo.model.repositories.OwnerRepository;
@@ -22,6 +23,18 @@ public class OwnerService {
            ownerRepository.save(ownerMapper.addDtoToEntity(ownerAddDto));
         }
         return ownerRepository.findByDni(ownerAddDto.getDni());
+    }
+    public Owner updateOwner (Owner bdOwner , OwnerUpdateDto ownerUpdateDto){
+        // SI OWNER UPDATE TRAE TODOS LOS DATOS.. CREO UN OWNER NUEVO Y LO devuelvo
+            // ownerRepository.save(ownerMapper.addDtoToEntity(ownerUpdateDto));
+
+        // SI NO TIENE TODOS LOS DATOS, entonces:
+            // Uso el bdOwner y actualizo los datos que son distintos
+                // reviso que datos vienen y los valido
+                // si son validos, los agrego al owner en bd y mando a guardar
+                // al final debo retornar el owner actualizado
+
+        return new Owner();
     }
     public void validateOwnerNewMatricula(OwnerAddDto ownerAddDto){
         if(ownerAddDto.getPhone() == null && ownerAddDto.getEmergency_phone() == null && ownerAddDto.getAddress() == null && ownerAddDto.getNotes() == null && ownerAddDto.getDni() != null ){ // si solo viene dni, asumo que ya deberia existir la persona, por lo que deberia traer de bd

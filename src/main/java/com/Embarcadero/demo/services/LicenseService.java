@@ -89,7 +89,7 @@ public class LicenseService {
         // verificar que datos me envian.. y los que lleguen mandar a actualizarlos
         String licenseCode = licenseUpdateDto.getLicenseCode();
         BoatUpdateDto boat = licenseUpdateDto.getBoat();
-        OwnerUpdateDto owner = licenseUpdateDto.getOwner();
+        OwnerUpdateDto ownerToUpdate = licenseUpdateDto.getOwner();
         State_enum state = licenseUpdateDto.getState_enum();
         if (licenseCode != null){
             // TODO VALIDAR DATOS A ACTUALIZAR
@@ -102,16 +102,15 @@ public class LicenseService {
             licenseRepository.save(licenseBD);
         }
         if (boat!= null){
-            // TODO VALIDAR DATOS A ACTUALIZAR
+            // TODO VALIDAR DATOS A ACTUALIZAR => ESTO ES RESPONSABILIDAD DEL SERVICIO DE BOAT
             // TODO licenseBD.setBoat(boat);
             // TODO licenseRepository.save(licenseBD);
 
         }
-        if (owner != null){
-            // TODO VALIDAR DATOS A ACTUALIZAR
-            licenseBD.setOwner(owner);
+        if (ownerToUpdate != null){
+            Owner updatedOwner =  ownerService.updateOwner(licenseBD.getOwner() , ownerToUpdate);
+            licenseBD.setOwner(updatedOwner);
             licenseRepository.save(licenseBD);
-
         }
 
 
