@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LicenseRepository extends JpaRepository<License, Integer> {
     Page<License> findAllByLicenseCodeContains(String licenseCode, Pageable pageable);
+
+    Boolean existsByLicenseCode (String licenseCode);
 }

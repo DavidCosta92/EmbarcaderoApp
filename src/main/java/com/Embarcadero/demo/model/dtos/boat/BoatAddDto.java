@@ -2,6 +2,8 @@ package com.Embarcadero.demo.model.dtos.boat;
 
 import com.Embarcadero.demo.model.dtos.engine.EngineAddDto;
 import com.Embarcadero.demo.model.entities.enums.TypeBoat_enum;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -15,6 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 public class BoatAddDto {
+    @Valid
     private EngineAddDto engine;
 
     @NotNull(message = "Casco no puede ser nula")
@@ -26,6 +29,7 @@ public class BoatAddDto {
     private String name;
 
     @NotNull(message = "Capacidad no puede ser nula")
+    @Min(value = 1 ,message = "Capacidad debe ser un valor positivo mayor a 0")
     private Integer capacity;
 
     private TypeBoat_enum typeBoat_enum;

@@ -14,7 +14,7 @@ public class LicenseMapper {
     @Autowired
     OwnerService ownerService;
 
-    public LicenseReadDto entityToReadDTO (License license){
+    public LicenseReadDto toReadDTO(License license){
         return new LicenseReadDto().builder()
                 .id(license.getId())
                 .licenseCode(license.getLicenseCode())

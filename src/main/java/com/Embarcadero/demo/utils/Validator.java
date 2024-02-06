@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 @Component
 public class Validator {
-    // **************************** VALIDACION DATOS PUROS **************************************************************
+    // *************** VALIDACION DATOS PUROS ***************
 
     public String stringMinSize(String field, Integer minSize, String value){
         if(value.length() < minSize) throw new InvalidValueException(field + " debe tener al menos "+minSize+" caracteres!");

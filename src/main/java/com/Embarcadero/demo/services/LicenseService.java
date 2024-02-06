@@ -1,13 +1,12 @@
 package com.Embarcadero.demo.services;
 
+import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
 import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
-import com.Embarcadero.demo.model.dtos.boat.BoatAddDto;
 import com.Embarcadero.demo.model.dtos.boat.BoatUpdateDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseAddDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseReadDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseArrayDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseUpdateDto;
-import com.Embarcadero.demo.model.dtos.owner.OwnerAddDto;
 import com.Embarcadero.demo.model.dtos.owner.OwnerUpdateDto;
 import com.Embarcadero.demo.model.entities.Boat;
 import com.Embarcadero.demo.model.entities.License;
@@ -15,6 +14,7 @@ import com.Embarcadero.demo.model.entities.Owner;
 import com.Embarcadero.demo.model.entities.enums.State_enum;
 import com.Embarcadero.demo.model.mappers.LicenseMapper;
 import com.Embarcadero.demo.model.repositories.LicenseRepository;
+import com.Embarcadero.demo.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,10 +36,12 @@ public class LicenseService {
     @Autowired
     private OwnerService ownerService;
 
+    @Autowired
+    private Validator validator;
+
 
     public LicenseReadDto addLicense(LicenseAddDto licenseAddDto){
         validateNewLicense(licenseAddDto);
-
         Boat boat = boatService.addBoat(licenseAddDto.getBoat());
         Owner owner = ownerService.getOrAddOwner(licenseAddDto.getOwner());
 
@@ -50,21 +52,28 @@ public class LicenseService {
                 .state_enum(licenseAddDto.getState_enum())
                 .build();
         licenseRepository.save(license);
-        return licenseMapper.entityToReadDTO(license);
+        return licenseMapper.toReadDTO(license);
+    }
+    public void validateLicenseCode(String licenseCode){
+        if(licenseRepository.existsByLicenseCode(licenseCode)) throw new AlreadyExistException("Matricula ya existente!");
+    }
+    public void validateNewLicense(LicenseAddDto licenseAddDto){
+        validateLicenseCode(licenseAddDto.getLicenseCode());
+        boatService.validateNewBoat(licenseAddDto.getBoat());
+        ownerService.validateOwnerNewMatricula(licenseAddDto.getOwner());
+        if (licenseAddDto.getLicenseCode() == null) licenseAddDto.setLicenseCode(State_enum.OK.name());
     }
     public LicenseArrayDto findAll (String licenseCode, Integer pageNumber, Integer pageSize, String sortBy){
-
         Page<License> results;
         Sort sort = Sort.by(sortBy);
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
         if (licenseCode != null) {
-            // todo validMatricula(licenseCode);
             results = licenseRepository.findAllByLicenseCodeContains(licenseCode, pageable);
         } else {
             results = licenseRepository.findAll(pageable);
         }
-        Page pagedResults = results.map(entity -> licenseMapper.entityToReadDTO(entity));
+        Page pagedResults = results.map(entity -> licenseMapper.toReadDTO(entity));
 
         return LicenseArrayDto.builder()
                 .licenses(pagedResults.getContent())
@@ -76,13 +85,12 @@ public class LicenseService {
                 .build();
     }
     public License getById(Integer id){
-        // TODO validateInteger??
         Optional<License> license = licenseRepository.findById(id);
         if (license.isEmpty())  throw new NotFoundException("No se encontro Licencia");
         return license.get();
     }
     public LicenseReadDto findById(Integer id){
-        return licenseMapper.entityToReadDTO(getById(id));
+        return licenseMapper.toReadDTO(getById(id));
     }
     public LicenseReadDto updateById(Integer id , LicenseUpdateDto licenseUpdateDto){
         License licenseBD = getById(id); // obtener los datos originales en la base de datos
@@ -92,32 +100,25 @@ public class LicenseService {
         OwnerUpdateDto ownerToUpdate = licenseUpdateDto.getOwner();
         State_enum state = licenseUpdateDto.getState_enum();
         if (licenseCode != null){
-            // TODO VALIDAR DATOS A ACTUALIZAR
+            // TODO VALIDAR DATOS DE INGRESO CON "utils/validator.java" => porque son opcionales
             licenseBD.setLicenseCode(licenseCode);
-            licenseRepository.save(licenseBD);
         }
         if (state!= null){
-            // TODO VALIDAR DATOS A ACTUALIZAR
+            // TODO VALIDAR DATOS DE INGRESO CON "utils/validator.java" => porque son opcionales
             licenseBD.setState_enum(state);
-            licenseRepository.save(licenseBD);
         }
         if (boat!= null){
-            // TODO VALIDAR DATOS A ACTUALIZAR => ESTO ES RESPONSABILIDAD DEL SERVICIO DE BOAT
-            // TODO licenseBD.setBoat(boat);
-            // TODO licenseRepository.save(licenseBD);
-
+            Boat updatedBoat =  boatService.updateBoat(licenseBD.getBoat() , boat);  //ownerService.updateOwner(licenseBD.getOwner() , ownerToUpdate);
+            licenseBD.setBoat(updatedBoat);
         }
         if (ownerToUpdate != null){
             Owner updatedOwner =  ownerService.updateOwner(licenseBD.getOwner() , ownerToUpdate);
             licenseBD.setOwner(updatedOwner);
-            licenseRepository.save(licenseBD);
         }
 
-
-        // guardar el objeto actualizado en la bd
-
-        // TODO y retornar el objeto actualizado
-        return new LicenseReadDto();
+        licenseRepository.save(licenseBD);
+        //return licenseMapper.toReadDTO(getById(id));
+        return licenseMapper.toReadDTO(licenseBD);
     }
     public LicenseReadDto deleteById(Integer id){
         LicenseReadDto licenseReadDto = findById(id);
@@ -129,16 +130,5 @@ public class LicenseService {
     public void existsById(Integer id){
         if(!licenseRepository.existsById(id)) throw new NotFoundException("No existe licencia por id");
     }
-    public void validateNewLicense(LicenseAddDto licenseAddDto){
-        /*
-        // TODO VALIDAR matriculaAddDto completa !!
-            "matricula": null,
-            "embarcacion": { .. ya validado .. },
-            "duenio": { .. ya validado .. },
-            "estado": "BAJA"
-        }*/
 
-        boatService.validateNewBoat(licenseAddDto.getBoat());
-        ownerService.validateOwnerNewMatricula(licenseAddDto.getOwner());
-    }
 }

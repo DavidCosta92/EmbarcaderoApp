@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class OwnerUpdateDto {
+    // TODO => se valida EL SERVICE YA QUE SON OPCIONALES
     private String dni;
     private String phone;
     private String emergency_phone ;
