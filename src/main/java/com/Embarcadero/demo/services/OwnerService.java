@@ -6,6 +6,7 @@ import com.Embarcadero.demo.model.dtos.owner.OwnerUpdateDto;
 import com.Embarcadero.demo.model.entities.Owner;
 import com.Embarcadero.demo.model.mappers.OwnerMapper;
 import com.Embarcadero.demo.model.repositories.OwnerRepository;
+import com.Embarcadero.demo.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class OwnerService {
 
     @Autowired
     private OwnerRepository ownerRepository;
+
+    @Autowired
+    private Validator validator;
 
     public Owner getOrAddOwner(OwnerAddDto ownerAddDto){
         validateOwnerNewMatricula(ownerAddDto);
@@ -30,23 +34,22 @@ public class OwnerService {
         } else{
             // Uso el bdOwner y actualizo los datos que vienen, valido, guardo y devuelvo owner actualizado
             if (newOwner.getDni() != null) {
-                // TODO VALIDAR DATOS DE INGRESO CON "utils/validator.java" => porque son opcionales
                 bdOwner.setDni(newOwner.getDni());
             }
             if (newOwner.getPhone() != null) {
-                // TODO VALIDAR DATOS DE INGRESO CON "utils/validator.java" => porque son opcionales
+                validator.validPhoneNumber(newOwner.getPhone());
                 bdOwner.setPhone(newOwner.getPhone());
             }
             if (newOwner.getEmergency_phone() != null) {
-                // TODO VALIDAR DATOS DE INGRESO CON "utils/validator.java" => porque son opcionales
+                validator.validPhoneNumber(newOwner.getEmergency_phone());
                 bdOwner.setEmergency_phone(newOwner.getEmergency_phone());
             }
             if (newOwner.getAddress() != null) {
-                // TODO VALIDAR DATOS DE INGRESO CON "utils/validator.java" => porque son opcionales
+                validator.stringMinSize("Direccion", 5 , newOwner.getAddress());
+                validator.stringOnlyLettersAndNumbers("Direccion", newOwner.getAddress());
                 bdOwner.setAddress(newOwner.getAddress());
             }
             if (newOwner.getNotes() != null) {
-                // TODO VALIDAR DATOS DE INGRESO CON "utils/validator.java" => porque son opcionales
                 bdOwner.setNotes(newOwner.getNotes());
             }
             ownerRepository.save(bdOwner);
@@ -61,8 +64,9 @@ public class OwnerService {
         }
     }
     public void validateNewOwner(OwnerAddDto ownerAddDto){
-        // TODO VALIDAR DATOS DE INGRESO
-        // TODO si persona viene con todos los datos, asumo que quiere crear una persona nueva, por tanto valido que no este duplicado el dni y que los otros esten bien
+        validator.validPhoneNumber(ownerAddDto.getPhone());
+        validator.validPhoneNumber(ownerAddDto.getEmergency_phone());
+        validator.stringOnlyLettersAndNumbers("Direccion", ownerAddDto.getAddress());
         if(ownerRepository.existsByDni(ownerAddDto.getDni())) throw new AlreadyExistException("Persona ya existe con ese dni");
     }
     public void validateAlreadyReportedOwner(OwnerAddDto ownerAddDto){

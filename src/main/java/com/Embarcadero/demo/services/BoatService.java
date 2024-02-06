@@ -7,6 +7,7 @@ import com.Embarcadero.demo.model.entities.Boat;
 import com.Embarcadero.demo.model.entities.Engine;
 import com.Embarcadero.demo.model.mappers.BoatMapper;
 import com.Embarcadero.demo.model.repositories.BoatRepository;
+import com.Embarcadero.demo.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ public class BoatService {
     @Autowired
     private EngineService engineService;
 
+    @Autowired
+    private Validator validator;
+
 
     public Boat addBoat(BoatAddDto boatAddDto){
         validateNewBoat(boatAddDto);
@@ -28,11 +32,16 @@ public class BoatService {
     }
 
     public void validateNewBoat(BoatAddDto boatAddDto){
+        validateNewName(boatAddDto.getName());
         engineService.validateNewEngine(boatAddDto.getEngine());
-        if(boatRepository.existsByName(boatAddDto.getName())) throw new AlreadyExistException("Nombre de embarcacion ya existe!");
     }
-    public Boat findByName(String nombre){
-        return boatRepository.findByName(nombre);
+    public Boat findByName(String name){
+        return boatRepository.findByName(name);
+    }
+    public void validateNewName(String name){
+        validator.stringOnlyLettersAndNumbers("Nombre", name);
+        validator.stringMinSize("Nombre", 2 , name);
+        if (boatRepository.existsByName(name)) throw new AlreadyExistException("Nombre de embarcacion ya existe!");
     }
 
     public Boat updateBoat( Boat boatDB, BoatUpdateDto newBoat){
@@ -41,31 +50,22 @@ public class BoatService {
         } else{
             // Uso el boatDB y actualizo los datos que vienen, valido, guardo y devuelvo boatDB actualizado
             if (newBoat.getEngine() != null) {
-                // TODO VALIDAR DATOS DE INGRESO CON "utils/validator.java" => porque son opcionales
-
                 Engine updatedEngine = engineService.updateEngine(boatDB.getEngine() , newBoat.getEngine());
-
                 boatDB.setEngine(updatedEngine);
             }
             if (newBoat.getHull() != null) {
-                // TODO VALIDAR DATOS DE INGRESO CON "utils/validator.java" => porque son opcionales
+                validator.stringOnlyLettersAndNumbers("Casco",newBoat.getHull());
                 boatDB.setHull(newBoat.getHull());
             }
             if (newBoat.getName() != null) {
-                // TODO si viene, debo validar que no exista previamente el nombre
-                // TODO si viene, debo validar que no exista previamente el nombre
-                // TODO si viene, debo validar que no exista previamente el nombre
-                // TODO si viene, debo validar que no exista previamente el nombre
-                // TODO VALIDAR DATOS DE INGRESO CON "utils/validator.java" => porque son opcionales
-                // TODO VALIDAR DATOS DE INGRESO CON "utils/validator.java" => porque son opcionales
+                validateNewName(newBoat.getName());
                 boatDB.setName(newBoat.getName());
             }
             if (newBoat.getCapacity() != null) {
-                // TODO VALIDAR DATOS DE INGRESO CON "utils/validator.java" => porque son opcionales
+                validator.stringOnlyIntegerPositiveNumbers("Capacidad", String.valueOf(newBoat.getCapacity()));
                 boatDB.setCapacity(newBoat.getCapacity());
             }
             if (newBoat.getTypeBoat_enum() != null) {
-                // TODO VALIDAR DATOS DE INGRESO CON "utils/validator.java" => porque son opcionales
                 boatDB.setTypeBoat_enum(newBoat.getTypeBoat_enum());
             }
             boatRepository.save(boatDB);

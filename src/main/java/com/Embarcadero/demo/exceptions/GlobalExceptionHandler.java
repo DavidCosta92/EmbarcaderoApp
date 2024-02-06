@@ -2,8 +2,12 @@ package com.Embarcadero.demo.exceptions;
 
 import com.Embarcadero.demo.exceptions.customsExceptions.*;
 import com.Embarcadero.demo.exceptions.customsExceptions.*;
+import com.Embarcadero.demo.model.entities.enums.EngineType_enum;
+import com.Embarcadero.demo.model.entities.enums.State_enum;
+import com.Embarcadero.demo.model.entities.enums.TypeBoat_enum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Arrays;
 import java.util.List;
 
 @ControllerAdvice
@@ -38,7 +43,17 @@ public class GlobalExceptionHandler {
 
     // excepts defecto
     // excepts defecto
-    // excepts defecto
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseBody
+    public ResponseEntity<ExceptionMessages> enumInputError (HttpMessageNotReadableException ex){
+        String cause = ex.getCause().toString();
+        String msg = "";
+        if(cause.contains("EngineType_enum")) msg = "Error en tipo de motor, las opciones son : " + Arrays.asList(EngineType_enum.class.getEnumConstants());
+        if(cause.contains("State_enum")) msg = "Error estado de matricula, las opciones son : " +  Arrays.asList(State_enum.class.getEnumConstants());
+        if(cause.contains("TypeBoat_enum")) msg = "Error en tipo de embarcacion, las opciones son : " +  Arrays.asList(TypeBoat_enum.class.getEnumConstants());
+        return new ResponseEntity<ExceptionMessages>(new ExceptionMessages(msg, InternalExceptionCodes.ILLEGAL_ARGS.ordinal()) , HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(InvalidValueException.class)
     // @ResponseBody
     public ResponseEntity<ExceptionMessages> handlerInvalidValueException (InvalidValueException ex){

@@ -100,11 +100,11 @@ public class LicenseService {
         OwnerUpdateDto ownerToUpdate = licenseUpdateDto.getOwner();
         State_enum state = licenseUpdateDto.getState_enum();
         if (licenseCode != null){
-            // TODO VALIDAR DATOS DE INGRESO CON "utils/validator.java" => porque son opcionales
+            validator.stringMinSize("Matricula",5 , licenseCode);
+            validator.stringOnlyLettersAndNumbers("Matricula" , licenseCode);
             licenseBD.setLicenseCode(licenseCode);
         }
         if (state!= null){
-            // TODO VALIDAR DATOS DE INGRESO CON "utils/validator.java" => porque son opcionales
             licenseBD.setState_enum(state);
         }
         if (boat!= null){
@@ -117,7 +117,6 @@ public class LicenseService {
         }
 
         licenseRepository.save(licenseBD);
-        //return licenseMapper.toReadDTO(getById(id));
         return licenseMapper.toReadDTO(licenseBD);
     }
     public LicenseReadDto deleteById(Integer id){
