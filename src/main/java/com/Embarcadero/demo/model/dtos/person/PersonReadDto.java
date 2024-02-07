@@ -1,4 +1,4 @@
-package com.Embarcadero.demo.model.dtos.owner;
+package com.Embarcadero.demo.model.dtos.person;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OwnerUpdateDto {
-    // TODO => se valida EL SERVICE YA QUE SON OPCIONALES
+public class PersonReadDto {
+    private Integer id;
     private String dni;
     private String phone;
-    private String emergency_phone ;
+    private String emergency_phone;
     private String address;
     private String notes;
 }

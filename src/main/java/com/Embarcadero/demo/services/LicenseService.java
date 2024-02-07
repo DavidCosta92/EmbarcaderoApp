@@ -7,10 +7,10 @@ import com.Embarcadero.demo.model.dtos.license.LicenseAddDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseReadDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseArrayDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseUpdateDto;
-import com.Embarcadero.demo.model.dtos.owner.OwnerUpdateDto;
+import com.Embarcadero.demo.model.dtos.person.PersonUpdateDto;
 import com.Embarcadero.demo.model.entities.Boat;
 import com.Embarcadero.demo.model.entities.License;
-import com.Embarcadero.demo.model.entities.Owner;
+import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.enums.State_enum;
 import com.Embarcadero.demo.model.mappers.LicenseMapper;
 import com.Embarcadero.demo.model.repositories.LicenseRepository;
@@ -34,7 +34,7 @@ public class LicenseService {
     @Autowired
     private BoatService boatService;
     @Autowired
-    private OwnerService ownerService;
+    private PersonService personService;
 
     @Autowired
     private Validator validator;
@@ -43,12 +43,12 @@ public class LicenseService {
     public LicenseReadDto addLicense(LicenseAddDto licenseAddDto){
         validateNewLicense(licenseAddDto);
         Boat boat = boatService.addBoat(licenseAddDto.getBoat());
-        Owner owner = ownerService.getOrAddOwner(licenseAddDto.getOwner());
+        Person person = personService.getOrAddPerson(licenseAddDto.getPerson());
 
         License license = License.builder()
                 .licenseCode(licenseAddDto.getLicenseCode())
                 .boat(boat)
-                .owner(owner)
+                .person(person)
                 .state_enum(licenseAddDto.getState_enum())
                 .build();
         licenseRepository.save(license);
@@ -60,7 +60,7 @@ public class LicenseService {
     public void validateNewLicense(LicenseAddDto licenseAddDto){
         validateLicenseCode(licenseAddDto.getLicenseCode());
         boatService.validateNewBoat(licenseAddDto.getBoat());
-        ownerService.validateOwnerNewMatricula(licenseAddDto.getOwner());
+        personService.validatePersonNewMatricula(licenseAddDto.getPerson());
         if (licenseAddDto.getLicenseCode() == null) licenseAddDto.setLicenseCode(State_enum.OK.name());
     }
     public LicenseArrayDto findAll (String licenseCode, Integer pageNumber, Integer pageSize, String sortBy){
@@ -97,7 +97,7 @@ public class LicenseService {
         // verificar que datos me envian.. y los que lleguen mandar a actualizarlos
         String licenseCode = licenseUpdateDto.getLicenseCode();
         BoatUpdateDto boat = licenseUpdateDto.getBoat();
-        OwnerUpdateDto ownerToUpdate = licenseUpdateDto.getOwner();
+        PersonUpdateDto personToUpdate = licenseUpdateDto.getPerson();
         State_enum state = licenseUpdateDto.getState_enum();
         if (licenseCode != null){
             validator.stringMinSize("Matricula",5 , licenseCode);
@@ -108,12 +108,12 @@ public class LicenseService {
             licenseBD.setState_enum(state);
         }
         if (boat!= null){
-            Boat updatedBoat =  boatService.updateBoat(licenseBD.getBoat() , boat);  //ownerService.updateOwner(licenseBD.getOwner() , ownerToUpdate);
+            Boat updatedBoat =  boatService.updateBoat(licenseBD.getBoat() , boat);
             licenseBD.setBoat(updatedBoat);
         }
-        if (ownerToUpdate != null){
-            Owner updatedOwner =  ownerService.updateOwner(licenseBD.getOwner() , ownerToUpdate);
-            licenseBD.setOwner(updatedOwner);
+        if (personToUpdate != null){
+            Person updatedPerson =  personService.updatePerson(licenseBD.getPerson() , personToUpdate);
+            licenseBD.setPerson(updatedPerson);
         }
 
         licenseRepository.save(licenseBD);

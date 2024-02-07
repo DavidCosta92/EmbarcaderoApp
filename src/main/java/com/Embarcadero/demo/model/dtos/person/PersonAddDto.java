@@ -1,9 +1,7 @@
-package com.Embarcadero.demo.model.dtos.owner;
+package com.Embarcadero.demo.model.dtos.person;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OwnerAddDto {
+public class PersonAddDto {
     @NotNull(message = "Dni no puede ser nulo.")
     @Pattern(regexp = "\\d{8}" , message = "Dni debe ser un numero de 8 digitos.")  //Que sea cualquier dígito decimal equivalente a [0-9] => ("d") x8 veces => ("{8}")
     private String dni;

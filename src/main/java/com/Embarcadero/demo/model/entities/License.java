@@ -28,7 +28,7 @@ public class License {
 
     @ManyToOne()
     @JoinColumn(name = "id_owner_fk" , nullable = false)
-    private Owner owner;
+    private Person person;
 
     private State_enum state_enum;
 }

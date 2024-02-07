@@ -1,7 +1,7 @@
 package com.Embarcadero.demo.model.dtos.license;
 
 import com.Embarcadero.demo.model.dtos.boat.BoatUpdateDto;
-import com.Embarcadero.demo.model.dtos.owner.OwnerUpdateDto;
+import com.Embarcadero.demo.model.dtos.person.PersonUpdateDto;
 import com.Embarcadero.demo.model.entities.enums.State_enum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +15,6 @@ import lombok.NoArgsConstructor;
 public class LicenseUpdateDto {
     private String licenseCode;
     private BoatUpdateDto boat;
-    private OwnerUpdateDto owner;
+    private PersonUpdateDto person;
     private State_enum state_enum;
 }
