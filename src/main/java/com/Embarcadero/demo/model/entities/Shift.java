@@ -26,7 +26,7 @@ public class Shift {
     @Column(nullable = false, updatable = false)
     private Date DATE;
 
-    // lista de ingresos
+    // lista de records
 
     // TODO Lista usuarios que estan de guardia, deben ser guardavidas..  relacion many to many
 

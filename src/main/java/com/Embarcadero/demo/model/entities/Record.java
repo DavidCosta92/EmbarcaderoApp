@@ -27,6 +27,8 @@ public class Record {
 
     private Date endTime;
 
+    // deberia decir algo como un enum de estado [ activo, eliminado, salio, desconocido, siniestro, ects ]
+
     // TODO MANY RECORDS TO ONE private Boat boat;
 
     // TODO MANY RECORDS TO ONE private Person driver;
