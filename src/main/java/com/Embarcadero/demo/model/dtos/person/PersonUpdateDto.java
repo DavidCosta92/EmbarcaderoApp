@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class PersonUpdateDto {
     // TODO => se valida EL SERVICE YA QUE SON OPCIONALES
     private String dni;
+    private String name;
+    private String lastName;
     private String phone;
     private String emergency_phone ;
     private String address;

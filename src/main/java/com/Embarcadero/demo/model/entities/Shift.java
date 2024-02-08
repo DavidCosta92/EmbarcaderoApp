@@ -7,7 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -24,12 +26,11 @@ public class Shift {
     private Dam_enum dam;
 
     @Column(nullable = false, updatable = false)
-    private Date DATE;
+    private Date date;
 
-    // lista de records
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Record> records;
 
-    // TODO Lista usuarios que estan de guardia, deben ser guardavidas..  relacion many to many
-
-
-
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Person> staff;
 }

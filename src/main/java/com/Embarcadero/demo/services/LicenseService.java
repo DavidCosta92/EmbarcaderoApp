@@ -5,7 +5,7 @@ import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
 import com.Embarcadero.demo.model.dtos.boat.BoatUpdateDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseAddDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseReadDto;
-import com.Embarcadero.demo.model.dtos.license.LicenseArrayDto;
+import com.Embarcadero.demo.model.dtos.license.LicenseReadDtoArray;
 import com.Embarcadero.demo.model.dtos.license.LicenseUpdateDto;
 import com.Embarcadero.demo.model.dtos.person.PersonUpdateDto;
 import com.Embarcadero.demo.model.entities.Boat;
@@ -63,7 +63,7 @@ public class LicenseService {
         personService.validatePersonNewMatricula(licenseAddDto.getPerson());
         if (licenseAddDto.getLicenseCode() == null) licenseAddDto.setLicenseCode(State_enum.OK.name());
     }
-    public LicenseArrayDto findAll (String licenseCode, Integer pageNumber, Integer pageSize, String sortBy){
+    public LicenseReadDtoArray findAll (String licenseCode, Integer pageNumber, Integer pageSize, String sortBy){
         Page<License> results;
         Sort sort = Sort.by(sortBy);
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
@@ -75,7 +75,7 @@ public class LicenseService {
         }
         Page pagedResults = results.map(entity -> licenseMapper.toReadDTO(entity));
 
-        return LicenseArrayDto.builder()
+        return LicenseReadDtoArray.builder()
                 .licenses(pagedResults.getContent())
                 .total_results(pagedResults.getTotalElements())
                 .results_per_page(pageSize)

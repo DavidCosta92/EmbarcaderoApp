@@ -19,7 +19,7 @@ public class Boat {
     private Integer id;
 
     @OneToOne
-    @JoinColumn(name="motor_id", referencedColumnName="id")
+    @JoinColumn(name="motor_id", referencedColumnName="id", nullable = true)
     private Engine engine;
 
     private String hull;

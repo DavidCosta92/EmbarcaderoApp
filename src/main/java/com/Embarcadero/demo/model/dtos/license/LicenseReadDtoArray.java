@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LicenseArrayDto {
+public class LicenseReadDtoArray {
     private List licenses;
     private Long total_results;
     private Integer results_per_page;
