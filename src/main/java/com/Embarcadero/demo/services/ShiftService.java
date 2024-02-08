@@ -1,5 +1,7 @@
 package com.Embarcadero.demo.services;
 
+import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
+import com.Embarcadero.demo.model.dtos.shift.ShiftReadDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDtoArray;
 import com.Embarcadero.demo.model.entities.Shift;
 import com.Embarcadero.demo.model.entities.enums.Dam_enum;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class ShiftService {
@@ -46,5 +49,10 @@ public class ShiftService {
                 .pages(pagedResults.getTotalPages())
                 .sort_by(sortBy)
                 .build();
+    }
+    public ShiftReadDto findById (Integer id){
+        Optional<Shift> shift = shiftRepository.findById(id);
+        if(shift.isEmpty()) throw new NotFoundException("Turno no encontrado por id: "+id);
+        return shiftMapper.toReadDTO(shift.get());
     }
 }
