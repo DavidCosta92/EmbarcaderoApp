@@ -1,5 +1,6 @@
 package com.Embarcadero.demo.services;
 
+import com.Embarcadero.demo.auth.entities.User;
 import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
 import com.Embarcadero.demo.model.dtos.person.PersonAddDto;
 import com.Embarcadero.demo.model.dtos.person.PersonUpdateDto;
@@ -20,7 +21,6 @@ public class PersonService {
 
     @Autowired
     private Validator validator;
-
 
     public Person getOrAddPerson(PersonAddDto personAddDto){
         validatePersonNewMatricula(personAddDto);

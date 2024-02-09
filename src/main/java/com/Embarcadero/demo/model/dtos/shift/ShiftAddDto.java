@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -15,12 +15,17 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class ShiftAddDto {
+    @NotNull
     private Dam_enum dam;
-    private Date date;
+
+    // date se genera automaticamente por regla de negocio
 
     // TODO TABLA RECORDS TIENE ID DE SHIFT
 
     // TODO Lista usuarios que estan de guardia, deben ser guardavidas..  relacion many to many
 
     private List<Person> staff;
+
+
+    private String notes;
 }

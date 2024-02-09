@@ -1,5 +1,6 @@
 package com.Embarcadero.demo.model.entities;
 
+import com.Embarcadero.demo.auth.entities.User;
 import com.Embarcadero.demo.model.entities.enums.Dam_enum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,11 @@ public class Shift {
     @OneToMany(fetch = FetchType.LAZY)
     private List<Record> records;
 
+    //@OneToMany(fetch = FetchType.LAZY)
+    // private List<Person> staff;
+
     @OneToMany(fetch = FetchType.LAZY)
-    private List<Person> staff;
+    private List<User> staff;
+
+    private String notes;
 }

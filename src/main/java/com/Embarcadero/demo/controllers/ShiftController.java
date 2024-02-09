@@ -1,9 +1,12 @@
 package com.Embarcadero.demo.controllers;
 
+import com.Embarcadero.demo.model.dtos.shift.ShiftAddDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDtoArray;
+import com.Embarcadero.demo.model.dtos.staff.StaffMemberAddDto;
 import com.Embarcadero.demo.model.entities.enums.Dam_enum;
 import com.Embarcadero.demo.services.ShiftService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,11 @@ public class ShiftController {
     @Autowired
     ShiftService shiftService;
 
+    @PostMapping
+    public ResponseEntity<ShiftReadDto> addNewShift(@Valid @RequestBody ShiftAddDto shiftAddDto){
+        return new ResponseEntity<>(shiftService.createShift(shiftAddDto) , HttpStatus.CREATED);
+    }
+
     @GetMapping
     public ResponseEntity<ShiftReadDtoArray> showAll (@RequestParam(required = false) Dam_enum dam,
                                                       @RequestParam(required = false) Date date,
@@ -25,18 +33,17 @@ public class ShiftController {
                                                       @RequestParam(required = false, defaultValue = "dam") String sortBy){
         return new ResponseEntity<>(shiftService.findAll(dam,date, page, size, sortBy), HttpStatus.OK);
     }
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<ShiftReadDto> findById(@PathVariable Integer id){
         return new ResponseEntity<>(shiftService.findById(id) , HttpStatus.OK);
     }
 
-
+    @PostMapping("{idShift}/staff/")
+    public ResponseEntity<ShiftReadDto> addStaffToShift (@PathVariable Integer idShift , @RequestBody StaffMemberAddDto staffMemberDni){
+        return new ResponseEntity<>(shiftService.addStaffUser(idShift , staffMemberDni), HttpStatus.ACCEPTED);
+    }
 
     // TODO SEGUIR CON EL RESTO DE ENDPOINTS!!!
-    // TODO findByID, add, update, delete,
-
-
-
-
+    // TODO add, update, delete,
 
 }

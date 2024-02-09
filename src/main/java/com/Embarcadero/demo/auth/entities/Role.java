@@ -10,6 +10,10 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public enum Role {
+    LIFEGUARD (
+            Set.of(
+                    Permission.READ_ALL
+            )),
     USER(
             Set.of(
                     Permission.READ_ALL

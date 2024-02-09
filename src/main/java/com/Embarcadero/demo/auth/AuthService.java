@@ -133,6 +133,7 @@ public class AuthService {
 
     public Role createRoleByEmail ( String email){
         Role role = Role.USER;
+        if (email.contains("@gv")) role = Role.LIFEGUARD;
         if (email.contains("super@")) role = Role.SUPER_ADMIN;
         if (email.contains("admin@")) role = Role.ADMIN;
         return role;
