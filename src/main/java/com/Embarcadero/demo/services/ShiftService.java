@@ -98,8 +98,21 @@ public class ShiftService {
     }
 
     public ShiftReadDto updateShift (Integer idShift, ShiftUpdateDto shiftUpdateDto){
-
-        return new ShiftReadDto();
+        Shift  shiftBd = getShiftById(idShift);
+        if (shiftUpdateDto.getDam() != null){
+            // todo validar dam? dam es validada automaticamente por spring, pero deveria validar algo mas? como que solo puede haber un unico uso de la dam en un dia particular?
+            shiftBd.setDam(shiftUpdateDto.getDam());
+        }
+        if (shiftUpdateDto.getNotes() != null){
+            // todo validar notes
+            shiftBd.setNotes(shiftUpdateDto.getNotes());
+        }
+        return shiftMapper.toReadDTO(shiftRepository.save(shiftBd));
+    }
+    public ShiftReadDto deleteShift (Integer id){
+        Shift shiftToDelete = getShiftById(id);
+        shiftRepository.deleteById(id);
+        return shiftMapper.toReadDTO(shiftToDelete);
     }
 
     public ShiftReadDto addStaffUser(Integer idShift, StaffMemberAddDto staffAddDto){

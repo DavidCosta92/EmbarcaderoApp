@@ -38,14 +38,17 @@ public class ShiftController {
     public ResponseEntity<ShiftReadDto> findById(@PathVariable Integer id){
         return new ResponseEntity<>(shiftService.findById(id) , HttpStatus.OK);
     }
-
-
-    // TODO SEGUIR CON EL RESTO DE ENDPOINTS!!!
-    // TODO update, delete,
     @PatchMapping("{id}")
     public ResponseEntity<ShiftReadDto> updateShift (@PathVariable Integer id, @RequestBody ShiftUpdateDto shiftUpdateDto){
         return  new ResponseEntity<>(shiftService.updateShift(id , shiftUpdateDto ), HttpStatus.ACCEPTED);
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<ShiftReadDto> deleteShift (@PathVariable Integer id){
+        return new ResponseEntity<>(shiftService.deleteShift(id) , HttpStatus.ACCEPTED);
+    }
+
+    //TODO SEGUIR CON resto de endpoints, uno para cerrar el turno, que envie un email con el reporte del dia
 
 
 
@@ -55,4 +58,8 @@ public class ShiftController {
     public ResponseEntity<ShiftReadDto> addStaffToShift (@PathVariable Integer idShift , @Valid @RequestBody StaffMemberAddDto staffMemberDni){
         return new ResponseEntity<>(shiftService.addStaffUser(idShift , staffMemberDni), HttpStatus.ACCEPTED);
     }
+
+
+
+    // TODO SEGUIR CON EL RESTO DE ENDPOINTS!!! borrar del staff, actualizar del staff? tipo cambiar uno por otro?
 }
