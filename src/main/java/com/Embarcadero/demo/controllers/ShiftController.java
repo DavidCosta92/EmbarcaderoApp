@@ -3,6 +3,7 @@ package com.Embarcadero.demo.controllers;
 import com.Embarcadero.demo.model.dtos.shift.ShiftAddDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDtoArray;
+import com.Embarcadero.demo.model.dtos.shift.ShiftUpdateDto;
 import com.Embarcadero.demo.model.dtos.staff.StaffMemberAddDto;
 import com.Embarcadero.demo.model.entities.enums.Dam_enum;
 import com.Embarcadero.demo.services.ShiftService;
@@ -38,12 +39,20 @@ public class ShiftController {
         return new ResponseEntity<>(shiftService.findById(id) , HttpStatus.OK);
     }
 
-    @PostMapping("{idShift}/staff/")
-    public ResponseEntity<ShiftReadDto> addStaffToShift (@PathVariable Integer idShift , @RequestBody StaffMemberAddDto staffMemberDni){
-        return new ResponseEntity<>(shiftService.addStaffUser(idShift , staffMemberDni), HttpStatus.ACCEPTED);
-    }
 
     // TODO SEGUIR CON EL RESTO DE ENDPOINTS!!!
-    // TODO add, update, delete,
+    // TODO update, delete,
+    @PatchMapping("{id}")
+    public ResponseEntity<ShiftReadDto> updateShift (@PathVariable Integer id, @RequestBody ShiftUpdateDto shiftUpdateDto){
+        return  new ResponseEntity<>(shiftService.updateShift(id , shiftUpdateDto ), HttpStatus.ACCEPTED);
+    }
 
+
+
+
+    // TODO STAFF
+    @PostMapping("{idShift}/staff/")
+    public ResponseEntity<ShiftReadDto> addStaffToShift (@PathVariable Integer idShift , @Valid @RequestBody StaffMemberAddDto staffMemberDni){
+        return new ResponseEntity<>(shiftService.addStaffUser(idShift , staffMemberDni), HttpStatus.ACCEPTED);
+    }
 }

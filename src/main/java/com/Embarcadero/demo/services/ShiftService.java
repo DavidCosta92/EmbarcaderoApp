@@ -6,6 +6,7 @@ import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
 import com.Embarcadero.demo.model.dtos.shift.ShiftAddDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDtoArray;
+import com.Embarcadero.demo.model.dtos.shift.ShiftUpdateDto;
 import com.Embarcadero.demo.model.dtos.staff.StaffMemberAddDto;
 import com.Embarcadero.demo.model.entities.Shift;
 import com.Embarcadero.demo.model.entities.enums.Dam_enum;
@@ -96,9 +97,13 @@ public class ShiftService {
         return shift.get();
     }
 
+    public ShiftReadDto updateShift (Integer idShift, ShiftUpdateDto shiftUpdateDto){
+
+        return new ShiftReadDto();
+    }
+
     public ShiftReadDto addStaffUser(Integer idShift, StaffMemberAddDto staffAddDto){
         Shift shiftBd = getShiftById(idShift);
-        // TODO VALIDAR QUE NO EXISTA YA COMO MIEMBRO DEL STAFF...
         if(shiftBd.getStaff().stream().anyMatch(user -> user.getDni().equals(staffAddDto.getDni()))) throw new AlreadyExistException("Ya existe el usuario dentro del staff");
         User staffMemberEntity = userService.getUserStaffMemberByDni(staffAddDto.getDni());
         shiftBd.getStaff().add(staffMemberEntity);
@@ -107,10 +112,7 @@ public class ShiftService {
     }
 
     public ShiftReadDto addStaffUser(Integer idShift, List<String> staffMemberDniList){
-            // todo
-            // todo
-            // todo
-            // todo
+            // todo ?? ES UTIL?
         return findById(idShift);
     }
 }
