@@ -7,5 +7,6 @@ public enum InternalExceptionCodes {
     MISSING_VALUES,
     NOT_FOUND_BY_ID,
     WRONG_JWT,
-    ACCESS_DENIED
+    ACCESS_DENIED,
+    FORBIDDEN_ACTION
 }

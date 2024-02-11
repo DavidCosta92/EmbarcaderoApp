@@ -20,6 +20,17 @@ public class PersonMapper {
                 .notes(personAddDto.getNotes())
                 .build();
     }
+    public Person toEntity (PersonReadDto readDto){
+        return Person.builder()
+                .dni(readDto.getDni())
+                .name(readDto.getName())
+                .lastName(readDto.getLastName())
+                .phone(readDto.getPhone())
+                .emergency_phone(readDto.getEmergency_phone())
+                .address(readDto.getAddress())
+                .notes(readDto.getNotes())
+                .build();
+    }
     public Person toEntity (PersonUpdateDto updateDto){
         return Person.builder()
                 .dni(updateDto.getDni())

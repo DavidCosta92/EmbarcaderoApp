@@ -23,4 +23,5 @@ public class ShiftReadDto {
     private List<RecordReadDto> records;
     private List<UserReadDto> staff;
     private String notes;
+    private Boolean close;
 }

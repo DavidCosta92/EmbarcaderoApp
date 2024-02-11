@@ -28,6 +28,17 @@ public class BoatMapper {
                 .name(boatAddDto.getName())
                 .build();
     }
+    public Boat toEntity(BoatReadDto readDto){
+        Engine engine = engineService.getEngineByEngineNumber(readDto.getEngine().getEngineNumber());
+
+        return new Boat().builder()
+                .typeBoat_enum(readDto.getTypeBoat_enum())
+                .hull(readDto.getHull())
+                .engine(engine)
+                .capacity(readDto.getCapacity())
+                .name(readDto.getName())
+                .build();
+    }
     public BoatReadDto toReadDto(Boat boat){
         return new BoatReadDto().builder()
                 .id(boat.getId())

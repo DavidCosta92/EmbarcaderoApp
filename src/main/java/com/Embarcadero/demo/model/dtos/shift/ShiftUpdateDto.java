@@ -15,5 +15,6 @@ public class ShiftUpdateDto {
     // date NO ES MODIFICABLE POR REGLA DE NEGOCIO
     // records tiene su propio endpoint para modificar
     // staff tiene su propio endpoint para modificar
+    private Boolean close;
     private String notes;
 }

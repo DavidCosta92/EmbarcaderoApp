@@ -41,6 +41,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<ExceptionMessages>(new ExceptionMessages(ex.getMessage(), InternalExceptionCodes.WRONG_JWT.ordinal()) , HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(ForbiddenAction.class)
+    public ResponseEntity<ExceptionMessages> forbiddenActionEx (ForbiddenAction ex){
+        return new ResponseEntity<ExceptionMessages>(new ExceptionMessages(ex.getMessage(), InternalExceptionCodes.FORBIDDEN_ACTION.ordinal()) , HttpStatus.FORBIDDEN);
+    }
     // excepts defecto
     // excepts defecto
     @ExceptionHandler(HttpMessageNotReadableException.class)

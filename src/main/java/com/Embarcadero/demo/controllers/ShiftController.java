@@ -48,9 +48,9 @@ public class ShiftController {
         return new ResponseEntity<>(shiftService.deleteShift(id) , HttpStatus.ACCEPTED);
     }
 
-    //TODO SEGUIR CON resto de endpoints, uno para cerrar el turno, que envie un email con el reporte del dia
-
-
+    //TODO SEGUIR CON resto de endpoints ??? .... Que funcion falta?
+    //TODO SEGUIR CON resto de endpoints ??? .... Que funcion falta?
+    //TODO SEGUIR CON resto de endpoints ??? .... Que funcion falta?
 
 
     // TODO STAFF

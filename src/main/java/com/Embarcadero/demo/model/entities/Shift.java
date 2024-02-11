@@ -39,4 +39,6 @@ public class Shift {
     private List<User> staff;
 
     private String notes;
+
+    private Boolean close;
 }
