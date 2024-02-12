@@ -1,6 +1,5 @@
 package com.Embarcadero.demo.services;
 
-import com.Embarcadero.demo.auth.entities.User;
 import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
 import com.Embarcadero.demo.model.dtos.person.PersonAddDto;
 import com.Embarcadero.demo.model.dtos.person.PersonUpdateDto;
@@ -22,16 +21,17 @@ public class PersonService {
     @Autowired
     private Validator validator;
 
-    public Person getOrAddPerson(PersonAddDto personAddDto){
-        validatePersonNewMatricula(personAddDto);
+    public Person getOrAddPersonForLicensesOrRecord(PersonAddDto personAddDto){
+        validatePersonNewMatriculaOrNewRecord(personAddDto);
         if(personDtoIsComplete(personAddDto)){
            personRepository.save(personMapper.toEntity(personAddDto));
         }
         return personRepository.findByDni(personAddDto.getDni());
     }
+
     public Person updatePerson(Person bdPerson, PersonUpdateDto newPerson){
         if(personDtoIsComplete(newPerson)){
-            return getOrAddPerson(personMapper.toAddDto(newPerson)); // SI Person UPDATE TRAE TODOS LOS DATOS.. CREO UN Person NUEVO Y LO devuelvo
+            return getOrAddPersonForLicensesOrRecord(personMapper.toAddDto(newPerson)); // SI Person UPDATE TRAE TODOS LOS DATOS.. CREO UN Person NUEVO Y LO devuelvo
         } else{
             // Uso el Person y actualizo los datos que vienen, valido, guardo y devuelvo Person actualizado
             if (newPerson.getDni() != null) {
@@ -68,7 +68,7 @@ public class PersonService {
             return personRepository.findByDni(bdPerson.getDni());
         }
     }
-    public void validatePersonNewMatricula(PersonAddDto personAddDto){
+    public void validatePersonNewMatriculaOrNewRecord(PersonAddDto personAddDto){
         if(personAddDtoOnlyHasDni(personAddDto)){ // si solo viene dni, asumo que ya deberia existir la persona, por lo que deberia traer de bd
             validateAlreadyReportedPerson(personAddDto);
         } else {

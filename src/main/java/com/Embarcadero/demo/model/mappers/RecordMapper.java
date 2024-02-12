@@ -19,9 +19,9 @@ public class RecordMapper {
     public Record toEntity (RecordAddDto addDto){
         Person p = personMapper.toEntity(addDto.getPerson());
         return new Record().builder()
-                .startTime(addDto.getStartTime())
-                .endTime(addDto.getEndTime())
-                .recordState(addDto.getRecordState())
+                // .startTime(addDto.getStartTime())
+                // .endTime(addDto.getEndTime())
+                // .recordState(addDto.getRecordState())
                 .boat(boatMapper.toEntity(addDto.getBoat()))
                 .person(p)
                 .numberOfGuests(addDto.getNumberOfGuests())

@@ -115,16 +115,17 @@ public class ShiftService {
             // todo validar notes
             shiftBd.setNotes(shiftUpdateDto.getNotes());
         }
-        if (shiftUpdateDto.getClose()){
-            closeShift(shiftBd , idShift);
+        System.out.println("<<<<<<<<<<< shiftBd getClose => "+shiftBd.getClose());
+        if (shiftUpdateDto.getClose() != null){
+            closeShift(shiftBd);
         }
         return shiftMapper.toReadDTO(shiftRepository.save(shiftBd));
     }
-    public ShiftReadDto closeShift (Shift shiftBd , Integer id){
+    public ShiftReadDto closeShift (Shift shiftBd){
         if (recordService.getOpenRecords(shiftBd.getRecords()).size() > 0){
             throw new ForbiddenAction("Aun existen registros activos, por favor cierra todos los registros!");
         }
-        shiftBd.setClose(true);
+        shiftBd.setClose(shiftBd.getClose() == true? false : true);
         shiftRepository.save(shiftBd);
         // todo ENVIAR EMAIL con resumen de shift (fecha, staff, records, notas)
         // todo ENVIAR EMAIL con resumen de shift (fecha, staff, records, notas)

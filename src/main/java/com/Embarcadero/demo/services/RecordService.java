@@ -1,14 +1,14 @@
 package com.Embarcadero.demo.services;
 
 import com.Embarcadero.demo.model.dtos.boat.BoatReadDto;
-import com.Embarcadero.demo.model.dtos.person.PersonReadDto;
 import com.Embarcadero.demo.model.dtos.records.RecordAddDto;
 import com.Embarcadero.demo.model.dtos.records.RecordReadDto;
+import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.Record;
-import com.Embarcadero.demo.model.entities.Shift;
 import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
 import com.Embarcadero.demo.model.mappers.RecordMapper;
 import com.Embarcadero.demo.model.repositories.RecordRepository;
+import com.Embarcadero.demo.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,33 +24,52 @@ public class RecordService {
     @Autowired
     private RecordMapper recordMapper;
 
+    @Autowired
+    private Validator validator;
+
+    @Autowired
+    PersonService personService;
+    @Autowired
+    BoatService boatService;
+    @Autowired
 
     public Record addNewRecord(RecordAddDto recordAddDto){
-        // todo validar record en si
-        // todo validar record en si
+        if(recordAddDto.getNumberOfGuests() == null) recordAddDto.setNumberOfGuests(0);
+        
+        
+        System.out.println("******************** notes "+recordAddDto.getNotes());
 
-        // Validado por clases numberOfGuests,car,notes; idShift validado por shift
-        // NO SE RECIBEN startTime endTime recordState;
 
+        if (recordAddDto.getNotes() == null) {
+            recordAddDto.setNotes("Sin observaciones.");
+        } else {
+            // todo validator.stringOnlyLettersAndNumbers("Notas", recordAddDto.getNotes());
+            // todo validator.stringOnlyLettersAndNumbers("Notas", recordAddDto.getNotes());
+
+            recordAddDto.setNotes("Sin observaciones."); // FIX PROVISORIO
+
+            // todo validator.stringOnlyLettersAndNumbers("Notas", recordAddDto.getNotes());
+            // todo validator.stringOnlyLettersAndNumbers("Notas", recordAddDto.getNotes());
+            // todo ESTE VALIDADOR NO FUNCIONA CORRECTAMENTE.. ME TOMA LOS ESPACIOS COMO ERRORES Y NO LOS PERMITE PASAR.. REVISAR!!!
+
+        }
+        if(recordAddDto.getNumberOfGuests() == null) recordAddDto.setNumberOfGuests(0);
+
+        validator.stringOnlyLettersAndNumbers("Auto" , recordAddDto.getCar());
 
 
         if(recordAddDto.getHasLicense()){
-            // todo validar BoatReadDto boat;
-            // todo validar BoatReadDto boat;
-            // todo validar BoatReadDto boat;
+            // todo ASUMO QUE BOTE YA EXISTE, YA QUE LAS LICENCIAS SOLO PUEDEN SER OTORGADAS EN SEDE NAUTICA
+            recordAddDto.setBoat(boatService.findByName(recordAddDto.getBoat().getName()));
         }
-
-
-        // todo validar PersonReadDto person;
-        // PERSONA PUEDE O NO EXISTIR ANTES.. DEBERIA HACER UN personService.getOrAddPerosna(recordAddDto=
-        // todo validar PersonReadDto person;
-
-        // todo validar record en si
-        // todo validar record en si
-        // todo validar record en si
 
         Record recordEntity = recordMapper.toEntity(recordAddDto);
 
+        Person person = personService.getOrAddPersonForLicensesOrRecord(recordAddDto.getPerson());
+
+
+
+        recordEntity.setPerson(person);
         Date startTime = new Date();
         recordEntity.setStartTime(startTime);;
         recordEntity.setRecordState(RecordState_enum.ACTIVO);

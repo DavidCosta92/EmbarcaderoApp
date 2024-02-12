@@ -30,6 +30,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/licences/**").permitAll()
                         .requestMatchers("/shifts/**").permitAll()
+                        .requestMatchers("/records/**").permitAll()
                         .requestMatchers("auth/restorePassword").permitAll()
                         .requestMatchers("auth/setNewPassword").permitAll()
                         .requestMatchers("/docs/**").permitAll()

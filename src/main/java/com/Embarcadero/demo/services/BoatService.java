@@ -2,6 +2,7 @@ package com.Embarcadero.demo.services;
 
 import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
 import com.Embarcadero.demo.model.dtos.boat.BoatAddDto;
+import com.Embarcadero.demo.model.dtos.boat.BoatReadDto;
 import com.Embarcadero.demo.model.dtos.boat.BoatUpdateDto;
 import com.Embarcadero.demo.model.entities.Boat;
 import com.Embarcadero.demo.model.entities.Engine;
@@ -28,15 +29,18 @@ public class BoatService {
         validateNewBoat(boatAddDto);
         engineService.addEngine(boatAddDto.getEngine());
         boatRepository.save(boatMapper.toEntity(boatAddDto));
-        return findByName(boatAddDto.getName());
+        return getByName(boatAddDto.getName());
     }
 
     public void validateNewBoat(BoatAddDto boatAddDto){
         validateNewName(boatAddDto.getName());
         engineService.validateNewEngine(boatAddDto.getEngine());
     }
-    public Boat findByName(String name){
+    public Boat getByName(String name){
         return boatRepository.findByName(name);
+    }
+    public BoatReadDto findByName(String name){
+        return boatMapper.toReadDto(boatRepository.findByName(name));
     }
     public void validateNewName(String name){
         validator.stringOnlyLettersAndNumbers("Nombre", name);

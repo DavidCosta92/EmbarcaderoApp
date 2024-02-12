@@ -19,4 +19,9 @@ public class BoatReadDto {
     private String name;
     private Integer capacity;
     private TypeBoat_enum typeBoat_enum;
+
+    public BoatReadDto (String name){
+        // este constructor es para aquellos casos donde solo envio el nombre, en el caso de agregar un bote a un record
+        this.name = name;
+    }
 }

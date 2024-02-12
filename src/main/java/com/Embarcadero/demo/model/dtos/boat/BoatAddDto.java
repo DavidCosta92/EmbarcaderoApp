@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 public class BoatAddDto {
-    @Valid
+        // @Valid => TODO ESTA VALIDACION ES OPCIONAL, SOLO SI LA EMBARCACION POSEE MOTOR.. POR TANTO DEBO HACECRLA CON validador.java
     private EngineAddDto engine;
 
     @NotNull(message = "Casco no puede ser nula")

@@ -43,7 +43,7 @@ public class LicenseService {
     public LicenseReadDto addLicense(LicenseAddDto licenseAddDto){
         validateNewLicense(licenseAddDto);
         Boat boat = boatService.addBoat(licenseAddDto.getBoat());
-        Person person = personService.getOrAddPerson(licenseAddDto.getPerson());
+        Person person = personService.getOrAddPersonForLicensesOrRecord(licenseAddDto.getPerson());
 
         License license = License.builder()
                 .licenseCode(licenseAddDto.getLicenseCode())
@@ -60,7 +60,7 @@ public class LicenseService {
     public void validateNewLicense(LicenseAddDto licenseAddDto){
         validateLicenseCode(licenseAddDto.getLicenseCode());
         boatService.validateNewBoat(licenseAddDto.getBoat());
-        personService.validatePersonNewMatricula(licenseAddDto.getPerson());
+        personService.validatePersonNewMatriculaOrNewRecord(licenseAddDto.getPerson());
         if (licenseAddDto.getLicenseCode() == null) licenseAddDto.setLicenseCode(State_enum.OK.name());
     }
     public LicenseReadDtoArray findAll (String licenseCode, Integer pageNumber, Integer pageSize, String sortBy){

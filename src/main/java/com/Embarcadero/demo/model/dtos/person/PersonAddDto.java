@@ -34,4 +34,9 @@ public class PersonAddDto {
     private String address;
 
     private String notes;
+
+    public PersonAddDto (String dni){
+        // este constructor es para aquellos casos donde solo envio el dni, en el caso de agregar una persona a un record
+        this.dni = dni;
+    }
 }
