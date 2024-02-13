@@ -32,6 +32,7 @@ public class BoatMapper {
         Engine engine = engineService.getEngineByEngineNumber(readDto.getEngine().getEngineNumber());
 
         return new Boat().builder()
+                .id(readDto.getId())
                 .typeBoat_enum(readDto.getTypeBoat_enum())
                 .hull(readDto.getHull())
                 .engine(engine)

@@ -26,6 +26,9 @@ public class RecordAddDto {
 
     private BoatReadDto boat; // Es un read porque solo envio nombre de embarcacion..
 
+    private Date startTime;
+    private RecordState_enum recordState;
+
     @Valid
     private PersonAddDto person;
 

@@ -26,7 +26,6 @@ public class RecordController {
 
     @PostMapping
     public ResponseEntity<ShiftReadDto> addNewRecord (@Valid @RequestBody RecordAddDto recordAddDTO){
-        // return new ResponseEntity<>(recordService.addNewRecord(recordAddDTO) , HttpStatus.CREATED);
         return new ResponseEntity<>(shiftService.addNewRecord(recordAddDTO) , HttpStatus.CREATED);
     }
     //TODO modificar un record?

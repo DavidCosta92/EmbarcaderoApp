@@ -156,12 +156,29 @@ public class ShiftService {
         Shift shiftBd = getShiftById(recordAddDTO.getIdShift());
         if (shiftBd.getClose()) throw new ForbiddenAction("La guardia esta cerrada, es imposible agregar el registro!");
 
-        // crear nuevo record, agregarlo y actualizar shift...
+        // obtener registros, verificar que no exista y crear nuevo record, agregarlo y actualizar shift...
         List<Record> records = shiftBd.getRecords();
+
+        validateNonDuplicatedRecords(records, recordAddDTO);  // validar que no hayan registros duplicados... mediante nombre embarcacion
         Record newRecord = recordService.addNewRecord(recordAddDTO);
+
         records.add(newRecord);
         shiftBd.setRecords(records);
         return shiftMapper.toReadDTO(shiftRepository.save(shiftBd));
+    }
+
+    public void validateNonDuplicatedRecords (List<Record> records , RecordAddDto recordAddDTO){
+
+        // verificar si existen regisrtos records.size() >0
+        // filtrar los que estan activos
+        // si existen activos
+            // verificar si record es con licencia
+                // si tiene licencia, verificar si existe algun record activo con un bote llamado igual al record..
+            // si no tiene licencia, verificar que entre los registros activos no hay un auto con la misma patente.. en dicho caso deberia pedir que agregue mas de una embarcacion..
+       if ( records.size() >0 ){
+           records.stream().anyMatch(record -> )
+       }
+
     }
 
     public ShiftReadDto addStaffUser(Integer idShift, List<String> staffMemberDniList){

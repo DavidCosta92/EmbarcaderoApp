@@ -21,6 +21,22 @@ public class Validator {
         if(pattern.matcher(value).find()) throw new InvalidValueException(field + " solo puede contener numeros y letras!");
         return value;
     }
+    public String stringText (String field, String value){
+
+        // todo ESTE VALIDADOR NO FUNCIONA CORRECTAMENTE.. ME TOMA LOS ESPACIOS COMO ERRORES Y NO LOS PERMITE PASAR.. REVISAR!!!
+        // todo ESTE VALIDADOR NO FUNCIONA CORRECTAMENTE.. ME TOMA LOS ESPACIOS COMO ERRORES Y NO LOS PERMITE PASAR.. REVISAR!!!
+        // todo ESTE VALIDADOR NO FUNCIONA CORRECTAMENTE.. ME TOMA LOS ESPACIOS COMO ERRORES Y NO LOS PERMITE PASAR.. REVISAR!!!
+        /*
+        Pattern pattern = Pattern.compile("[^a-zA-Z0-9]");
+        // "[^a-zA-Z0-9]" => CUALQUIER CARACTER MENOS LOS ENUMERADOS, osea si encuentra un caracter distinto, lanza excepcion
+        if(pattern.matcher(value).find()) throw new InvalidValueException(field + " solo puede contener numeros y letras!");
+         */
+
+        // todo ESTE VALIDADOR NO FUNCIONA CORRECTAMENTE.. ME TOMA LOS ESPACIOS COMO ERRORES Y NO LOS PERMITE PASAR.. REVISAR!!!
+        // todo ESTE VALIDADOR NO FUNCIONA CORRECTAMENTE.. ME TOMA LOS ESPACIOS COMO ERRORES Y NO LOS PERMITE PASAR.. REVISAR!!!
+
+        return value;
+    }
     public String stringOnlyLetters (String field, String value){
         Pattern pattern = Pattern.compile("[^a-zA-Z]");
         // "[^a-zA-Z]" => CUALQUIER CARACTER MENOS LOS ENUMERADOS, osea si encuentra un caracter distinto, lanza excepcion

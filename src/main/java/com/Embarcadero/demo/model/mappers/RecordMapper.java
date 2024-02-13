@@ -29,6 +29,21 @@ public class RecordMapper {
                 .notes(addDto.getNotes())
                 .build();
     }
+    public Record toEntity (RecordReadDto readDto){
+        Person p = personMapper.toEntity(readDto.getPerson());
+        return new Record().builder()
+                .id(readDto.getId())
+                // .startTime(readDto.getStartTime())
+                // .endTime(readDto.getEndTime())
+                // .recordState(readDto.getRecordState())
+                .boat(boatMapper.toEntity(readDto.getBoat()))
+                .person(p)
+                .numberOfGuests(readDto.getNumberOfGuests())
+                .car(readDto.getCar())
+                .notes(readDto.getNotes())
+                .build();
+    }
+
 
     public RecordReadDto toReadDto(Record record){
         return new RecordReadDto().builder()

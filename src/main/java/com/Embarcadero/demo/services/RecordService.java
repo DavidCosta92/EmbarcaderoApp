@@ -3,6 +3,7 @@ package com.Embarcadero.demo.services;
 import com.Embarcadero.demo.model.dtos.boat.BoatReadDto;
 import com.Embarcadero.demo.model.dtos.records.RecordAddDto;
 import com.Embarcadero.demo.model.dtos.records.RecordReadDto;
+import com.Embarcadero.demo.model.entities.Boat;
 import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.Record;
 import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
@@ -31,48 +32,43 @@ public class RecordService {
     PersonService personService;
     @Autowired
     BoatService boatService;
-    @Autowired
 
-    public Record addNewRecord(RecordAddDto recordAddDto){
+    public RecordAddDto setDefaultValuesAddNewRecord(RecordAddDto recordAddDto){
+        // este codigo podria salvarlo desde controlador, poniendo valores por default???
         if(recordAddDto.getNumberOfGuests() == null) recordAddDto.setNumberOfGuests(0);
-        
-        
-        System.out.println("******************** notes "+recordAddDto.getNotes());
-
-
         if (recordAddDto.getNotes() == null) {
             recordAddDto.setNotes("Sin observaciones.");
         } else {
-            // todo validator.stringOnlyLettersAndNumbers("Notas", recordAddDto.getNotes());
-            // todo validator.stringOnlyLettersAndNumbers("Notas", recordAddDto.getNotes());
 
-            recordAddDto.setNotes("Sin observaciones."); // FIX PROVISORIO
-
-            // todo validator.stringOnlyLettersAndNumbers("Notas", recordAddDto.getNotes());
-            // todo validator.stringOnlyLettersAndNumbers("Notas", recordAddDto.getNotes());
+            // todo ESTE VALIDADOR NO FUNCIONA CORRECTAMENTE.. ME TOMA LOS ESPACIOS COMO ERRORES Y NO LOS PERMITE PASAR.. REVISAR!!!
+            // todo ESTE VALIDADOR NO FUNCIONA CORRECTAMENTE.. ME TOMA LOS ESPACIOS COMO ERRORES Y NO LOS PERMITE PASAR.. REVISAR!!!
+            validator.stringText("Notas", recordAddDto.getNotes());
+            // todo ESTE VALIDADOR NO FUNCIONA CORRECTAMENTE.. ME TOMA LOS ESPACIOS COMO ERRORES Y NO LOS PERMITE PASAR.. REVISAR!!!
             // todo ESTE VALIDADOR NO FUNCIONA CORRECTAMENTE.. ME TOMA LOS ESPACIOS COMO ERRORES Y NO LOS PERMITE PASAR.. REVISAR!!!
 
+            recordAddDto.setNotes(recordAddDto.getNotes());
         }
         if(recordAddDto.getNumberOfGuests() == null) recordAddDto.setNumberOfGuests(0);
+        Date startTime = new Date();
+        recordAddDto.setStartTime(startTime);;
+        recordAddDto.setRecordState(RecordState_enum.ACTIVO);
+        return recordAddDto;
+    }
 
-        validator.stringOnlyLettersAndNumbers("Auto" , recordAddDto.getCar());
+    public Record addNewRecord(RecordAddDto recordAddDto){
+        RecordAddDto addDto = setDefaultValuesAddNewRecord(recordAddDto); // setea los valores por defecto que no sean enviados, segun la logica de negocio
 
+        validator.stringOnlyLettersAndNumbers("Auto" , addDto.getCar());
 
-        if(recordAddDto.getHasLicense()){
-            // todo ASUMO QUE BOTE YA EXISTE, YA QUE LAS LICENCIAS SOLO PUEDEN SER OTORGADAS EN SEDE NAUTICA
-            recordAddDto.setBoat(boatService.findByName(recordAddDto.getBoat().getName()));
+        if(addDto.getHasLicense()){ // ASUMO QUE BOTE YA EXISTE, YA QUE LAS LICENCIAS SOLO PUEDEN SER OTORGADAS EN SEDE NAUTICA
+            BoatReadDto b = boatService.findByName(addDto.getBoat().getName());
+            addDto.setBoat(b);
         }
 
-        Record recordEntity = recordMapper.toEntity(recordAddDto);
+        Record recordEntity = recordMapper.toEntity(addDto);
 
-        Person person = personService.getOrAddPersonForLicensesOrRecord(recordAddDto.getPerson());
-
-
-
+        Person person = personService.getOrAddPersonForLicensesOrRecord(addDto.getPerson());
         recordEntity.setPerson(person);
-        Date startTime = new Date();
-        recordEntity.setStartTime(startTime);;
-        recordEntity.setRecordState(RecordState_enum.ACTIVO);
 
         return recordRepository.save(recordEntity);
     }
