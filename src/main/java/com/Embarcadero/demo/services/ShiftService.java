@@ -3,6 +3,7 @@ package com.Embarcadero.demo.services;
 import com.Embarcadero.demo.auth.entities.User;
 import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
 import com.Embarcadero.demo.exceptions.customsExceptions.ForbiddenAction;
+import com.Embarcadero.demo.exceptions.customsExceptions.InvalidValueException;
 import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
 import com.Embarcadero.demo.model.dtos.records.RecordAddDto;
 import com.Embarcadero.demo.model.dtos.records.RecordReadDto;
@@ -14,6 +15,7 @@ import com.Embarcadero.demo.model.dtos.staff.StaffMemberAddDto;
 import com.Embarcadero.demo.model.entities.Record;
 import com.Embarcadero.demo.model.entities.Shift;
 import com.Embarcadero.demo.model.entities.enums.Dam_enum;
+import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
 import com.Embarcadero.demo.model.mappers.PersonMapper;
 import com.Embarcadero.demo.model.mappers.RecordMapper;
 import com.Embarcadero.demo.model.mappers.ShiftMapper;
@@ -30,6 +32,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ShiftService {
@@ -158,8 +161,7 @@ public class ShiftService {
 
         // obtener registros, verificar que no exista y crear nuevo record, agregarlo y actualizar shift...
         List<Record> records = shiftBd.getRecords();
-
-        validateNonDuplicatedRecords(records, recordAddDTO);  // validar que no hayan registros duplicados... mediante nombre embarcacion
+        if(!records.isEmpty()) validateNonDuplicatedRecords(records, recordAddDTO);  // validar que no hayan registros duplicados... mediante nombre embarcacion
         Record newRecord = recordService.addNewRecord(recordAddDTO);
 
         records.add(newRecord);
@@ -168,16 +170,14 @@ public class ShiftService {
     }
 
     public void validateNonDuplicatedRecords (List<Record> records , RecordAddDto recordAddDTO){
-
-        // verificar si existen regisrtos records.size() >0
-        // filtrar los que estan activos
-        // si existen activos
-            // verificar si record es con licencia
-                // si tiene licencia, verificar si existe algun record activo con un bote llamado igual al record..
-            // si no tiene licencia, verificar que entre los registros activos no hay un auto con la misma patente.. en dicho caso deberia pedir que agregue mas de una embarcacion..
-       if ( records.size() >0 ){
-           records.stream().anyMatch(record -> )
-       }
+        List<Record> activeRecords = records.stream().filter(rec -> rec.getRecordState().equals(RecordState_enum.ACTIVO)).collect(Collectors.toList());
+        if (!activeRecords.isEmpty()){ // si hay registros activos
+            if (recordAddDTO.getHasLicense()){ // si tiene licencia, verificar si existe algun record activo con un bote llamado igual al record..
+                if (activeRecords.stream().anyMatch(rec -> rec.getBoat().getName().equals(recordAddDTO.getBoat().getName()))) throw new InvalidValueException("Ya existe un registro con una embarcacion llamada " + recordAddDTO.getBoat().getName());
+            } else{
+                // todo si no tiene licencia, verificar que entre los registros activos no hay un auto con la misma patente.. en dicho caso deberia pedir que agregue mas de una embarcacion..
+            }
+        }
 
     }
 

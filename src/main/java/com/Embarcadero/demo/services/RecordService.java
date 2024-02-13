@@ -34,6 +34,7 @@ public class RecordService {
     BoatService boatService;
 
     public RecordAddDto setDefaultValuesAddNewRecord(RecordAddDto recordAddDto){
+        // RecordAddDto defaultAdd = recordAddDto;
         // este codigo podria salvarlo desde controlador, poniendo valores por default???
         if(recordAddDto.getNumberOfGuests() == null) recordAddDto.setNumberOfGuests(0);
         if (recordAddDto.getNotes() == null) {
@@ -48,7 +49,6 @@ public class RecordService {
 
             recordAddDto.setNotes(recordAddDto.getNotes());
         }
-        if(recordAddDto.getNumberOfGuests() == null) recordAddDto.setNumberOfGuests(0);
         Date startTime = new Date();
         recordAddDto.setStartTime(startTime);;
         recordAddDto.setRecordState(RecordState_enum.ACTIVO);
@@ -60,10 +60,8 @@ public class RecordService {
 
         validator.stringOnlyLettersAndNumbers("Auto" , addDto.getCar());
 
-        if(addDto.getHasLicense()){ // ASUMO QUE BOTE YA EXISTE, YA QUE LAS LICENCIAS SOLO PUEDEN SER OTORGADAS EN SEDE NAUTICA
-            BoatReadDto b = boatService.findByName(addDto.getBoat().getName());
-            addDto.setBoat(b);
-        }
+        // ASUMO QUE BOTE YA EXISTE, YA QUE LAS LICENCIAS SOLO PUEDEN SER OTORGADAS EN SEDE NAUTICA
+        if(addDto.getHasLicense()) addDto.setBoat(boatService.findByName(addDto.getBoat().getName()));
 
         Record recordEntity = recordMapper.toEntity(addDto);
 
