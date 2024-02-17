@@ -40,13 +40,7 @@ public class RecordService {
         if (recordAddDto.getNotes() == null) {
             recordAddDto.setNotes("Sin observaciones.");
         } else {
-
-            // todo ESTE VALIDADOR NO FUNCIONA CORRECTAMENTE.. ME TOMA LOS ESPACIOS COMO ERRORES Y NO LOS PERMITE PASAR.. REVISAR!!!
-            // todo ESTE VALIDADOR NO FUNCIONA CORRECTAMENTE.. ME TOMA LOS ESPACIOS COMO ERRORES Y NO LOS PERMITE PASAR.. REVISAR!!!
             validator.stringText("Notas", recordAddDto.getNotes());
-            // todo ESTE VALIDADOR NO FUNCIONA CORRECTAMENTE.. ME TOMA LOS ESPACIOS COMO ERRORES Y NO LOS PERMITE PASAR.. REVISAR!!!
-            // todo ESTE VALIDADOR NO FUNCIONA CORRECTAMENTE.. ME TOMA LOS ESPACIOS COMO ERRORES Y NO LOS PERMITE PASAR.. REVISAR!!!
-
             recordAddDto.setNotes(recordAddDto.getNotes());
         }
         Date startTime = new Date();
@@ -60,8 +54,7 @@ public class RecordService {
 
         validator.stringOnlyLettersAndNumbers("Auto" , addDto.getCar());
 
-        // ASUMO QUE BOTE YA EXISTE, YA QUE LAS LICENCIAS SOLO PUEDEN SER OTORGADAS EN SEDE NAUTICA
-        if(addDto.getHasLicense()) addDto.setBoat(boatService.findByName(addDto.getBoat().getName()));
+        if(addDto.getHasLicense()) addDto.setBoat(boatService.findByName(addDto.getBoat().getName())); // ASUMO QUE BOTE YA EXISTE, licencias solo las entrega nautica
 
         Record recordEntity = recordMapper.toEntity(addDto);
 
