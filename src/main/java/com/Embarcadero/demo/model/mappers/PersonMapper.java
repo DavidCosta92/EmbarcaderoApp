@@ -59,7 +59,17 @@ public class PersonMapper {
     }
 
 
-
+    public PersonUpdateDto toUpdateDto(PersonAddDto addDto){
+        return PersonUpdateDto.builder()
+                .dni(addDto.getDni())
+                .name(addDto.getName())
+                .lastName(addDto.getLastName())
+                .phone(addDto.getPhone())
+                .emergency_phone(addDto.getEmergency_phone())
+                .address(addDto.getAddress())
+                .notes(addDto.getNotes())
+                .build();
+    }
 
     public PersonAddDto toAddDto(PersonUpdateDto updateDto){
         return PersonAddDto.builder()

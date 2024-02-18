@@ -7,6 +7,7 @@ import com.Embarcadero.demo.exceptions.customsExceptions.InvalidValueException;
 import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
 import com.Embarcadero.demo.model.dtos.records.RecordAddDto;
 import com.Embarcadero.demo.model.dtos.records.RecordReadDto;
+import com.Embarcadero.demo.model.dtos.records.RecordUpdateDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftAddDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDtoArray;
@@ -167,6 +168,13 @@ public class ShiftService {
         records.add(newRecord);
         shiftBd.setRecords(records);
         return shiftMapper.toReadDTO(shiftRepository.save(shiftBd));
+    }
+
+    public RecordReadDto updateRecord(Integer idRecord, RecordUpdateDto updateDto){
+        Shift shiftBd = getShiftById(updateDto.getIdShift()); // obtener shift en bd
+        List<Record> recordBdList = shiftBd.getRecords().stream().filter(record -> record.getId() == idRecord).collect(Collectors.toList());
+        if (recordBdList.isEmpty()) throw new NotFoundException("El registro a actualzar con id: "+idRecord+", no existe en el turno id: "+updateDto.getIdShift()+", verifica los datos!");
+        return recordService.updateRecord(recordBdList.get(0) ,updateDto);
     }
 
     public void validateNonDuplicatedRecords (List<Record> records , RecordAddDto recordAddDTO){

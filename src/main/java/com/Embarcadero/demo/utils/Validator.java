@@ -22,7 +22,7 @@ public class Validator {
         return value;
     }
     public String stringText (String field, String value){
-        Pattern pattern = Pattern.compile("[^a-zA-Z0-9\s.,:*?!]");  // \s es para espacio en blanco
+        Pattern pattern = Pattern.compile("[^a-zA-Z0-9\s.,:*?!/]");  // \s es para espacio en blanco
         if(pattern.matcher(value).find()) throw new InvalidValueException(field + " solo puede contener numeros, letras, espacios en blanco, puntos, comas, asteriscos, signos de pregunta o exclamacion!");
         return value;
     }

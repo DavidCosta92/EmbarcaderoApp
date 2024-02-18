@@ -36,11 +36,11 @@ public class EngineService {
     }
 
     public EngineReadDto findMotorByNumero_motor(String engineNumber){
-        validator.stringOnlyLettersAndNumbers("Numero de motor", engineNumber);
+        validator.stringText("Numero de motor", engineNumber);
         return engineMapper.toReadDto(getEngineByEngineNumber(engineNumber));
     }
     public void validateEngineNumber(String engineNumber){
-        validator.stringOnlyLettersAndNumbers("Numero de motor", engineNumber);
+        validator.stringText("Numero de motor", engineNumber);
         if(engineRepository.existsByEngineNumber(engineNumber)) throw new AlreadyExistException("Numero de motor ya existe");
     }
     public void validateCc(String cc){

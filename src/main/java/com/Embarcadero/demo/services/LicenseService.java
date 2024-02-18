@@ -101,7 +101,7 @@ public class LicenseService {
         State_enum state = licenseUpdateDto.getState_enum();
         if (licenseCode != null){
             validator.stringMinSize("Matricula",5 , licenseCode);
-            validator.stringOnlyLettersAndNumbers("Matricula" , licenseCode);
+            validator.stringText("Matricula" , licenseCode);
             licenseBD.setLicenseCode(licenseCode);
         }
         if (state!= null){

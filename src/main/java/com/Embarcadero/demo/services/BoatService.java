@@ -1,6 +1,7 @@
 package com.Embarcadero.demo.services;
 
 import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
+import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
 import com.Embarcadero.demo.model.dtos.boat.BoatAddDto;
 import com.Embarcadero.demo.model.dtos.boat.BoatReadDto;
 import com.Embarcadero.demo.model.dtos.boat.BoatUpdateDto;
@@ -11,6 +12,8 @@ import com.Embarcadero.demo.model.repositories.BoatRepository;
 import com.Embarcadero.demo.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class BoatService {
@@ -37,13 +40,15 @@ public class BoatService {
         engineService.validateNewEngine(boatAddDto.getEngine());
     }
     public Boat getByName(String name){
-        return boatRepository.findByName(name);
+        Optional<Boat> boat = boatRepository.findByName(name);
+        if(boat.isEmpty()) throw new NotFoundException("No se encontro bote con el nombre:"+name+".");
+        return boat.get();
     }
     public BoatReadDto findByName(String name){
-        return boatMapper.toReadDto(boatRepository.findByName(name));
+        return boatMapper.toReadDto(getByName(name));
     }
     public void validateNewName(String name){
-        validator.stringOnlyLettersAndNumbers("Nombre", name);
+        validator.stringText("Nombre", name);
         validator.stringMinSize("Nombre", 2 , name);
         if (boatRepository.existsByName(name)) throw new AlreadyExistException("Nombre de embarcacion ya existe!");
     }
@@ -58,7 +63,7 @@ public class BoatService {
                 boatDB.setEngine(updatedEngine);
             }
             if (newBoat.getHull() != null) {
-                validator.stringOnlyLettersAndNumbers("Casco",newBoat.getHull());
+                validator.stringText("Casco",newBoat.getHull());
                 boatDB.setHull(newBoat.getHull());
             }
             if (newBoat.getName() != null) {
@@ -74,6 +79,6 @@ public class BoatService {
             }
             boatRepository.save(boatDB);
         }
-        return boatRepository.findByName(newBoat.getName());
+        return getByName(newBoat.getName());
     }
 }

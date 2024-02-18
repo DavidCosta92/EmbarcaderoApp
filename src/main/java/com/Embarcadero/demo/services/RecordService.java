@@ -1,12 +1,17 @@
 package com.Embarcadero.demo.services;
 
+import com.Embarcadero.demo.model.dtos.boat.BoatAddDto;
 import com.Embarcadero.demo.model.dtos.boat.BoatReadDto;
+import com.Embarcadero.demo.model.dtos.person.PersonAddDto;
 import com.Embarcadero.demo.model.dtos.records.RecordAddDto;
 import com.Embarcadero.demo.model.dtos.records.RecordReadDto;
+import com.Embarcadero.demo.model.dtos.records.RecordUpdateDto;
 import com.Embarcadero.demo.model.entities.Boat;
 import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.Record;
 import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
+import com.Embarcadero.demo.model.mappers.BoatMapper;
+import com.Embarcadero.demo.model.mappers.PersonMapper;
 import com.Embarcadero.demo.model.mappers.RecordMapper;
 import com.Embarcadero.demo.model.repositories.RecordRepository;
 import com.Embarcadero.demo.utils.Validator;
@@ -15,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,7 +37,11 @@ public class RecordService {
     @Autowired
     PersonService personService;
     @Autowired
+    PersonMapper personMapper;
+    @Autowired
     BoatService boatService;
+    @Autowired
+    BoatMapper boatMapper;
 
     public RecordAddDto setDefaultValuesAddNewRecord(RecordAddDto recordAddDto){
         // RecordAddDto defaultAdd = recordAddDto;
@@ -49,18 +59,41 @@ public class RecordService {
         return recordAddDto;
     }
 
+    public RecordReadDto updateRecord(Record recordBd , RecordUpdateDto updateDto){
+
+        // setear los datos nuevos
+        if(updateDto.getRecordState()!= null) recordBd.setRecordState(updateDto.getRecordState());
+
+        if(updateDto.getNumberOfGuests()!= null) {
+            validator.stringOnlyIntegerPositiveNumbers("Acompañantes", String.valueOf(updateDto.getNumberOfGuests()));
+            recordBd.setNumberOfGuests(updateDto.getNumberOfGuests());
+        }
+        if(updateDto.getCar()!= null) {
+            validateCar(updateDto.getCar());
+            recordBd.setCar(updateDto.getCar());
+        }
+        if(updateDto.getNotes()!= null) recordBd.setNotes(updateDto.getNotes());
+
+        if(updateDto.getBoat()!= null){
+            recordBd.setBoat(boatService.getByName(updateDto.getBoat().getName()));// por regla negocio, solo oficinas pueden cambiar botes, solo se acepta bote si ya existe, sino getByName lanzara exception
+        }
+        if(updateDto.getPerson()!= null){
+            recordBd.setPerson(personService.updateRecordPerson(updateDto)); // puede crear nueva persona si llegan todos los campos o editar si solo vienen algunos..
+        }
+        return recordMapper.toReadDto(recordRepository.save(recordBd));
+    }
+    public void validateCar(String car){
+        validator.stringText("Auto" , car);
+    }
     public Record addNewRecord(RecordAddDto recordAddDto){
         RecordAddDto addDto = setDefaultValuesAddNewRecord(recordAddDto); // setea los valores por defecto que no sean enviados, segun la logica de negocio
-
-        validator.stringOnlyLettersAndNumbers("Auto" , addDto.getCar());
-
-        if(addDto.getHasLicense()) addDto.setBoat(boatService.findByName(addDto.getBoat().getName())); // ASUMO QUE BOTE YA EXISTE, licencias solo las entrega nautica
-
+        validateCar(addDto.getCar());
+        if(addDto.getHasLicense()) {
+            addDto.setBoat(boatService.findByName(addDto.getBoat().getName())); // Las licencias solo las entrega nautica, por lo que si no existe, findByName, lanzara exception
+        }
         Record recordEntity = recordMapper.toEntity(addDto);
-
         Person person = personService.getOrAddPersonForLicensesOrRecord(addDto.getPerson());
         recordEntity.setPerson(person);
-
         return recordRepository.save(recordEntity);
     }
 
