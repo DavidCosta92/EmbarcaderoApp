@@ -19,7 +19,7 @@ public class Engine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    //@Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private EngineType_enum engineType_enum;
 
     @Column(unique = true)

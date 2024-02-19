@@ -29,7 +29,7 @@ public class Boat {
 
     private Integer capacity;
 
-    // @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private TypeBoat_enum typeBoat_enum;
 
 }

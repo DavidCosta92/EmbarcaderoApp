@@ -24,6 +24,7 @@ public class Shift {
     private Integer id;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Dam_enum dam;
 
     @Column(nullable = false, updatable = false)

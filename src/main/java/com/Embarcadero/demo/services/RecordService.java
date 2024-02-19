@@ -1,12 +1,9 @@
 package com.Embarcadero.demo.services;
 
-import com.Embarcadero.demo.model.dtos.boat.BoatAddDto;
-import com.Embarcadero.demo.model.dtos.boat.BoatReadDto;
-import com.Embarcadero.demo.model.dtos.person.PersonAddDto;
 import com.Embarcadero.demo.model.dtos.records.RecordAddDto;
 import com.Embarcadero.demo.model.dtos.records.RecordReadDto;
+import com.Embarcadero.demo.model.dtos.records.RecordReadDtoArray;
 import com.Embarcadero.demo.model.dtos.records.RecordUpdateDto;
-import com.Embarcadero.demo.model.entities.Boat;
 import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.Record;
 import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
@@ -16,11 +13,14 @@ import com.Embarcadero.demo.model.mappers.RecordMapper;
 import com.Embarcadero.demo.model.repositories.RecordRepository;
 import com.Embarcadero.demo.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,9 +43,40 @@ public class RecordService {
     @Autowired
     BoatMapper boatMapper;
 
+    public RecordReadDtoArray findAllRecords(String recordState, Date startTime , Date endTime, Integer page, Integer size, String sortBy){
+
+        Page<Record> results;
+        Sort sort = Sort.by(sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        if( recordState !=null && startTime == null && endTime == null){
+            results = recordRepository.findAllByRecordStateContains(recordState, pageable);
+        } else if( recordState == null && startTime!= null && endTime == null){
+            results = recordRepository.findAllByStartTimeContains(startTime, pageable);
+        }  else if( recordState == null && startTime == null && endTime != null){
+            results = recordRepository.findAllByEndTimeContains(endTime, pageable);
+        } else if( recordState != null && startTime!= null){
+            results = recordRepository.findAllByRecordStateContainsAndStartTimeContains(recordState , startTime, pageable);
+        } else if( recordState != null && endTime!= null){
+            results = recordRepository.findAllByRecordStateContainsAndEndTimeContains(recordState , endTime, pageable);
+        } else if( recordState != null && startTime!= null && endTime!= null){
+            results = recordRepository.findAllByRecordStateContainsAndStartTimeContainsAndEndTimeContains(recordState ,startTime, endTime, pageable);
+        }
+        else {
+            results = recordRepository.findAll(pageable);
+        }
+
+        Page pagedResults = results.map(entity -> recordMapper.toReadDto(entity));
+        return RecordReadDtoArray.builder()
+                .records(pagedResults.getContent())
+                .total_results(pagedResults.getTotalElements())
+                .results_per_page(size)
+                .current_page(page)
+                .pages(pagedResults.getTotalPages())
+                .sort_by(sortBy)
+                .build();
+    }
     public RecordAddDto setDefaultValuesAddNewRecord(RecordAddDto recordAddDto){
-        // RecordAddDto defaultAdd = recordAddDto;
-        // este codigo podria salvarlo desde controlador, poniendo valores por default???
         if(recordAddDto.getNumberOfGuests() == null) recordAddDto.setNumberOfGuests(0);
         if (recordAddDto.getNotes() == null) {
             recordAddDto.setNotes("Sin observaciones.");
@@ -58,11 +89,19 @@ public class RecordService {
         recordAddDto.setRecordState(RecordState_enum.ACTIVO);
         return recordAddDto;
     }
+    public void changeRecordState (Record recordBd , RecordUpdateDto updateDto){
+        recordBd.setRecordState(updateDto.getRecordState());
+
+        if(!updateDto.getRecordState().equals(RecordState_enum.ACTIVO) && !updateDto.getRecordState().equals(RecordState_enum.DESCONOCIDO)){
+            recordBd.setEndTime(new Date()); // si estado da baja al record, setear endtime con la fecha de baja
+        } else {
+            recordBd.setEndTime(null);// si estado da alta al record, eliminar endtime
+        }
+    }
 
     public RecordReadDto updateRecord(Record recordBd , RecordUpdateDto updateDto){
-
         // setear los datos nuevos
-        if(updateDto.getRecordState()!= null) recordBd.setRecordState(updateDto.getRecordState());
+        if(updateDto.getRecordState()!= null) changeRecordState(recordBd,updateDto);
 
         if(updateDto.getNumberOfGuests()!= null) {
             validator.stringOnlyIntegerPositiveNumbers("Acompañantes", String.valueOf(updateDto.getNumberOfGuests()));
@@ -77,24 +116,9 @@ public class RecordService {
         if(updateDto.getBoat()!= null){
             recordBd.setBoat(boatService.getByName(updateDto.getBoat().getName()));// por regla negocio, solo oficinas pueden cambiar botes, solo se acepta bote si ya existe, sino getByName lanzara exception
         }
-
-
-        // todo DEBUG METODO UPDATE
-        // todo DEBUG METODO UPDATE
-        // todo DEBUG METODO UPDATE
-        // todo DEBUG METODO UPDATE
-
         if(updateDto.getPerson()!= null){
             recordBd.setPerson(personService.updateRecordPerson(recordBd, updateDto)); //Puede crear nueva persona si llegan todos los campos o editar si solo vienen algunos..
         }
-
-        // todo DEBUG METODO UPDATE
-        // todo DEBUG METODO UPDATE
-        // todo DEBUG METODO UPDATE
-        // todo DEBUG METODO UPDATE
-
-
-
         return recordMapper.toReadDto(recordRepository.save(recordBd));
     }
     public void validateCar(String car){

@@ -30,5 +30,6 @@ public class License {
     @JoinColumn(name = "id_owner_fk" , nullable = false)
     private Person person;
 
+    @Enumerated(EnumType.STRING)
     private State_enum state_enum;
 }

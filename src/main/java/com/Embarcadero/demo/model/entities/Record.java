@@ -25,6 +25,7 @@ public class Record {
 
     private Date endTime;
 
+    @Enumerated(EnumType.STRING)
     private RecordState_enum recordState;
 
     // TODO MANY RECORDS TO ONE private Boat boat;
