@@ -77,9 +77,24 @@ public class RecordService {
         if(updateDto.getBoat()!= null){
             recordBd.setBoat(boatService.getByName(updateDto.getBoat().getName()));// por regla negocio, solo oficinas pueden cambiar botes, solo se acepta bote si ya existe, sino getByName lanzara exception
         }
+
+
+        // todo DEBUG METODO UPDATE
+        // todo DEBUG METODO UPDATE
+        // todo DEBUG METODO UPDATE
+        // todo DEBUG METODO UPDATE
+
         if(updateDto.getPerson()!= null){
-            recordBd.setPerson(personService.updateRecordPerson(updateDto)); // puede crear nueva persona si llegan todos los campos o editar si solo vienen algunos..
+            recordBd.setPerson(personService.updateRecordPerson(recordBd, updateDto)); //Puede crear nueva persona si llegan todos los campos o editar si solo vienen algunos..
         }
+
+        // todo DEBUG METODO UPDATE
+        // todo DEBUG METODO UPDATE
+        // todo DEBUG METODO UPDATE
+        // todo DEBUG METODO UPDATE
+
+
+
         return recordMapper.toReadDto(recordRepository.save(recordBd));
     }
     public void validateCar(String car){

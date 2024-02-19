@@ -47,6 +47,7 @@ public class GlobalExceptionHandler {
     }
     // excepts defecto
     // excepts defecto
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseBody
     public ResponseEntity<ExceptionMessages> enumInputError (HttpMessageNotReadableException ex){
