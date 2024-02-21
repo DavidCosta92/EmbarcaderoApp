@@ -27,4 +27,9 @@ public class UserService {
         if (!userBd.isEnabled() && !userBd.isAccountNonLocked() && !userBd.isAccountNonExpired() ) throw new InvalidValueException("Staff user no apto para ser agregado");
         return userBd;
     }
+    public User findById(Integer id){
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) throw new NotFoundException("No se encontro usuario con ID:"+id);
+        return user.get();
+    }
 }

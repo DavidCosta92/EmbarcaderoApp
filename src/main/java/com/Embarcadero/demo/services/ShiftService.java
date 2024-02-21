@@ -13,6 +13,7 @@ import com.Embarcadero.demo.model.dtos.shift.ShiftReadDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDtoArray;
 import com.Embarcadero.demo.model.dtos.shift.ShiftUpdateDto;
 import com.Embarcadero.demo.model.dtos.staff.StaffMemberAddDto;
+import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.Record;
 import com.Embarcadero.demo.model.entities.Shift;
 import com.Embarcadero.demo.model.entities.enums.Dam_enum;
@@ -165,6 +166,15 @@ public class ShiftService {
         shiftBd.getStaff().add(staffMemberEntity);
         shiftRepository.save(shiftBd);
         return shiftMapper.toReadDTO(shiftBd);
+    }
+
+    public ShiftReadDto removeStaffFromShift(Integer idShift, Integer idStaff){
+        Shift shiftBd = getShiftById(idShift);
+        User userToRemove = userService.findById(idStaff);
+        Boolean removeResult = shiftBd.getStaff().remove(userToRemove);
+        if (!removeResult) throw new NotFoundException("No se encontro miembro de staff con id:"+idStaff);
+        shiftRepository.save(shiftBd);
+        return  shiftMapper.toReadDTO(shiftBd);
     }
 
     public ShiftReadDto addNewRecord(RecordAddDto recordAddDTO){

@@ -53,13 +53,13 @@ public class ShiftController {
     //TODO SEGUIR CON resto de endpoints ??? .... Que funcion falta?
 
 
-    // TODO STAFF
+
     @PostMapping("{idShift}/staff/")
     public ResponseEntity<ShiftReadDto> addStaffToShift (@PathVariable Integer idShift , @Valid @RequestBody StaffMemberAddDto staffMemberDni){
         return new ResponseEntity<>(shiftService.addStaffUser(idShift , staffMemberDni), HttpStatus.ACCEPTED);
     }
-
-
-
-    // TODO SEGUIR CON EL RESTO DE ENDPOINTS!!! borrar del staff, actualizar del staff? tipo cambiar uno por otro?
+    @PatchMapping("{idShift}/staff/{idStaff}")
+    public ResponseEntity<ShiftReadDto> removeStaffFromShift (@PathVariable Integer idShift , @PathVariable Integer idStaff){
+        return new ResponseEntity<>(shiftService.removeStaffFromShift(idShift , idStaff), HttpStatus.ACCEPTED);
+    }
 }
