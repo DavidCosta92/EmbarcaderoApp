@@ -19,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +45,22 @@ public class RecordService {
     @Autowired
     BoatMapper boatMapper;
 
-    public RecordReadDtoArray findAllRecords(String recordState, Date startTime , Date endTime, Integer page, Integer size, String sortBy){
+    public RecordReadDtoArray findAllRecords(RecordState_enum recordState, String startTime , Date endTime, Integer page, Integer size, String sortBy){
+        Date castedDate = null;
+        if(startTime != null){
+            SimpleDateFormat formatPattern = new SimpleDateFormat("yyyy-MM-dd");
+            try{
+                castedDate = formatPattern.parse(startTime);
+
+                System.out.println("·.... =>>>  new date ···..·····"+formatPattern.format(new Date()));
+                System.out.println("·.... =>>>  castedDate ········"+formatPattern.format(castedDate));
+
+            }catch (ParseException exception){
+                System.out.println("··················· ERRROR PARSEO DE FECHA ········");
+                System.out.println("··················· ERRROR PARSEO DE FECHA ········");
+            }
+        }
+
 
         Page<Record> results;
         Sort sort = Sort.by(sortBy);
@@ -52,15 +69,15 @@ public class RecordService {
         if( recordState !=null && startTime == null && endTime == null){
             results = recordRepository.findAllByRecordStateContains(recordState, pageable);
         } else if( recordState == null && startTime!= null && endTime == null){
-            results = recordRepository.findAllByStartTimeContains(startTime, pageable);
+            results = recordRepository.findAllByStartTimeContains(castedDate, pageable);
         }  else if( recordState == null && startTime == null && endTime != null){
             results = recordRepository.findAllByEndTimeContains(endTime, pageable);
         } else if( recordState != null && startTime!= null){
-            results = recordRepository.findAllByRecordStateContainsAndStartTimeContains(recordState , startTime, pageable);
+            results = recordRepository.findAllByRecordStateContainsAndStartTimeContains(recordState , castedDate, pageable);
         } else if( recordState != null && endTime!= null){
             results = recordRepository.findAllByRecordStateContainsAndEndTimeContains(recordState , endTime, pageable);
         } else if( recordState != null && startTime!= null && endTime!= null){
-            results = recordRepository.findAllByRecordStateContainsAndStartTimeContainsAndEndTimeContains(recordState ,startTime, endTime, pageable);
+            results = recordRepository.findAllByRecordStateContainsAndStartTimeContainsAndEndTimeContains(recordState ,castedDate, endTime, pageable);
         }
         else {
             results = recordRepository.findAll(pageable);

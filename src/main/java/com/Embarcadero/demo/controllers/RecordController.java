@@ -36,9 +36,9 @@ public class RecordController {
         return new ResponseEntity<>(shiftService.updateRecord(id,recordUpdateDTO) , HttpStatus.ACCEPTED);
     }
     @GetMapping
-    public ResponseEntity<RecordReadDtoArray> findAllRecords (@RequestParam(required = false) String recordState,
-                                                             @RequestParam(required = false) Date startTime,
-                                                              @RequestParam(required = false) Date endTime,
+    public ResponseEntity<RecordReadDtoArray> findAllRecords (@RequestParam(required = false) RecordState_enum recordState,
+                                                             @RequestParam(required = false) String startTime,
+                                                             @RequestParam(required = false) Date endTime,
                                                              @RequestParam(required = false, defaultValue = "0") Integer page,
                                                              @RequestParam(required = false, defaultValue = "10") Integer size,
                                                              @RequestParam(required = false, defaultValue = "recordState") String sortBy){
