@@ -2,6 +2,7 @@ package com.Embarcadero.demo.utils;
 
 import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
 import com.Embarcadero.demo.exceptions.customsExceptions.InvalidValueException;
+import com.Embarcadero.demo.model.entities.enums.Dam_enum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -50,4 +51,6 @@ public class Validator {
     }
 
     /* validacion datos negocio */
+
+
 }

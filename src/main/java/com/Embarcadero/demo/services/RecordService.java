@@ -142,9 +142,8 @@ public class RecordService {
     }
 
     public List<RecordReadDto> getOpenRecords(List<Record> records){
-        Stream<Record> activeRecordsEntities = records.stream().filter(record -> record.getRecordState().equals("ACTIVO"));
-        Stream<RecordReadDto> activeRecordsDtos = activeRecordsEntities.map(record -> recordMapper.toReadDto(record));
-        return activeRecordsDtos.collect(Collectors.toList());
+        List<Record> activeRecordsEntities = records.stream().filter(record -> record.getRecordState().equals(RecordState_enum.ACTIVO)).collect(Collectors.toList());
+        return activeRecordsEntities.stream().map(record -> recordMapper.toReadDto(record)).collect(Collectors.toList());
     }
 
 }
