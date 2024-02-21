@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -93,8 +94,9 @@ public class ShiftService {
 
         Shift shiftEntity = shiftMapper.toEntity(shiftAddDto);
 
-        Date currentDate = new Date();
-        shiftEntity.setDate(currentDate);
+        // todo Date currentDate = new Date();
+
+        shiftEntity.setDate(LocalDate.now());
 
         Shift savedShift = shiftRepository.save(shiftEntity);
         return shiftMapper.toReadDTO(savedShift);

@@ -19,10 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,43 +42,34 @@ public class RecordService {
     @Autowired
     BoatMapper boatMapper;
 
-    public RecordReadDtoArray findAllRecords(RecordState_enum recordState, String startTime , Date endTime, Integer page, Integer size, String sortBy){
-        Date castedDate = null;
-        if(startTime != null){
-            SimpleDateFormat formatPattern = new SimpleDateFormat("yyyy-MM-dd");
-            try{
-                castedDate = formatPattern.parse(startTime);
+    public Map<String,Integer> validateDate(String date){
+        HashMap<String, Integer> resp = new HashMap<>();
+        Integer year = null;
+        Integer month = null;
+        Integer day = null;
 
-                System.out.println("·.... =>>>  new date ···..·····"+formatPattern.format(new Date()));
-                System.out.println("·.... =>>>  castedDate ········"+formatPattern.format(castedDate));
-
-            }catch (ParseException exception){
-                System.out.println("··················· ERRROR PARSEO DE FECHA ········");
-                System.out.println("··················· ERRROR PARSEO DE FECHA ········");
-            }
+        if(date != null){
+            String[] splitedDate = date.split("-");
+            year = splitedDate.length>0 ? Integer.valueOf(splitedDate[0]) : null;
+            month = splitedDate.length>1 ? Integer.valueOf(splitedDate[1]) : null;
+            day = splitedDate.length>2 ? Integer.valueOf(splitedDate[2]) : null;
         }
 
+        resp.put("y",year);
+        resp.put("m",month);
+        resp.put("d",day);
+        return resp;
+    }
+
+    public RecordReadDtoArray findAllRecords(RecordState_enum recState, String sTime , String eTime, Integer page, Integer size, String sortBy){
+        Map<String, Integer> startT = validateDate(sTime);
+        Map<String, Integer> endT = validateDate(eTime);
 
         Page<Record> results;
         Sort sort = Sort.by(sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        if( recordState !=null && startTime == null && endTime == null){
-            results = recordRepository.findAllByRecordStateContains(recordState, pageable);
-        } else if( recordState == null && startTime!= null && endTime == null){
-            results = recordRepository.findAllByStartTimeContains(castedDate, pageable);
-        }  else if( recordState == null && startTime == null && endTime != null){
-            results = recordRepository.findAllByEndTimeContains(endTime, pageable);
-        } else if( recordState != null && startTime!= null){
-            results = recordRepository.findAllByRecordStateContainsAndStartTimeContains(recordState , castedDate, pageable);
-        } else if( recordState != null && endTime!= null){
-            results = recordRepository.findAllByRecordStateContainsAndEndTimeContains(recordState , endTime, pageable);
-        } else if( recordState != null && startTime!= null && endTime!= null){
-            results = recordRepository.findAllByRecordStateContainsAndStartTimeContainsAndEndTimeContains(recordState ,castedDate, endTime, pageable);
-        }
-        else {
-            results = recordRepository.findAll(pageable);
-        }
+        results = recordRepository.findAllByOptionalParameters(recState ,startT.get("y"), startT.get("m"), startT.get("d"), endT.get("y"), endT.get("m"), endT.get("d"), pageable);
 
         Page pagedResults = results.map(entity -> recordMapper.toReadDto(entity));
         return RecordReadDtoArray.builder()

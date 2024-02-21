@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
 public class ShiftReadDto {
     private Integer id;
     private Dam_enum dam;
-    private Date date;
+    private LocalDate date;
     // TODO Lista usuarios que estan de guardia, deben ser guardavidas..  relacion many to many
     private List<RecordReadDto> records;
     private List<UserReadDto> staff;

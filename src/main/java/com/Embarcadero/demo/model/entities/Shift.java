@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,8 @@ public class Shift {
     private Dam_enum dam;
 
     @Column(nullable = false, updatable = false)
-    private Date date;
+    // @Temporal(TemporalType.DATE) // para que solo se almacene la fecha sin hora
+    private LocalDate date;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<Record> records;
