@@ -29,10 +29,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,20 +50,33 @@ public class ShiftService {
     private RecordService recordService;
 
 
-    public ShiftReadDtoArray findAll (Dam_enum dam, Date date, Integer page, Integer size, String sortBy){
+    public Map<String,Integer> validateDate(String date){
+        HashMap<String, Integer> resp = new HashMap<>();
+        Integer year = null;
+        Integer month = null;
+        Integer day = null;
+
+        if(date != null){
+            String[] splitedDate = date.split("-");
+            year = splitedDate.length>0 ? Integer.valueOf(splitedDate[0]) : null;
+            month = splitedDate.length>1 ? Integer.valueOf(splitedDate[1]) : null;
+            day = splitedDate.length>2 ? Integer.valueOf(splitedDate[2]) : null;
+        }
+
+        resp.put("y",year);
+        resp.put("m",month);
+        resp.put("d",day);
+        return resp;
+    }
+
+
+    public ShiftReadDtoArray findAll (Dam_enum dam, String stringDate, Integer page, Integer size, String sortBy){
         Page<Shift> results;
         Sort sort = Sort.by(sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
+        Map<String, Integer> date = validateDate(stringDate);
 
-        if( dam !=null && date == null){
-            results = shiftRepository.findAllByDamContains(dam, pageable);
-        } else if( dam == null && date!= null){
-            results = shiftRepository.findAllByDateContains(date, pageable);
-        } else if( dam != null && date!= null){
-            results = shiftRepository.findAllByDamContainsAndDateContains(dam , date, pageable);
-        } else {
-            results = shiftRepository.findAll(pageable);
-        }
+        results = shiftRepository.findAllByOptionalParameters(dam , date.get("y"), date.get("m"), date.get("d"), pageable);
 
         Page pagedResults = results.map(entity -> shiftMapper.toReadDTO(entity));
         return ShiftReadDtoArray.builder()

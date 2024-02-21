@@ -28,7 +28,7 @@ public class ShiftController {
 
     @GetMapping
     public ResponseEntity<ShiftReadDtoArray> showAll (@RequestParam(required = false) Dam_enum dam,
-                                                      @RequestParam(required = false) Date date,
+                                                      @RequestParam(required = false) String date,
                                                       @RequestParam(required = false, defaultValue = "0") Integer page,
                                                       @RequestParam(required = false, defaultValue = "10") Integer size,
                                                       @RequestParam(required = false, defaultValue = "dam") String sortBy){
