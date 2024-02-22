@@ -42,23 +42,4 @@ public class AplicationSecurityConfig {
                 .orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
 
-/*
-// todo para permitir cors de determinado origen
-// todo para permitir cors de determinado origen
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(@NotNull CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS")
-                        .allowCredentials(true);
-            }
-        };
-    }
- */
-
-
-
 }

@@ -2,6 +2,7 @@ package com.Embarcadero.demo.config;
 
 import com.Embarcadero.demo.auth.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,10 +23,12 @@ public class SecurityConfig {
     private JwtAuthenticationFilter jwtAuthenticationFilter;
     @Autowired
     private AuthenticationProvider authProvider;
+    @Autowired
+    private CorsConfig corsConfig;
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
-                .csrf(csrf-> csrf.disable()).headers().disable()
+                .csrf(csrf-> csrf.disable())//.headers().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/licences/**").permitAll()
