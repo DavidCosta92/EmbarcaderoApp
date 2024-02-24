@@ -40,6 +40,8 @@ public class ShiftService {
     private ShiftMapper shiftMapper;
 
     @Autowired
+    private PersonService personService;
+    @Autowired
     private PersonMapper personMapper;
 
     @Autowired
@@ -91,6 +93,16 @@ public class ShiftService {
     public ShiftReadDto findById (Integer id){
         return shiftMapper.toReadDTO(getShiftById(id));
     }
+
+    public ShiftReadDto findShiftByIdUser (Integer id){
+        return shiftMapper.toReadDTO(getShiftByIdUser(id));
+    }
+    public Shift getShiftByIdUser (Integer id){
+        Optional<Shift> shift = shiftRepository.getShiftByIdUser(id);
+        if(shift.isEmpty()) throw new NotFoundException("Turno no encontrado con el staff id: "+id);
+        return shift.get();
+    }
+
     public Shift getShiftById (Integer id){
         Optional<Shift> shift = shiftRepository.findById(id);
         if(shift.isEmpty()) throw new NotFoundException("Turno no encontrado por id: "+id);

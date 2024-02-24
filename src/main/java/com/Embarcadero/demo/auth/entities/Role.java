@@ -14,6 +14,11 @@ public enum Role {
             Set.of(
                     Permission.READ_ALL
             )),
+    OFFICE(
+            Set.of(
+                    Permission.READ_ALL
+            )
+    ),
     USER(
             Set.of(
                     Permission.READ_ALL

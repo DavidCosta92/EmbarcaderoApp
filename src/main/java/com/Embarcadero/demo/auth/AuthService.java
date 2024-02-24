@@ -65,6 +65,7 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest loginRequest) {
+        System.out.println("************** >>>>>>>>>>>>>> ENTRE AL LOGIN YA PASE EL FILTRO DE JWT <<<<<<<<<<<<<<<<< **************");
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername() , loginRequest.getPassword()));
         UserDetails userDetails = userRepository
                 .findByUsername(loginRequest.getUsername())
@@ -133,6 +134,7 @@ public class AuthService {
 
     public Role createRoleByEmail ( String email){
         Role role = Role.USER;
+        if (email.contains("@office")) role = Role.OFFICE;
         if (email.contains("@gv")) role = Role.LIFEGUARD;
         if (email.contains("super@")) role = Role.SUPER_ADMIN;
         if (email.contains("admin@")) role = Role.ADMIN;

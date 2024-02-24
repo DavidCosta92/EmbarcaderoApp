@@ -38,6 +38,10 @@ public class ShiftController {
     public ResponseEntity<ShiftReadDto> findById(@PathVariable Integer id){
         return new ResponseEntity<>(shiftService.findById(id) , HttpStatus.OK);
     }
+    @GetMapping("user/{id}")
+    public ResponseEntity<ShiftReadDto> findShiftByIdUser(@PathVariable Integer id){
+        return new ResponseEntity<>(shiftService.findShiftByIdUser(id) , HttpStatus.OK);
+    }
     @PatchMapping("{id}")
     public ResponseEntity<ShiftReadDto> updateShift (@PathVariable Integer id, @RequestBody ShiftUpdateDto shiftUpdateDto){
         return  new ResponseEntity<>(shiftService.updateShift(id , shiftUpdateDto ), HttpStatus.ACCEPTED);

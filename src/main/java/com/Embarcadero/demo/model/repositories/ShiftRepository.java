@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Repository
 public interface ShiftRepository extends JpaRepository<Shift , Integer> {
@@ -19,5 +20,9 @@ public interface ShiftRepository extends JpaRepository<Shift , Integer> {
 
     @Query("SELECT s FROM Shift s WHERE (:dam is null or CAST(s.dam AS string) LIKE %:dam%) AND (:year is null or YEAR(s.date) = :year) AND (:month is null or MONTH(s.date) = :month) AND (:day is null or DAY(s.date) = :day)")
     Page<Shift> findAllByOptionalParameters(Dam_enum dam , Integer year, Integer month, Integer day, Pageable pageable);
+
+
+    @Query("SELECT s from FROM Shift s JOIN s.staff u WHERE u.id = :id  ")
+    Optional<Shift> getShiftByIdUser (Integer id);
 
 }

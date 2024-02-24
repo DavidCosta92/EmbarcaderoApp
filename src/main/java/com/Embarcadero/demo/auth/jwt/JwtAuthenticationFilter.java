@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -38,6 +40,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         username = jwtService.getUsernameFromToken(token);
         // si es valido el token, obtengo el username y chequeo si esta authenticado en el security context
+
+
+        System.out.println("******** username "+username);
+
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if(jwtService.isTokenValid(token , userDetails)){
