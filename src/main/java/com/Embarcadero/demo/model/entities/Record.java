@@ -1,5 +1,6 @@
 package com.Embarcadero.demo.model.entities;
 
+import com.Embarcadero.demo.model.entities.boat.SimpleBoat;
 import com.Embarcadero.demo.model.entities.enums.Dam_enum;
 import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
 import jakarta.persistence.*;
@@ -28,10 +29,17 @@ public class Record {
     @Enumerated(EnumType.STRING)
     private RecordState_enum recordState;
 
-    // TODO MANY RECORDS TO ONE private Boat boat;
+
+    // @ManyToOne(cascade = {CascadeType.MERGE})
+    // @JoinColumn(name = "boat_id", nullable = true)
+    // private Boat boat;
     @ManyToOne(cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "boat_id", nullable = true)
-    private Boat boat;
+    @JoinColumn(name = "license_id", nullable = true)
+    private License license;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name="simpleBoat_id", referencedColumnName="id", nullable = true) // TODO, PONER QUE AL BORRAR, BORRE EN CASCADA ASI LIMPO BD!
+    private SimpleBoat simpleBoat;
 
     // TODO MANY RECORDS TO ONE private Person driver;
     @ManyToOne(cascade = {CascadeType.MERGE})
@@ -43,5 +51,4 @@ public class Record {
     private String car;
 
     private String notes;
-
 }

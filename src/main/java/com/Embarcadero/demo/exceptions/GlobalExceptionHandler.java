@@ -1,10 +1,7 @@
 package com.Embarcadero.demo.exceptions;
 
 import com.Embarcadero.demo.exceptions.customsExceptions.*;
-import com.Embarcadero.demo.exceptions.customsExceptions.*;
-import com.Embarcadero.demo.model.entities.enums.EngineType_enum;
-import com.Embarcadero.demo.model.entities.enums.State_enum;
-import com.Embarcadero.demo.model.entities.enums.TypeBoat_enum;
+import com.Embarcadero.demo.model.entities.enums.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -55,7 +52,8 @@ public class GlobalExceptionHandler {
         String msg = "";
         if(cause.contains("EngineType_enum")) msg = "Error en tipo de motor, las opciones son : " + Arrays.asList(EngineType_enum.class.getEnumConstants());
         if(cause.contains("State_enum")) msg = "Error estado de matricula, las opciones son : " +  Arrays.asList(State_enum.class.getEnumConstants());
-        if(cause.contains("TypeBoat_enum")) msg = "Error en tipo de embarcacion, las opciones son : " +  Arrays.asList(TypeBoat_enum.class.getEnumConstants());
+        if(cause.contains("TypeLicencedBoat_enum")) msg = "Error en tipo de embarcacion, las opciones con matricula son : " +  Arrays.asList(TypeLicencedBoat_enum.class.getEnumConstants());
+        if(cause.contains("TypeSimpleBoat_enum")) msg = "Error en tipo de embarcacion, las opciones sin matricula son : " +  Arrays.asList(TypeSimpleBoat_enum.class.getEnumConstants());
         return new ResponseEntity<ExceptionMessages>(new ExceptionMessages(msg, InternalExceptionCodes.ILLEGAL_ARGS.ordinal()) , HttpStatus.BAD_REQUEST);
     }
 

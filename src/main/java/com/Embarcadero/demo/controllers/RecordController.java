@@ -31,9 +31,14 @@ public class RecordController {
     public ResponseEntity<ShiftReadDto> addNewRecord (@Valid @RequestBody RecordAddDto recordAddDTO){
         return new ResponseEntity<>(shiftService.addNewRecord(recordAddDTO) , HttpStatus.CREATED);
     }
-    @PatchMapping("{id}")
+    @CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", methods = {RequestMethod.PATCH})
+    @PutMapping("{id}")
     public ResponseEntity<RecordReadDto> updateRecord (@PathVariable Integer id, @RequestBody RecordUpdateDto recordUpdateDTO){
         return new ResponseEntity<>(shiftService.updateRecord(id,recordUpdateDTO) , HttpStatus.ACCEPTED);
+    }
+    @GetMapping("{id}")
+    public ResponseEntity<RecordReadDto> findById (@PathVariable Integer id){
+        return new ResponseEntity<>(recordService.findById(id) , HttpStatus.ACCEPTED);
     }
     @GetMapping
     public ResponseEntity<RecordReadDtoArray> findAllRecords (@RequestParam(required = false) RecordState_enum recordState,

@@ -1,13 +1,9 @@
 package com.Embarcadero.demo.model.dtos.records;
 
-import com.Embarcadero.demo.model.dtos.boat.BoatReadDto;
+import com.Embarcadero.demo.model.dtos.boat.SimpleBoatReadDto;
 import com.Embarcadero.demo.model.dtos.person.PersonReadDto;
-import com.Embarcadero.demo.model.entities.Boat;
-import com.Embarcadero.demo.model.entities.Person;
+import com.Embarcadero.demo.model.entities.License;
 import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +20,8 @@ public class RecordReadDto {
     private Date startTime;
     private Date endTime;
     private RecordState_enum recordState;
-    private BoatReadDto boat;
+    private License license;
+    private SimpleBoatReadDto simpleBoat;
     private PersonReadDto person;
     private Integer numberOfGuests;
     private String car;

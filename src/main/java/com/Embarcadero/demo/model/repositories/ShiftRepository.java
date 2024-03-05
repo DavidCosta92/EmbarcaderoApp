@@ -22,7 +22,7 @@ public interface ShiftRepository extends JpaRepository<Shift , Integer> {
     Page<Shift> findAllByOptionalParameters(Dam_enum dam , Integer year, Integer month, Integer day, Pageable pageable);
 
 
-    @Query("SELECT s from FROM Shift s JOIN s.staff u WHERE u.id = :id  ")
+    @Query("SELECT s from FROM Shift s JOIN s.staff u WHERE u.id = :id")
     Optional<Shift> getShiftByIdUser (Integer id);
 
 }

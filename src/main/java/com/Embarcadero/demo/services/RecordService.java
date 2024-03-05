@@ -1,12 +1,17 @@
 package com.Embarcadero.demo.services;
 
+import com.Embarcadero.demo.exceptions.customsExceptions.ForbiddenAction;
+import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
 import com.Embarcadero.demo.model.dtos.records.RecordAddDto;
 import com.Embarcadero.demo.model.dtos.records.RecordReadDto;
 import com.Embarcadero.demo.model.dtos.records.RecordReadDtoArray;
 import com.Embarcadero.demo.model.dtos.records.RecordUpdateDto;
+import com.Embarcadero.demo.model.entities.License;
 import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.Record;
+import com.Embarcadero.demo.model.entities.boat.SimpleBoat;
 import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
+import com.Embarcadero.demo.model.entities.enums.State_enum;
 import com.Embarcadero.demo.model.mappers.BoatMapper;
 import com.Embarcadero.demo.model.mappers.PersonMapper;
 import com.Embarcadero.demo.model.mappers.RecordMapper;
@@ -34,6 +39,9 @@ public class RecordService {
     private Validator validator;
 
     @Autowired
+    private LicenseService licenseService;
+
+    @Autowired
     PersonService personService;
     @Autowired
     PersonMapper personMapper;
@@ -59,6 +67,11 @@ public class RecordService {
         resp.put("m",month);
         resp.put("d",day);
         return resp;
+    }
+    public RecordReadDto findById(Integer id){
+        Optional<Record> record = recordRepository.findById(id);
+        if(record.isEmpty()) throw new NotFoundException("No se econtro record con el Id:"+id);
+        return  recordMapper.toReadDto(record.get());
     }
 
     public RecordReadDtoArray findAllRecords(RecordState_enum recState, String sTime , String eTime, Integer page, Integer size, String sortBy){
@@ -118,8 +131,16 @@ public class RecordService {
         }
         if(updateDto.getNotes()!= null) recordBd.setNotes(updateDto.getNotes());
 
-        if(updateDto.getBoat()!= null){
-            recordBd.setBoat(boatService.getByName(updateDto.getBoat().getName()));// por regla negocio, solo oficinas pueden cambiar botes, solo se acepta bote si ya existe, sino getByName lanzara exception
+
+        if (updateDto.getSimpleBoat() != null && updateDto.getLicense() == null){
+            // todo, aca deberia permitir que solo cambie algunos datos de simple boat. osea, si me mandan un solo campo, lo debo recibir y actualizar solo ese campo.. pendiente!!
+            // todo, aca deberia permitir que solo cambie algunos datos de simple boat. osea, si me mandan un solo campo, lo debo recibir y actualizar solo ese campo.. pendiente!!
+            // todo, aca deberia permitir que solo cambie algunos datos de simple boat. osea, si me mandan un solo campo, lo debo recibir y actualizar solo ese campo.. pendiente!!
+            recordBd.setSimpleBoat(updateDto.getSimpleBoat());
+        } else if (updateDto.getSimpleBoat() == null && updateDto.getLicense() != null){ // solo puede cambiar de licenseCode!
+            License newLicenseBd = licenseService.getByLicenseCode(updateDto.getLicense().getLicenseCode()); //  verificar que exista
+            if(! newLicenseBd.getState_enum().equals(State_enum.OK.name())) throw new ForbiddenAction("Matricula no esta activa, el estado actual es: "+newLicenseBd.getState_enum().name()); //  verificar que este OK
+            recordBd.setLicense(newLicenseBd);
         }
         if(updateDto.getPerson()!= null){
             recordBd.setPerson(personService.updateRecordPerson(recordBd, updateDto)); //Puede crear nueva persona si llegan todos los campos o editar si solo vienen algunos..
@@ -132,8 +153,13 @@ public class RecordService {
     public Record addNewRecord(RecordAddDto recordAddDto){
         RecordAddDto addDto = setDefaultValuesAddNewRecord(recordAddDto); // setea los valores por defecto que no sean enviados, segun la logica de negocio
         validateCar(addDto.getCar());
-        if(addDto.getHasLicense()) {
-            addDto.setBoat(boatService.findByName(addDto.getBoat().getName())); // Las licencias solo las entrega nautica, por lo que si no existe, findByName, lanzara exception
+        if(addDto.getHasLicense()) { // si tiene licencia, ya debe existir en bd, ya que solo oficina las crea,
+            License licenseBd = licenseService.getByLicenseCode(addDto.getLicense().getLicenseCode()); // si no existe, getByLicenseCode, lanzara exception
+            if( ! licenseBd.getState_enum().equals(State_enum.OK.name())){ // SI NO ESTA ACTIVA
+                throw new ForbiddenAction("Matricula no esta activa, el estado actual es: "+licenseBd.getState_enum().name());
+            }
+        } else{
+            boatService.addBoat(recordAddDto.getSimpleBoat()); // no tiene licencia, es un simpleBote, solo lo guardo en bd
         }
         Record recordEntity = recordMapper.toEntity(addDto);
         Person person = personService.getOrAddPersonForLicensesOrRecord(addDto.getPerson());

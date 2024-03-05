@@ -1,8 +1,8 @@
 package com.Embarcadero.demo.model.dtos.records;
 
-import com.Embarcadero.demo.model.dtos.boat.BoatReadDto;
-import com.Embarcadero.demo.model.dtos.person.PersonAddDto;
 import com.Embarcadero.demo.model.dtos.person.PersonUpdateDto;
+import com.Embarcadero.demo.model.entities.License;
+import com.Embarcadero.demo.model.entities.boat.SimpleBoat;
 import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,10 +15,12 @@ import lombok.NoArgsConstructor;
 public class RecordUpdateDto {
     private Integer idShift;
 
-    // @Valid todo VALIDAR BOAT EN SERVICE PORQUE ES OPCIONAL!
-    private BoatReadDto boat; // Es un read porque solo envio nombre de embarcacion..
+    // @Valid todo VALIDAR LICENSE EN SERVICE PORQUE ES OPCIONAL!
+    private License license; // Es un read porque solo envio license code
     // @Valid todo VALIDAR PERSONA EN SERVICE PORQUE ES OPCIONAL!
     private PersonUpdateDto person;
+    // @Valid todo VALIDAR BOAT EN SERVICE PORQUE ES OPCIONAL!
+    private SimpleBoat simpleBoat;
 
     // todo VALIDAR DATOS EN SHIFT SERVICE PORQUE ES OPCIONAL!
     private RecordState_enum recordState;
@@ -27,5 +29,3 @@ public class RecordUpdateDto {
     private String notes;
     private Boolean hasLicense;
 }
-
-

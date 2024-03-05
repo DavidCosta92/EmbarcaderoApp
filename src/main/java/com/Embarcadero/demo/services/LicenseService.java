@@ -2,15 +2,15 @@ package com.Embarcadero.demo.services;
 
 import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
 import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
-import com.Embarcadero.demo.model.dtos.boat.BoatUpdateDto;
+import com.Embarcadero.demo.model.dtos.boat.RegisteredBoatUpdateDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseAddDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseReadDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseReadDtoArray;
 import com.Embarcadero.demo.model.dtos.license.LicenseUpdateDto;
 import com.Embarcadero.demo.model.dtos.person.PersonUpdateDto;
-import com.Embarcadero.demo.model.entities.Boat;
 import com.Embarcadero.demo.model.entities.License;
 import com.Embarcadero.demo.model.entities.Person;
+import com.Embarcadero.demo.model.entities.boat.RegisteredBoat;
 import com.Embarcadero.demo.model.entities.enums.State_enum;
 import com.Embarcadero.demo.model.mappers.LicenseMapper;
 import com.Embarcadero.demo.model.repositories.LicenseRepository;
@@ -39,16 +39,15 @@ public class LicenseService {
     @Autowired
     private Validator validator;
 
-
     public LicenseReadDto addLicense(LicenseAddDto licenseAddDto){
         validateNewLicense(licenseAddDto);
-        Boat boat = boatService.addBoat(licenseAddDto.getBoat());
+        RegisteredBoat boat = boatService.addBoat(licenseAddDto.getRegisteredBoat());
         Person person = personService.getOrAddPersonForLicensesOrRecord(licenseAddDto.getPerson());
 
         License license = License.builder()
                 .licenseCode(licenseAddDto.getLicenseCode())
-                .boat(boat)
-                .person(person)
+                .registeredBoat(boat)
+                .owner(person)
                 .state_enum(licenseAddDto.getState_enum())
                 .build();
         licenseRepository.save(license);
@@ -59,7 +58,7 @@ public class LicenseService {
     }
     public void validateNewLicense(LicenseAddDto licenseAddDto){
         validateLicenseCode(licenseAddDto.getLicenseCode());
-        boatService.validateNewBoat(licenseAddDto.getBoat());
+        boatService.validateNewBoat(licenseAddDto.getRegisteredBoat());
         personService.validatePersonNewMatriculaOrNewRecord(licenseAddDto.getPerson());
         if (licenseAddDto.getLicenseCode() == null) licenseAddDto.setLicenseCode(State_enum.OK.name());
     }
@@ -96,7 +95,7 @@ public class LicenseService {
         License licenseBD = getById(id); // obtener los datos originales en la base de datos
         // verificar que datos me envian.. y los que lleguen mandar a actualizarlos
         String licenseCode = licenseUpdateDto.getLicenseCode();
-        BoatUpdateDto boat = licenseUpdateDto.getBoat();
+        RegisteredBoatUpdateDto boat = licenseUpdateDto.getBoat();
         PersonUpdateDto personToUpdate = licenseUpdateDto.getPerson();
         State_enum state = licenseUpdateDto.getState_enum();
         if (licenseCode != null){
@@ -108,12 +107,12 @@ public class LicenseService {
             licenseBD.setState_enum(state);
         }
         if (boat!= null){
-            Boat updatedBoat =  boatService.updateBoat(licenseBD.getBoat() , boat);
-            licenseBD.setBoat(updatedBoat);
+            RegisteredBoat updatedBoatELIMINAR =  boatService.updateBoat(licenseBD.getRegisteredBoat() , boat);
+            licenseBD.setRegisteredBoat(updatedBoatELIMINAR);
         }
         if (personToUpdate != null){
-            Person updatedPerson =  personService.updatePerson(licenseBD.getPerson() , personToUpdate);
-            licenseBD.setPerson(updatedPerson);
+            Person updatedPerson =  personService.updatePerson(licenseBD.getOwner() , personToUpdate);
+            licenseBD.setOwner(updatedPerson);
         }
 
         licenseRepository.save(licenseBD);
@@ -124,10 +123,15 @@ public class LicenseService {
         licenseRepository.deleteById(id);
         return licenseReadDto;
     }
-
-
     public void existsById(Integer id){
         if(!licenseRepository.existsById(id)) throw new NotFoundException("No existe licencia por id");
+    }
+
+    public License getByLicenseCode(String licenseCode){
+        Optional<License> license = licenseRepository.findByLicenseCode(licenseCode);
+        if (license.isEmpty())  throw new NotFoundException("No se encontro Licencia con codigo: "+licenseCode);
+        return license.get();
+
     }
 
 }

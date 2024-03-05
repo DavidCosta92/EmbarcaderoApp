@@ -33,10 +33,8 @@ public class Shift {
     private LocalDate date;
 
     @OneToMany(fetch = FetchType.LAZY)
+    @OrderBy("recordState, startTime")
     private List<Record> records;
-
-    //@OneToMany(fetch = FetchType.LAZY)
-    // private List<Person> staff;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<User> staff;

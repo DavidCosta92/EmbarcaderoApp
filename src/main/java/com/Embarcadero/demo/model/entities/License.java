@@ -1,5 +1,6 @@
 package com.Embarcadero.demo.model.entities;
 
+import com.Embarcadero.demo.model.entities.boat.RegisteredBoat;
 import com.Embarcadero.demo.model.entities.enums.State_enum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,15 +22,22 @@ public class License {
     @Column(nullable = false , unique = true)
     private String licenseCode;
 
+    /*
     @OneToOne
     @JoinColumn(name="boat_id", referencedColumnName="id")
-    private Boat boat;
+    private Boat registeredBoat;
+     */
 
+    @OneToOne
+    @JoinColumn(name="registeredBoat_id", referencedColumnName="id")
+    private RegisteredBoat registeredBoat;
 
     @ManyToOne()
     @JoinColumn(name = "id_owner_fk" , nullable = false)
-    private Person person;
+    private Person owner;
 
     @Enumerated(EnumType.STRING)
     private State_enum state_enum;
+
+    private String notes;
 }

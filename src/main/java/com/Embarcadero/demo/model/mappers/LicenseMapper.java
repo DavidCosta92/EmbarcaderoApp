@@ -18,9 +18,21 @@ public class LicenseMapper {
         return new LicenseReadDto().builder()
                 .id(license.getId())
                 .licenseCode(license.getLicenseCode())
-                .person(license.getPerson())
-                .boat(license.getBoat())
+                .person(license.getOwner())
+                .registeredBoat(license.getRegisteredBoat())
                 .state_enum(license.getState_enum())
                 .build();
     }
+
+    public License toEntity (LicenseReadDto license){
+        return new License().builder()
+                .id(license.getId())
+                .licenseCode(license.getLicenseCode())
+                .owner(license.getPerson())
+                .registeredBoat(license.getRegisteredBoat())
+                .state_enum(license.getState_enum())
+                .build();
+
+    }
+
 }

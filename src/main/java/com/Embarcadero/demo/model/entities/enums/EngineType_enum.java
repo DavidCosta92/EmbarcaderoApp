@@ -9,6 +9,5 @@ import lombok.ToString;
 public enum EngineType_enum {
     MOTOR_INTERNO,
     FUERA_DE_BORDA ,
-    SIN_MOTOR,
     OTRO
 }

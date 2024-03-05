@@ -1,9 +1,9 @@
 package com.Embarcadero.demo.services;
 
 import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
-import com.Embarcadero.demo.exceptions.customsExceptions.ForbiddenAction;
 import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
 import com.Embarcadero.demo.model.dtos.person.PersonAddDto;
+import com.Embarcadero.demo.model.dtos.person.PersonReadDto;
 import com.Embarcadero.demo.model.dtos.person.PersonUpdateDto;
 import com.Embarcadero.demo.model.dtos.records.RecordUpdateDto;
 import com.Embarcadero.demo.model.entities.Person;
@@ -25,24 +25,36 @@ public class PersonService {
     @Autowired
     private Validator validator;
 
+    public PersonReadDto createPerson(PersonAddDto addDto){
+        if(personDtoIsComplete(addDto)){
+            validateNewPerson(addDto);
+            Person createdPerson = personRepository.save(personMapper.toEntity(addDto));
+            return personMapper.toReadDto(createdPerson);
+        }
+        return null;
+    }
+    public PersonReadDto updatePerson(PersonUpdateDto updateDto){
+        Person personBd= getPersonByDni(updateDto.getDni());
+        return personMapper.toReadDto(updatePersonFields(personBd, updateDto));
+    }
+
+
     public Person getOrAddPersonForLicensesOrRecord(PersonAddDto personAddDto){
         validatePersonNewMatriculaOrNewRecord(personAddDto);
         if(personDtoIsComplete(personAddDto)){
            personRepository.save(personMapper.toEntity(personAddDto));
         }
-        return findPersonByDni(personAddDto.getDni());
+        return getPersonByDni(personAddDto.getDni());
     }
 
     public Person updateRecordPerson(Record recordBd, RecordUpdateDto updateDto){
         PersonAddDto addDto = personMapper.toAddDto(updateDto.getPerson());
-        if(personDtoIsComplete(updateDto.getPerson())){
-            // SI Person UPDATE TRAE TODOS LOS DATOS.. CREO UN Person NUEVO Y LO devuelvo
+        if(!updateDto.getPerson().getIsUpdate()){  //CREO UN Person NUEVO Y LO devuelvo
             return getOrAddPersonForLicensesOrRecord(addDto);
-        } else {
-            // Si no trae todos, asumo que la persona ya deberia existir y hay que actualizarla
+        } else { //Si es un update, asumo que la persona ya deberia existir y hay que actualizarla
             if(personAddDtoOnlyHasDni(addDto)){
                 // si solo tiene dni, solo la obtengo y la seteo
-                Person bdPerson = findPersonByDni(updateDto.getPerson().getDni());
+                Person bdPerson = getPersonByDni(updateDto.getPerson().getDni());
                 return updatePersonFields(bdPerson, updateDto.getPerson()); // actualiza los campos que tengan info y devuelve person
             } else {
                 // persona trae dni o no y algun otro campo, obtengo la persona desde el record, seteo los campos y la retorno
@@ -67,8 +79,7 @@ public class PersonService {
         if (newPerson.getLastName() != null) {
             validator.stringMinSize("Apellido", 3, newPerson.getLastName());
             validator.stringOnlyLetters("Apellido", newPerson.getLastName());
-            validator.validPhoneNumber(newPerson.getPhone());
-            bdPerson.setPhone(newPerson.getPhone());
+            bdPerson.setLastName(newPerson.getLastName());
         }
         if (newPerson.getEmergency_phone() != null) {
             validator.validPhoneNumber(newPerson.getEmergency_phone());
@@ -83,7 +94,7 @@ public class PersonService {
             bdPerson.setNotes(newPerson.getNotes());
         }
         personRepository.save(bdPerson);
-        return findPersonByDni(bdPerson.getDni());
+        return getPersonByDni(bdPerson.getDni());
     }
     public Person updatePerson(Person bdPerson, PersonUpdateDto newPerson){
         if(personDtoIsComplete(newPerson)){
@@ -92,10 +103,13 @@ public class PersonService {
             return updatePersonFields(bdPerson, newPerson); // Si no trae todos, los mando a actualziar a los que traiga Y LO devuelvo
         }
     }
-    public Person findPersonByDni(String dni){
+    public Person getPersonByDni(String dni){
         Person bdPerson = personRepository.findByDni(dni);
         if(bdPerson == null) throw new NotFoundException("No se encontro persona por DNI:"+dni);
         return bdPerson;
+    }
+    public PersonReadDto findPersonByDni(String dni){
+        return personMapper.toReadDto(getPersonByDni(dni));
     }
     public void validatePersonNewMatriculaOrNewRecord(PersonAddDto personAddDto){
         if(personAddDtoOnlyHasDni(personAddDto)){ // si solo viene dni, asumo que ya deberia existir la persona, por lo que deberia traer de bd

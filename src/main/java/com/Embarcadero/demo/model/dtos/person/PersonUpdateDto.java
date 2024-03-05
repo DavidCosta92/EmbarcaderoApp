@@ -18,4 +18,5 @@ public class PersonUpdateDto {
     private String emergency_phone ;
     private String address;
     private String notes;
+    private Boolean isUpdate;
 }

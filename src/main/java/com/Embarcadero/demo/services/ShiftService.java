@@ -137,20 +137,24 @@ public class ShiftService {
         Shift shiftBd = getShiftById(recordAddDTO.getIdShift());
         if (shiftBd.getClose()) throw new ForbiddenAction("La guardia esta cerrada, es imposible agregar el registro!");
 
-        // obtener registros, verificar que no exista y crear nuevo record, agregarlo y actualizar shift...
+        // obtener registros, verificar que no exista y crear nuevo record, agregarlo al listado y actualizar shift...
         List<Record> records = shiftBd.getRecords();
-        if(!records.isEmpty()) validateNonDuplicatedRecords(records, recordAddDTO);  // validar que no hayan registros duplicados... mediante nombre embarcacion
+        if(!records.isEmpty() && recordAddDTO.getHasLicense()) validateNonDuplicatedRecordsByLicense(records, recordAddDTO);  // validar que no hayan registros duplicados...
         Record newRecord = recordService.addNewRecord(recordAddDTO);
-
         records.add(newRecord);
         shiftBd.setRecords(records);
         return shiftMapper.toReadDTO(shiftRepository.save(shiftBd));
     }
-    public RecordReadDto updateRecord(Integer idRecord, RecordUpdateDto updateDto){
-        Shift shiftBd = getShiftById(updateDto.getIdShift()); // obtener shift en bd
+    public RecordReadDto updateRecord(Integer idRecord, RecordUpdateDto recordUpdateDTO){
+        Shift shiftBd = getShiftById(recordUpdateDTO.getIdShift()); // obtener shift en bd
         List<Record> recordBdList = shiftBd.getRecords().stream().filter(record -> record.getId() == idRecord).collect(Collectors.toList());
-        if (recordBdList.isEmpty()) throw new NotFoundException("El registro a actualzar con id: "+idRecord+", no existe en el turno id: "+updateDto.getIdShift()+", verifica los datos!");
-        return recordService.updateRecord(recordBdList.get(0) ,updateDto);
+        if (recordBdList.isEmpty()) throw new NotFoundException("El registro a actualzar con id: "+idRecord+", no existe en el turno id: "+recordUpdateDTO.getIdShift()+", verifica los datos!");
+
+        List<Record> activeRecords = shiftBd.getRecords().stream().filter(rec -> rec.getRecordState().equals(RecordState_enum.ACTIVO)).collect(Collectors.toList());
+        if (!activeRecords.isEmpty()){ // si hay registros activos
+            if(activeRecords.stream().anyMatch(record -> record.getLicense().getLicenseCode().equals(recordUpdateDTO.getLicense().getLicenseCode()))) throw new InvalidValueException("Ya existe un registro ACTIVO con la misma matricula: " + recordUpdateDTO.getLicense().getLicenseCode());
+        }
+        return recordService.updateRecord(recordBdList.get(0) ,recordUpdateDTO);
     }
 
     public ShiftReadDto createShift(ShiftAddDto shiftAddDto){
@@ -203,14 +207,10 @@ public class ShiftService {
     }
 
 
-    public void validateNonDuplicatedRecords (List<Record> records , RecordAddDto recordAddDTO){
+    public void validateNonDuplicatedRecordsByLicense (List<Record> records , RecordAddDto recordAddDTO){
         List<Record> activeRecords = records.stream().filter(rec -> rec.getRecordState().equals(RecordState_enum.ACTIVO)).collect(Collectors.toList());
         if (!activeRecords.isEmpty()){ // si hay registros activos
-            if (recordAddDTO.getHasLicense()){ // si tiene licencia, verificar si existe algun record activo con un bote llamado igual al record..
-                if (activeRecords.stream().anyMatch(rec -> rec.getBoat().getName().equals(recordAddDTO.getBoat().getName()))) throw new InvalidValueException("Ya existe un registro con una embarcacion llamada " + recordAddDTO.getBoat().getName());
-            } else{
-                // todo si no tiene licencia, verificar que entre los registros activos no hay un auto con la misma patente.. en dicho caso deberia pedir que agregue mas de una embarcacion..
-            }
+            if(activeRecords.stream().anyMatch(record -> record.getLicense().getLicenseCode().equals(recordAddDTO.getLicense().getLicenseCode()))) throw new InvalidValueException("Ya existe un registro ACTIVO con la misma matricula: " + recordAddDTO.getLicense().getLicenseCode());
         }
     }
 

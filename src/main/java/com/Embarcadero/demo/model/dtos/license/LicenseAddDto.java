@@ -1,6 +1,6 @@
 package com.Embarcadero.demo.model.dtos.license;
 
-import com.Embarcadero.demo.model.dtos.boat.BoatAddDto;
+import com.Embarcadero.demo.model.dtos.boat.RegisteredBoatAddDto;
 import com.Embarcadero.demo.model.dtos.person.PersonAddDto;
 import com.Embarcadero.demo.model.entities.enums.State_enum;
 import jakarta.validation.Valid;
@@ -21,12 +21,11 @@ public class LicenseAddDto {
     private String licenseCode;
 
     @Valid
-    private BoatAddDto boat;
+    private RegisteredBoatAddDto registeredBoat;
 
     @Valid
     private PersonAddDto person;
     private State_enum state_enum;
 }
-
 
 
