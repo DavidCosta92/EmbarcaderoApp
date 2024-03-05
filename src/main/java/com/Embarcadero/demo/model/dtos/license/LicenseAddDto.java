@@ -24,7 +24,7 @@ public class LicenseAddDto {
     private RegisteredBoatAddDto registeredBoat;
 
     @Valid
-    private PersonAddDto person;
+    private PersonAddDto owner;
     private State_enum state_enum;
 }
 

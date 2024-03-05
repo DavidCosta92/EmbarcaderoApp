@@ -5,6 +5,7 @@ import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
 import com.Embarcadero.demo.exceptions.customsExceptions.ForbiddenAction;
 import com.Embarcadero.demo.exceptions.customsExceptions.InvalidValueException;
 import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
+import com.Embarcadero.demo.model.dtos.license.LicenseReadDto;
 import com.Embarcadero.demo.model.dtos.records.RecordAddDto;
 import com.Embarcadero.demo.model.dtos.records.RecordReadDto;
 import com.Embarcadero.demo.model.dtos.records.RecordUpdateDto;
@@ -13,6 +14,7 @@ import com.Embarcadero.demo.model.dtos.shift.ShiftReadDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDtoArray;
 import com.Embarcadero.demo.model.dtos.shift.ShiftUpdateDto;
 import com.Embarcadero.demo.model.dtos.staff.StaffMemberAddDto;
+import com.Embarcadero.demo.model.entities.License;
 import com.Embarcadero.demo.model.entities.Record;
 import com.Embarcadero.demo.model.entities.Shift;
 import com.Embarcadero.demo.model.entities.enums.Dam_enum;
@@ -49,6 +51,9 @@ public class ShiftService {
 
     @Autowired
     private RecordService recordService;
+
+    @Autowired
+    private LicenseService licenseService;
 
     @Autowired
     private Validator validator;
@@ -137,6 +142,8 @@ public class ShiftService {
         Shift shiftBd = getShiftById(recordAddDTO.getIdShift());
         if (shiftBd.getClose()) throw new ForbiddenAction("La guardia esta cerrada, es imposible agregar el registro!");
 
+        if( recordAddDTO.getLicense() != null && recordAddDTO.getSimpleBoat() != null) throw new ForbiddenAction( "Los registros pueden tener un bote con matricula o sin matricula, no puedes enviar ambos datos!");
+
         // obtener registros, verificar que no exista y crear nuevo record, agregarlo al listado y actualizar shift...
         List<Record> records = shiftBd.getRecords();
         if(!records.isEmpty() && recordAddDTO.getHasLicense()) validateNonDuplicatedRecordsByLicense(records, recordAddDTO);  // validar que no hayan registros duplicados...
@@ -208,8 +215,8 @@ public class ShiftService {
 
 
     public void validateNonDuplicatedRecordsByLicense (List<Record> records , RecordAddDto recordAddDTO){
-        List<Record> activeRecords = records.stream().filter(rec -> rec.getRecordState().equals(RecordState_enum.ACTIVO)).collect(Collectors.toList());
-        if (!activeRecords.isEmpty()){ // si hay registros activos
+        List<Record> activeRecords = records.stream().filter(rec -> (rec.getRecordState().equals(RecordState_enum.ACTIVO) && rec.getLicense() != null)).collect(Collectors.toList());
+        if (!activeRecords.isEmpty()){ // si hay registros activos y que tengan licencia
             if(activeRecords.stream().anyMatch(record -> record.getLicense().getLicenseCode().equals(recordAddDTO.getLicense().getLicenseCode()))) throw new InvalidValueException("Ya existe un registro ACTIVO con la misma matricula: " + recordAddDTO.getLicense().getLicenseCode());
         }
     }

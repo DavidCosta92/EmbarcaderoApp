@@ -42,7 +42,7 @@ public class LicenseService {
     public LicenseReadDto addLicense(LicenseAddDto licenseAddDto){
         validateNewLicense(licenseAddDto);
         RegisteredBoat boat = boatService.addBoat(licenseAddDto.getRegisteredBoat());
-        Person person = personService.getOrAddPersonForLicensesOrRecord(licenseAddDto.getPerson());
+        Person person = personService.getOrAddPersonForLicensesOrRecord(licenseAddDto.getOwner());
 
         License license = License.builder()
                 .licenseCode(licenseAddDto.getLicenseCode())
@@ -59,8 +59,8 @@ public class LicenseService {
     public void validateNewLicense(LicenseAddDto licenseAddDto){
         validateLicenseCode(licenseAddDto.getLicenseCode());
         boatService.validateNewBoat(licenseAddDto.getRegisteredBoat());
-        personService.validatePersonNewMatriculaOrNewRecord(licenseAddDto.getPerson());
-        if (licenseAddDto.getLicenseCode() == null) licenseAddDto.setLicenseCode(State_enum.OK.name());
+        personService.validatePersonNewMatriculaOrNewRecord(licenseAddDto.getOwner());
+        if (licenseAddDto.getState_enum() == null) licenseAddDto.setState_enum(State_enum.OK);
     }
     public LicenseReadDtoArray findAll (String licenseCode, Integer pageNumber, Integer pageSize, String sortBy){
         Page<License> results;
@@ -91,12 +91,16 @@ public class LicenseService {
     public LicenseReadDto findById(Integer id){
         return licenseMapper.toReadDTO(getById(id));
     }
+    public LicenseReadDto findByLicenseCode(String licenseCode){
+        return licenseMapper.toReadDTO(getByLicenseCode(licenseCode));
+    }
+
     public LicenseReadDto updateById(Integer id , LicenseUpdateDto licenseUpdateDto){
         License licenseBD = getById(id); // obtener los datos originales en la base de datos
         // verificar que datos me envian.. y los que lleguen mandar a actualizarlos
         String licenseCode = licenseUpdateDto.getLicenseCode();
         RegisteredBoatUpdateDto boat = licenseUpdateDto.getBoat();
-        PersonUpdateDto personToUpdate = licenseUpdateDto.getPerson();
+        PersonUpdateDto personToUpdate = licenseUpdateDto.getOwner();
         State_enum state = licenseUpdateDto.getState_enum();
         if (licenseCode != null){
             validator.stringMinSize("Matricula",5 , licenseCode);
@@ -131,7 +135,6 @@ public class LicenseService {
         Optional<License> license = licenseRepository.findByLicenseCode(licenseCode);
         if (license.isEmpty())  throw new NotFoundException("No se encontro Licencia con codigo: "+licenseCode);
         return license.get();
-
     }
 
 }

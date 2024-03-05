@@ -30,9 +30,6 @@ public class Record {
     private RecordState_enum recordState;
 
 
-    // @ManyToOne(cascade = {CascadeType.MERGE})
-    // @JoinColumn(name = "boat_id", nullable = true)
-    // private Boat boat;
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "license_id", nullable = true)
     private License license;
@@ -42,7 +39,7 @@ public class Record {
     private SimpleBoat simpleBoat;
 
     // TODO MANY RECORDS TO ONE private Person driver;
-    @ManyToOne(cascade = {CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "person_id" , nullable = false)
     private Person person;
 

@@ -31,6 +31,8 @@ public class RegisteredBoatAddDto {
     @Min(value = 1 ,message = "Capacidad debe ser un valor positivo mayor a 0")
     private Integer capacity;
 
+    private String details;
+
     private TypeLicencedBoat_enum typeLicencedBoat_enum;
 
 }

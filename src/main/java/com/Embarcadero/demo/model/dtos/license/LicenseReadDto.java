@@ -16,6 +16,6 @@ public class LicenseReadDto {
     private Integer id;
     private String licenseCode;
     private RegisteredBoat registeredBoat;
-    private Person person;
+    private Person owner;
     private State_enum state_enum;
 }

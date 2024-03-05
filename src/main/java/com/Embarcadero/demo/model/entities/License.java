@@ -22,12 +22,6 @@ public class License {
     @Column(nullable = false , unique = true)
     private String licenseCode;
 
-    /*
-    @OneToOne
-    @JoinColumn(name="boat_id", referencedColumnName="id")
-    private Boat registeredBoat;
-     */
-
     @OneToOne
     @JoinColumn(name="registeredBoat_id", referencedColumnName="id")
     private RegisteredBoat registeredBoat;

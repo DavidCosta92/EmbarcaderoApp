@@ -2,6 +2,7 @@ package com.Embarcadero.demo.services;
 
 import com.Embarcadero.demo.exceptions.customsExceptions.ForbiddenAction;
 import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
+import com.Embarcadero.demo.model.dtos.license.LicenseReadDto;
 import com.Embarcadero.demo.model.dtos.records.RecordAddDto;
 import com.Embarcadero.demo.model.dtos.records.RecordReadDto;
 import com.Embarcadero.demo.model.dtos.records.RecordReadDtoArray;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -150,20 +152,25 @@ public class RecordService {
     public void validateCar(String car){
         validator.stringText("Auto" , car);
     }
+
     public Record addNewRecord(RecordAddDto recordAddDto){
         RecordAddDto addDto = setDefaultValuesAddNewRecord(recordAddDto); // setea los valores por defecto que no sean enviados, segun la logica de negocio
         validateCar(addDto.getCar());
         if(addDto.getHasLicense()) { // si tiene licencia, ya debe existir en bd, ya que solo oficina las crea,
             License licenseBd = licenseService.getByLicenseCode(addDto.getLicense().getLicenseCode()); // si no existe, getByLicenseCode, lanzara exception
-            if( ! licenseBd.getState_enum().equals(State_enum.OK.name())){ // SI NO ESTA ACTIVA
+            if( ! licenseBd.getState_enum().equals(State_enum.OK)){ // SI NO ESTA ACTIVA
                 throw new ForbiddenAction("Matricula no esta activa, el estado actual es: "+licenseBd.getState_enum().name());
             }
+            LicenseReadDto license = licenseService.findByLicenseCode(recordAddDto.getLicense().getLicenseCode());
+            recordAddDto.setLicense(license);
+
         } else{
             boatService.addBoat(recordAddDto.getSimpleBoat()); // no tiene licencia, es un simpleBote, solo lo guardo en bd
         }
         Record recordEntity = recordMapper.toEntity(addDto);
         Person person = personService.getOrAddPersonForLicensesOrRecord(addDto.getPerson());
         recordEntity.setPerson(person);
+
         return recordRepository.save(recordEntity);
     }
 

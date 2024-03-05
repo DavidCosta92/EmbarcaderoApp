@@ -16,6 +16,7 @@ public class RegisteredBoatUpdateDto {
     private EngineUpdateDto engine;
     private String hull;
     private String name;
+    private String details;
     private Integer capacity;
     private TypeLicencedBoat_enum typeLicencedBoat_enum;
 }

@@ -15,6 +15,6 @@ import lombok.NoArgsConstructor;
 public class LicenseUpdateDto {
     private String licenseCode;
     private RegisteredBoatUpdateDto boat;
-    private PersonUpdateDto person;
+    private PersonUpdateDto owner;
     private State_enum state_enum;
 }

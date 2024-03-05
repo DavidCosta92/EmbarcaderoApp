@@ -28,6 +28,8 @@ public class RegisteredBoat {
 
     private Integer capacity;
 
+    private String details;
+
     @Enumerated(EnumType.STRING)
     private TypeLicencedBoat_enum typeLicencedBoat_enum;
 }

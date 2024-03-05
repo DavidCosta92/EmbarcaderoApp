@@ -24,6 +24,7 @@ public class BoatMapper {
                 .hull(registeredBoatAddDto.getHull())
                 .engine(engine)
                 .capacity(registeredBoatAddDto.getCapacity())
+                .details(registeredBoatAddDto.getDetails())
                 .name(registeredBoatAddDto.getName())
                 .build();
     }
@@ -50,6 +51,7 @@ public class BoatMapper {
                 .hull(readDto.getHull())
                 .engine(engine)
                 .capacity(readDto.getCapacity())
+                .details(readDto.getDetails())
                 .name(readDto.getName())
                 .build();
     }
@@ -60,6 +62,7 @@ public class BoatMapper {
                 .hull(registeredBoat.getHull())
                 .name(registeredBoat.getName())
                 .capacity(registeredBoat.getCapacity())
+                .details(registeredBoat.getDetails())
                 .typeLicencedBoat_enum(registeredBoat.getTypeLicencedBoat_enum())
                 .build();
     }
@@ -77,6 +80,7 @@ public class BoatMapper {
                 .hull(boat.getHull())
                 .name(boat.getName())
                 .capacity(boat.getCapacity())
+                .details(boat.getDetails())
                 .typeLicencedBoat_enum(boat.getTypeLicencedBoat_enum())
                 .build();
     }

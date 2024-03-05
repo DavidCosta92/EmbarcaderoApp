@@ -35,6 +35,11 @@ public class LicenseController {
     public ResponseEntity<LicenseReadDto> showById(@PathVariable Integer id) {
         return new ResponseEntity<>(licenseService.findById(id), HttpStatus.OK);
     }
+    @GetMapping("licenseCode/{licenseCode}")
+    @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
+    public ResponseEntity<LicenseReadDto> showByLicenseCode(@PathVariable String licenseCode) {
+        return new ResponseEntity<>(licenseService.findByLicenseCode(licenseCode), HttpStatus.OK);
+    }
     @PutMapping("{id}")
     // @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
     public ResponseEntity<LicenseReadDto> updateById(@PathVariable Integer id , @RequestBody LicenseUpdateDto licenseUpdateDto) {
