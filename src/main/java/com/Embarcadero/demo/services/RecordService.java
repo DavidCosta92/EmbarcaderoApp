@@ -10,9 +10,8 @@ import com.Embarcadero.demo.model.dtos.records.RecordUpdateDto;
 import com.Embarcadero.demo.model.entities.License;
 import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.Record;
-import com.Embarcadero.demo.model.entities.boat.SimpleBoat;
+import com.Embarcadero.demo.model.entities.enums.LicenseState_enum;
 import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
-import com.Embarcadero.demo.model.entities.enums.State_enum;
 import com.Embarcadero.demo.model.mappers.BoatMapper;
 import com.Embarcadero.demo.model.mappers.PersonMapper;
 import com.Embarcadero.demo.model.mappers.RecordMapper;
@@ -24,11 +23,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class RecordService {
@@ -141,7 +138,7 @@ public class RecordService {
             recordBd.setSimpleBoat(updateDto.getSimpleBoat());
         } else if (updateDto.getSimpleBoat() == null && updateDto.getLicense() != null){ // solo puede cambiar de licenseCode!
             License newLicenseBd = licenseService.getByLicenseCode(updateDto.getLicense().getLicenseCode()); //  verificar que exista
-            if(! newLicenseBd.getState_enum().equals(State_enum.OK.name())) throw new ForbiddenAction("Matricula no esta activa, el estado actual es: "+newLicenseBd.getState_enum().name()); //  verificar que este OK
+            if(! newLicenseBd.getLicenseState_enum().equals(LicenseState_enum.OK.name())) throw new ForbiddenAction("Matricula no esta activa, el estado actual es: "+newLicenseBd.getLicenseState_enum().name()); //  verificar que este OK
             recordBd.setLicense(newLicenseBd);
         }
         if(updateDto.getPerson()!= null){
@@ -158,8 +155,8 @@ public class RecordService {
         validateCar(addDto.getCar());
         if(addDto.getHasLicense()) { // si tiene licencia, ya debe existir en bd, ya que solo oficina las crea,
             License licenseBd = licenseService.getByLicenseCode(addDto.getLicense().getLicenseCode()); // si no existe, getByLicenseCode, lanzara exception
-            if( ! licenseBd.getState_enum().equals(State_enum.OK)){ // SI NO ESTA ACTIVA
-                throw new ForbiddenAction("Matricula no esta activa, el estado actual es: "+licenseBd.getState_enum().name());
+            if( ! licenseBd.getLicenseState_enum().equals(LicenseState_enum.OK)){ // SI NO ESTA ACTIVA
+                throw new ForbiddenAction("Matricula no esta activa, el estado actual es: "+licenseBd.getLicenseState_enum().name());
             }
             LicenseReadDto license = licenseService.findByLicenseCode(recordAddDto.getLicense().getLicenseCode());
             recordAddDto.setLicense(license);

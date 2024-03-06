@@ -1,7 +1,7 @@
 package com.Embarcadero.demo.model.entities;
 
 import com.Embarcadero.demo.model.entities.boat.RegisteredBoat;
-import com.Embarcadero.demo.model.entities.enums.State_enum;
+import com.Embarcadero.demo.model.entities.enums.LicenseState_enum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +31,7 @@ public class License {
     private Person owner;
 
     @Enumerated(EnumType.STRING)
-    private State_enum state_enum;
+    private LicenseState_enum licenseState_enum;
 
     private String notes;
 }

@@ -6,6 +6,7 @@ import com.Embarcadero.demo.exceptions.customsExceptions.ForbiddenAction;
 import com.Embarcadero.demo.exceptions.customsExceptions.InvalidValueException;
 import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
 import com.Embarcadero.demo.model.dtos.license.LicenseReadDto;
+import com.Embarcadero.demo.model.dtos.license.LicenseUpdateDto;
 import com.Embarcadero.demo.model.dtos.records.RecordAddDto;
 import com.Embarcadero.demo.model.dtos.records.RecordReadDto;
 import com.Embarcadero.demo.model.dtos.records.RecordUpdateDto;
@@ -159,7 +160,16 @@ public class ShiftService {
 
         List<Record> activeRecords = shiftBd.getRecords().stream().filter(rec -> rec.getRecordState().equals(RecordState_enum.ACTIVO)).collect(Collectors.toList());
         if (!activeRecords.isEmpty()){ // si hay registros activos
-            if(activeRecords.stream().anyMatch(record -> record.getLicense().getLicenseCode().equals(recordUpdateDTO.getLicense().getLicenseCode()))) throw new InvalidValueException("Ya existe un registro ACTIVO con la misma matricula: " + recordUpdateDTO.getLicense().getLicenseCode());
+            LicenseUpdateDto licenseToUpdate = recordUpdateDTO.getLicense();
+            if(recordUpdateDTO.getLicense() != null){
+                if(activeRecords.stream().anyMatch(record -> record.getLicense().getLicenseCode().equals(recordUpdateDTO.getLicense().getLicenseCode()))) throw new InvalidValueException("Ya existe un registro ACTIVO con la misma matricula: " + recordUpdateDTO.getLicense().getLicenseCode());
+            } else if (recordUpdateDTO.getSimpleBoat() != null){
+                // TODO ACA DEBO CREAR UNA FORMA DE VALIDAR QUE NO EXISTE EL MISMO CONJUNTO DE EMBARCACION + PATENTE AUTO + TIPO DE EMBARCACION? O CUAL SERIA LA REGLA DE NEGOCIO NECESARIA?
+                // TODO ACA DEBO CREAR UNA FORMA DE VALIDAR QUE NO EXISTE EL MISMO CONJUNTO DE EMBARCACION + PATENTE AUTO + TIPO DE EMBARCACION? O CUAL SERIA LA REGLA DE NEGOCIO NECESARIA?
+                // TODO ACA DEBO CREAR UNA FORMA DE VALIDAR QUE NO EXISTE EL MISMO CONJUNTO DE EMBARCACION + PATENTE AUTO + TIPO DE EMBARCACION? O CUAL SERIA LA REGLA DE NEGOCIO NECESARIA?
+                // TODO ACA DEBO CREAR UNA FORMA DE VALIDAR QUE NO EXISTE EL MISMO CONJUNTO DE EMBARCACION + PATENTE AUTO + TIPO DE EMBARCACION? O CUAL SERIA LA REGLA DE NEGOCIO NECESARIA?
+            }
+
         }
         return recordService.updateRecord(recordBdList.get(0) ,recordUpdateDTO);
     }

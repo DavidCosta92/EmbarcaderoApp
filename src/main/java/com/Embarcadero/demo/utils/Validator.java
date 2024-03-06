@@ -41,7 +41,7 @@ public class Validator {
     public String stringOnlyIntegerPositiveNumbers (String field, String value){
         Pattern pattern = Pattern.compile("[^0-9]");
         if(pattern.matcher(value).find()) throw new InvalidValueException(field + " solo puede contener numeros enteros, mayores a cero!");
-        if (Integer.parseInt(value) < 1) throw new InvalidValueException(field + " solo puede contener numeros enteros, mayores a cero!");
+        if (Integer.parseInt(value) < 0) throw new InvalidValueException(field + " solo puede contener numeros enteros, mayores a cero!");
         return value;
     }
 

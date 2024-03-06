@@ -49,6 +49,8 @@ public class PersonService {
 
     public Person updateRecordPerson(Record recordBd, RecordUpdateDto updateDto){
         PersonAddDto addDto = personMapper.toAddDto(updateDto.getPerson());
+
+        //TODO ACA ME SALTA EL ERROR... NO ESTOY MANDANDO ESTE CAMPO IS UPDATE!,DEBO SOLUCIONARLO DESDE EL FRONT
         if(!updateDto.getPerson().getIsUpdate()){  //CREO UN Person NUEVO Y LO devuelvo
             return getOrAddPersonForLicensesOrRecord(addDto);
         } else { //Si es un update, asumo que la persona ya deberia existir y hay que actualizarla

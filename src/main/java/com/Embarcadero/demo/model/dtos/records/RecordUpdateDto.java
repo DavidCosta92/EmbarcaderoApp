@@ -1,5 +1,6 @@
 package com.Embarcadero.demo.model.dtos.records;
 
+import com.Embarcadero.demo.model.dtos.license.LicenseUpdateDto;
 import com.Embarcadero.demo.model.dtos.person.PersonUpdateDto;
 import com.Embarcadero.demo.model.entities.License;
 import com.Embarcadero.demo.model.entities.boat.SimpleBoat;
@@ -16,7 +17,8 @@ public class RecordUpdateDto {
     private Integer idShift;
 
     // @Valid todo VALIDAR LICENSE EN SERVICE PORQUE ES OPCIONAL!
-    private License license; // Es un read porque solo envio license code
+    // private License license; // Es un read porque solo envio license code
+    private LicenseUpdateDto license;
     // @Valid todo VALIDAR PERSONA EN SERVICE PORQUE ES OPCIONAL!
     private PersonUpdateDto person;
     // @Valid todo VALIDAR BOAT EN SERVICE PORQUE ES OPCIONAL!

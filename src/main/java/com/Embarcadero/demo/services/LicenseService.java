@@ -11,7 +11,7 @@ import com.Embarcadero.demo.model.dtos.person.PersonUpdateDto;
 import com.Embarcadero.demo.model.entities.License;
 import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.boat.RegisteredBoat;
-import com.Embarcadero.demo.model.entities.enums.State_enum;
+import com.Embarcadero.demo.model.entities.enums.LicenseState_enum;
 import com.Embarcadero.demo.model.mappers.LicenseMapper;
 import com.Embarcadero.demo.model.repositories.LicenseRepository;
 import com.Embarcadero.demo.utils.Validator;
@@ -48,7 +48,8 @@ public class LicenseService {
                 .licenseCode(licenseAddDto.getLicenseCode())
                 .registeredBoat(boat)
                 .owner(person)
-                .state_enum(licenseAddDto.getState_enum())
+                .licenseState_enum(licenseAddDto.getLicenseState_enum())
+                .notes(licenseAddDto.getNotes())
                 .build();
         licenseRepository.save(license);
         return licenseMapper.toReadDTO(license);
@@ -60,7 +61,7 @@ public class LicenseService {
         validateLicenseCode(licenseAddDto.getLicenseCode());
         boatService.validateNewBoat(licenseAddDto.getRegisteredBoat());
         personService.validatePersonNewMatriculaOrNewRecord(licenseAddDto.getOwner());
-        if (licenseAddDto.getState_enum() == null) licenseAddDto.setState_enum(State_enum.OK);
+        if (licenseAddDto.getLicenseState_enum() == null) licenseAddDto.setLicenseState_enum(LicenseState_enum.OK);
     }
     public LicenseReadDtoArray findAll (String licenseCode, Integer pageNumber, Integer pageSize, String sortBy){
         Page<License> results;
@@ -101,14 +102,14 @@ public class LicenseService {
         String licenseCode = licenseUpdateDto.getLicenseCode();
         RegisteredBoatUpdateDto boat = licenseUpdateDto.getBoat();
         PersonUpdateDto personToUpdate = licenseUpdateDto.getOwner();
-        State_enum state = licenseUpdateDto.getState_enum();
+        LicenseState_enum state = licenseUpdateDto.getLicenseState_enum();
         if (licenseCode != null){
             validator.stringMinSize("Matricula",5 , licenseCode);
             validator.stringText("Matricula" , licenseCode);
             licenseBD.setLicenseCode(licenseCode);
         }
         if (state!= null){
-            licenseBD.setState_enum(state);
+            licenseBD.setLicenseState_enum(state);
         }
         if (boat!= null){
             RegisteredBoat updatedBoatELIMINAR =  boatService.updateBoat(licenseBD.getRegisteredBoat() , boat);

@@ -2,7 +2,7 @@ package com.Embarcadero.demo.model.dtos.license;
 
 import com.Embarcadero.demo.model.dtos.boat.RegisteredBoatAddDto;
 import com.Embarcadero.demo.model.dtos.person.PersonAddDto;
-import com.Embarcadero.demo.model.entities.enums.State_enum;
+import com.Embarcadero.demo.model.entities.enums.LicenseState_enum;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,7 +25,8 @@ public class LicenseAddDto {
 
     @Valid
     private PersonAddDto owner;
-    private State_enum state_enum;
+    private LicenseState_enum licenseState_enum;
+    private String notes;
 }
 
 

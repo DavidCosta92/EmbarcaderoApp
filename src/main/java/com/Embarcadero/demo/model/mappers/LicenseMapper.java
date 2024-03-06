@@ -20,7 +20,8 @@ public class LicenseMapper {
                 .licenseCode(license.getLicenseCode())
                 .owner(license.getOwner())
                 .registeredBoat(license.getRegisteredBoat())
-                .state_enum(license.getState_enum())
+                .licenseState_enum(license.getLicenseState_enum())
+                .notes(license.getNotes())
                 .build();
     }
 
@@ -30,7 +31,8 @@ public class LicenseMapper {
                 .licenseCode(license.getLicenseCode())
                 .owner(license.getOwner())
                 .registeredBoat(license.getRegisteredBoat())
-                .state_enum(license.getState_enum())
+                .licenseState_enum(license.getLicenseState_enum())
+                .notes(license.getNotes())
                 .build();
 
     }

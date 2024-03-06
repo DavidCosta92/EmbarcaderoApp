@@ -2,7 +2,7 @@ package com.Embarcadero.demo.model.dtos.license;
 
 import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.boat.RegisteredBoat;
-import com.Embarcadero.demo.model.entities.enums.State_enum;
+import com.Embarcadero.demo.model.entities.enums.LicenseState_enum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +17,6 @@ public class LicenseReadDto {
     private String licenseCode;
     private RegisteredBoat registeredBoat;
     private Person owner;
-    private State_enum state_enum;
+    private LicenseState_enum licenseState_enum;
+    private String notes;
 }
