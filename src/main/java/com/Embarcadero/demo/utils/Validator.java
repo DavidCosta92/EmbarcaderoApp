@@ -28,7 +28,7 @@ public class Validator {
         return value;
     }
     public String stringOnlyLetters (String field, String value){
-        Pattern pattern = Pattern.compile("[^a-zA-Z]");
+        Pattern pattern = Pattern.compile("[^a-zA-Z\s]");
         // "[^a-zA-Z]" => CUALQUIER CARACTER MENOS LOS ENUMERADOS, osea si encuentra un caracter distinto, lanza excepcion
         if(pattern.matcher(value).find()) throw new InvalidValueException(field + " solo puede contener letras!");
         return value;

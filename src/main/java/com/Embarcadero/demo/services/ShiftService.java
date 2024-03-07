@@ -161,8 +161,8 @@ public class ShiftService {
         List<Record> activeRecords = shiftBd.getRecords().stream().filter(rec -> rec.getRecordState().equals(RecordState_enum.ACTIVO)).collect(Collectors.toList());
         if (!activeRecords.isEmpty()){ // si hay registros activos
             LicenseUpdateDto licenseToUpdate = recordUpdateDTO.getLicense();
-            if(recordUpdateDTO.getLicense() != null){
-                if(activeRecords.stream().anyMatch(record -> record.getLicense().getLicenseCode().equals(recordUpdateDTO.getLicense().getLicenseCode()))) throw new InvalidValueException("Ya existe un registro ACTIVO con la misma matricula: " + recordUpdateDTO.getLicense().getLicenseCode());
+            if(licenseToUpdate != null){
+                if(activeRecords.stream().anyMatch(record -> record.getLicense().getLicenseCode().equals(licenseToUpdate.getLicenseCode()))) throw new InvalidValueException("Ya existe un registro ACTIVO con la misma matricula: " + recordUpdateDTO.getLicense().getLicenseCode());
             } else if (recordUpdateDTO.getSimpleBoat() != null){
                 // TODO ACA DEBO CREAR UNA FORMA DE VALIDAR QUE NO EXISTE EL MISMO CONJUNTO DE EMBARCACION + PATENTE AUTO + TIPO DE EMBARCACION? O CUAL SERIA LA REGLA DE NEGOCIO NECESARIA?
                 // TODO ACA DEBO CREAR UNA FORMA DE VALIDAR QUE NO EXISTE EL MISMO CONJUNTO DE EMBARCACION + PATENTE AUTO + TIPO DE EMBARCACION? O CUAL SERIA LA REGLA DE NEGOCIO NECESARIA?

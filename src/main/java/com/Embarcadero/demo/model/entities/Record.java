@@ -34,12 +34,12 @@ public class Record {
     @JoinColumn(name = "license_id", nullable = true)
     private License license;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="simpleBoat_id", referencedColumnName="id", nullable = true) // TODO, PONER QUE AL BORRAR, BORRE EN CASCADA ASI LIMPO BD!
     private SimpleBoat simpleBoat;
 
     // TODO MANY RECORDS TO ONE private Person driver;
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "person_id" , nullable = false)
     private Person person;
 
