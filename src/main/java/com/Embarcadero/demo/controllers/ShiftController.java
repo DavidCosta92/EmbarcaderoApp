@@ -52,12 +52,6 @@ public class ShiftController {
         return new ResponseEntity<>(shiftService.deleteShift(id) , HttpStatus.ACCEPTED);
     }
 
-    //TODO SEGUIR CON resto de endpoints ??? .... Que funcion falta?
-    //TODO SEGUIR CON resto de endpoints ??? .... Que funcion falta?
-    //TODO SEGUIR CON resto de endpoints ??? .... Que funcion falta?
-
-
-
     @PostMapping("{idShift}/staff/")
     public ResponseEntity<ShiftReadDto> addStaffToShift (@PathVariable Integer idShift , @Valid @RequestBody StaffMemberAddDto staffMemberDni){
         return new ResponseEntity<>(shiftService.addStaffUser(idShift , staffMemberDni), HttpStatus.ACCEPTED);

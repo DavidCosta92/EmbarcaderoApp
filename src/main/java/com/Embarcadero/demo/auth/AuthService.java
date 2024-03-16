@@ -57,7 +57,12 @@ public class AuthService {
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(registerRequest.getUsername() , registerRequest.getPassword1()));
 
+        // TODO VERIFICAR ERROR DE ENVIO DE EMAILS!
+        // TODO VERIFICAR ERROR DE ENVIO DE EMAILS!
         mailManager.sendEmail(user.getEmail(), "Test servidor backend java", "Hola, GRACIAS POR REGISTRARTE "+user.getUsername()+"!");
+        // TODO VERIFICAR ERROR DE ENVIO DE EMAILS!
+        // TODO VERIFICAR ERROR DE ENVIO DE EMAILS!
+
         log.info("NUEVO USUARIO => "+user.getUsername());
 
         return AuthResponse.builder().token(jwtService.getToken(user)).build();
@@ -133,6 +138,7 @@ public class AuthService {
     }
 
     public Role createRoleByEmail ( String email){
+        // TODO EL ROL USER DEBE SER EL INICIAL, Y SOLO EL SUPER DEBERIA ASIGNAR LOS ROLES SEGUN CONDICIONES DE NEGOCIO??
         Role role = Role.USER;
         if (email.contains("@office")) role = Role.OFFICE;
         if (email.contains("@gv")) role = Role.LIFEGUARD;

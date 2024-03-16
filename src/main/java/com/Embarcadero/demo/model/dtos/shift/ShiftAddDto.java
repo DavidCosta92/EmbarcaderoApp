@@ -1,5 +1,7 @@
 package com.Embarcadero.demo.model.dtos.shift;
 
+import com.Embarcadero.demo.auth.entities.User;
+import com.Embarcadero.demo.model.dtos.user.UserDni;
 import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.enums.Dam_enum;
 import lombok.AllArgsConstructor;
@@ -17,15 +19,6 @@ import java.util.List;
 public class ShiftAddDto {
     @NotNull
     private Dam_enum dam;
-
-    // date se genera automaticamente por regla de negocio
-
-    // TODO TABLA RECORDS TIENE ID DE SHIFT
-
-    // TODO Lista usuarios que estan de guardia, deben ser guardavidas..  relacion many to many
-
-    private List<Person> staff;
-
-
+    private List<UserDni> staff;
     private String notes;
 }

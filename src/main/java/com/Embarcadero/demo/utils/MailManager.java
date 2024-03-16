@@ -12,8 +12,10 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class MailManager {
 
-    @Value("${spring.mail.username}")
-    private String sender;
+    // @Value("${spring.mail.username}")
+    // private String sender;
+    private String sender = "davidcst2991@gmail.com";
+
     @Autowired
     JavaMailSender javaMailSender;
 
@@ -36,6 +38,7 @@ public class MailManager {
 
     public void sendEmailToRestorePassword(String email, String token) {
         // TODO Solo para testing. SE ENVIA TOKEN PARA LUEGO HACER POST CON PASSWORD, Sin embargo, esto deberia estar siendo recibido por email, con un link a un front que obtenga passwords y haga post a el ednpoint enviando el token.
+
         String template = """
                 <div style="color:#000000; background-color: #e9f2ff; border:1px solid #b1e1ff; border-radius:10px; padding: 10px; text-align: center;">                    
                      <h3>ESTE ES EL TOKEN PARA RESTAURAR TU CONTRASEÑA</h3> 
@@ -48,6 +51,8 @@ public class MailManager {
                      <p>Es valido solo por 24hs.</p>      
                 </div>
                 """.formatted(token);
+
+
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             message.setSubject("Restauracion de password");

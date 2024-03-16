@@ -15,7 +15,9 @@ import com.Embarcadero.demo.model.dtos.shift.ShiftReadDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDtoArray;
 import com.Embarcadero.demo.model.dtos.shift.ShiftUpdateDto;
 import com.Embarcadero.demo.model.dtos.staff.StaffMemberAddDto;
+import com.Embarcadero.demo.model.dtos.user.UserDni;
 import com.Embarcadero.demo.model.entities.License;
+import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.Record;
 import com.Embarcadero.demo.model.entities.Shift;
 import com.Embarcadero.demo.model.entities.enums.Dam_enum;
@@ -175,15 +177,22 @@ public class ShiftService {
     }
 
     public ShiftReadDto createShift(ShiftAddDto shiftAddDto){
-        // si staff esta vacio, creo nueva lista.. sino, agrego listado
-        if (shiftAddDto.getStaff() == null){
-            shiftAddDto.setStaff(new ArrayList<>());
-        } else{
-            // todo agregar todas los users que envian al crear shift.. Util para un caso sin conexion, donde deberia recibir todos los datos juntos..
-            // todo agregar todas los users que envian al crear shift.. Util para un caso sin conexion, donde deberia recibir todos los datos juntos..
-            // todo agregar todas los users que envian al crear shift.. Util para un caso sin conexion, donde deberia recibir todos los datos juntos..
+        List<User> userListToAdd = new ArrayList<>();
+        if (shiftAddDto.getStaff() != null){ // si staff tiene users, los busco y los agrego
+            List<UserDni> userListDni = shiftAddDto.getStaff();
+            userListDni.forEach(userDni ->{
+                User userEntity = userService.getUserStaffMemberByDni(userDni.getDni());
+                if(userEntity.getRole().equals("LIFEGUARD")){
+                    userListToAdd.add(userEntity);
+                } else{
+                    // TODO aca deberia crear un listado de usuarios que no cumplen con la condicion de guardavida y responder que no son gv...
+
+                }
+            });
         }
+
         Shift shiftEntity = shiftMapper.toEntity(shiftAddDto);
+        shiftEntity.setStaff(userListToAdd);
         shiftEntity.setDate(LocalDate.now());
         shiftEntity.setClose(false);
         Shift savedShift = shiftRepository.save(shiftEntity);

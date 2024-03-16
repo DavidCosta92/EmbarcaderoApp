@@ -165,9 +165,21 @@ public class RecordService {
             boatService.addBoat(recordAddDto.getSimpleBoat()); // no tiene licencia, es un simpleBote, solo lo guardo en bd
         }
         Record recordEntity = recordMapper.toEntity(addDto);
+        //todo ERROR AL CREAR PERSONA EN UN RECORD, QUE ONDA?>>< 409: Persona no existe, revisa dni o crea una nueva persona - Cod: 2
+        //todo ERROR AL CREAR PERSONA EN UN RECORD, QUE ONDA?>>< 409: Persona no existe, revisa dni o crea una nueva persona - Cod: 2
+        //todo ERROR AL CREAR PERSONA EN UN RECORD, QUE ONDA?>>< 409: Persona no existe, revisa dni o crea una nueva persona - Cod: 2
+        //todo ERROR AL CREAR PERSONA EN UN RECORD, QUE ONDA?>>< 409: Persona no existe, revisa dni o crea una nueva persona - Cod: 2
+        //todo ERROR AL CREAR PERSONA EN UN RECORD, QUE ONDA?>>< 409: Persona no existe, revisa dni o crea una nueva persona - Cod: 2
+        //todo ERROR AL CREAR PERSONA EN UN RECORD, QUE ONDA?>>< 409: Persona no existe, revisa dni o crea una nueva persona - Cod: 2
+        //todo ERROR AL CREAR PERSONA EN UN RECORD, QUE ONDA?>>< 409: Persona no existe, revisa dni o crea una nueva persona - Cod: 2
         Person person = personService.getOrAddPersonForLicensesOrRecord(addDto.getPerson());
         recordEntity.setPerson(person);
 
+        /*
+
+        400: org.hibernate.TransientPropertyValueException: object references an unsaved transient instance - save the transient instance before flushing : com.Embarcadero.demo.model.entities.Record.simpleBoat -> com.Embarcadero.demo.model.entities.boat.SimpleBoat - Cod: 6
+
+         */
         return recordRepository.save(recordEntity);
     }
 

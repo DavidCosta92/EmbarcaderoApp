@@ -34,7 +34,7 @@ public class Record {
     @JoinColumn(name = "license_id", nullable = true)
     private License license;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="simpleBoat_id", referencedColumnName="id", nullable = true) // TODO, PONER QUE AL BORRAR, BORRE EN CASCADA ASI LIMPO BD!
     private SimpleBoat simpleBoat;
 
