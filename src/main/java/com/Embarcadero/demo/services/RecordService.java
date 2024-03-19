@@ -165,13 +165,6 @@ public class RecordService {
             boatService.addBoat(recordAddDto.getSimpleBoat()); // no tiene licencia, es un simpleBote, solo lo guardo en bd
         }
         Record recordEntity = recordMapper.toEntity(addDto);
-        //todo ERROR AL CREAR PERSONA EN UN RECORD, QUE ONDA?>>< 409: Persona no existe, revisa dni o crea una nueva persona - Cod: 2
-        //todo ERROR AL CREAR PERSONA EN UN RECORD, QUE ONDA?>>< 409: Persona no existe, revisa dni o crea una nueva persona - Cod: 2
-        //todo ERROR AL CREAR PERSONA EN UN RECORD, QUE ONDA?>>< 409: Persona no existe, revisa dni o crea una nueva persona - Cod: 2
-        //todo ERROR AL CREAR PERSONA EN UN RECORD, QUE ONDA?>>< 409: Persona no existe, revisa dni o crea una nueva persona - Cod: 2
-        //todo ERROR AL CREAR PERSONA EN UN RECORD, QUE ONDA?>>< 409: Persona no existe, revisa dni o crea una nueva persona - Cod: 2
-        //todo ERROR AL CREAR PERSONA EN UN RECORD, QUE ONDA?>>< 409: Persona no existe, revisa dni o crea una nueva persona - Cod: 2
-        //todo ERROR AL CREAR PERSONA EN UN RECORD, QUE ONDA?>>< 409: Persona no existe, revisa dni o crea una nueva persona - Cod: 2
         Person person = personService.getOrAddPersonForLicensesOrRecord(addDto.getPerson());
         recordEntity.setPerson(person);
 

@@ -33,6 +33,7 @@ public class AuthService {
     @Autowired
     private Validator validator;
 
+
     public AuthResponse register(RegisterRequest registerRequest) {
         if (! registerRequest.getPassword1().equals(registerRequest.getPassword2())) {
             throw new com.Embarcadero.demo.exceptions.customsExceptions.InvalidValueException("Passwords no coinciden!");

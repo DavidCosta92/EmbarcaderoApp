@@ -36,7 +36,9 @@ public class Shift {
     @OrderBy("recordState, startTime")
     private List<Record> records;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    // @OneToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name= "shift_staff", joinColumns = @JoinColumn(name = "shift_id"), inverseJoinColumns = @JoinColumn(name="staff_id"))
     private List<User> staff;
 
     private String notes;

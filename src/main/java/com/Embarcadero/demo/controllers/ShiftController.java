@@ -1,25 +1,30 @@
 package com.Embarcadero.demo.controllers;
 
+import com.Embarcadero.demo.auth.entities.User;
 import com.Embarcadero.demo.model.dtos.shift.ShiftAddDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDtoArray;
 import com.Embarcadero.demo.model.dtos.shift.ShiftUpdateDto;
 import com.Embarcadero.demo.model.dtos.staff.StaffMemberAddDto;
+import com.Embarcadero.demo.model.dtos.user.UserReadDto;
+import com.Embarcadero.demo.model.dtos.user.UserStaffReadDto;
 import com.Embarcadero.demo.model.entities.enums.Dam_enum;
 import com.Embarcadero.demo.services.ShiftService;
+import com.Embarcadero.demo.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-
 @RestController
 @RequestMapping("/shifts/")
 public class ShiftController {
     @Autowired
     ShiftService shiftService;
+
+    @Autowired
+    UserService userService;
 
     @PostMapping
     public ResponseEntity<ShiftReadDto> addNewShift(@Valid @RequestBody ShiftAddDto shiftAddDto){
@@ -56,6 +61,13 @@ public class ShiftController {
     public ResponseEntity<ShiftReadDto> addStaffToShift (@PathVariable Integer idShift , @Valid @RequestBody StaffMemberAddDto staffMemberDni){
         return new ResponseEntity<>(shiftService.addStaffUser(idShift , staffMemberDni), HttpStatus.ACCEPTED);
     }
+
+    @GetMapping("{idShift}/staff/{dniUser}")
+    public ResponseEntity<UserStaffReadDto> findUserStaffByDni (@PathVariable String dniUser){
+        return new ResponseEntity<>(userService.findUserStaffByDni(dniUser), HttpStatus.OK);
+    }
+
+
     @PatchMapping("{idShift}/staff/{idStaff}")
     public ResponseEntity<ShiftReadDto> removeStaffFromShift (@PathVariable Integer idShift , @PathVariable Integer idStaff){
         return new ResponseEntity<>(shiftService.removeStaffFromShift(idShift , idStaff), HttpStatus.ACCEPTED);
