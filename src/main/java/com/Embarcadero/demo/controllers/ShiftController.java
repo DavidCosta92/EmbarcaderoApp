@@ -12,10 +12,19 @@ import com.Embarcadero.demo.model.entities.enums.Dam_enum;
 import com.Embarcadero.demo.services.ShiftService;
 import com.Embarcadero.demo.services.UserService;
 import jakarta.validation.Valid;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Date;
+
 
 @RestController
 @RequestMapping("/shifts/")
@@ -68,8 +77,18 @@ public class ShiftController {
     }
 
 
-    @PatchMapping("{idShift}/staff/{idStaff}")
+    @PutMapping("{idShift}/staff/{idStaff}")
     public ResponseEntity<ShiftReadDto> removeStaffFromShift (@PathVariable Integer idShift , @PathVariable Integer idStaff){
         return new ResponseEntity<>(shiftService.removeStaffFromShift(idShift , idStaff), HttpStatus.ACCEPTED);
     }
+
+    @GetMapping("shiftResume/{idShift}")
+    public ResponseEntity<byte[]> shiftResume(@PathVariable Integer idShift) throws JRException, IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        LocalDate date = LocalDate.now();
+        headers.setContentDispositionFormData("shiftReport", "shiftReport"+date+".pdf");
+        return ResponseEntity.ok().headers(headers).body(shiftService.shiftResumePdf(idShift));
+    }
+
 }

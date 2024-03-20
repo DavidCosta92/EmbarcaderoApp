@@ -26,6 +26,8 @@ import com.Embarcadero.demo.model.mappers.PersonMapper;
 import com.Embarcadero.demo.model.mappers.ShiftMapper;
 import com.Embarcadero.demo.model.repositories.ShiftRepository;
 import com.Embarcadero.demo.utils.Validator;
+import com.Embarcadero.demo.utils.reports.ShiftReportGenerator;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +35,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -60,6 +64,8 @@ public class ShiftService {
 
     @Autowired
     private Validator validator;
+    @Autowired
+    private ShiftReportGenerator shiftReportGenerator;
 
 
     public Map<String,Integer> validateDate(String date){
@@ -240,4 +246,8 @@ public class ShiftService {
         }
     }
 
+
+    public byte[] shiftResumePdf(Integer shiftId) throws JRException, IOException {
+        return shiftReportGenerator.staffExportToPdf(getShiftById(shiftId));
+    }
 }

@@ -196,6 +196,20 @@
 			<version>3.8.1</version>
 		</dependency>
 
+		<!-- reportes  -->
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>6.20.1</version>
+		</dependency>
+		<!-- reportes  para evitar error con excels-->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>5.2.3</version>
+		</dependency>
+		<!-- reportes  -->
+
 
 	</dependencies>
 

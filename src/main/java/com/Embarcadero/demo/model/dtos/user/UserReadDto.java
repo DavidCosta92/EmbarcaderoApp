@@ -17,5 +17,6 @@ public class UserReadDto {
     String phone;
     String firstName;
     String lastName;
+    String email;
     Role role;
 }
