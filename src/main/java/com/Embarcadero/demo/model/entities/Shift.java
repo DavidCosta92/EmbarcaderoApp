@@ -44,4 +44,15 @@ public class Shift {
     private String notes;
 
     private Boolean close;
+
+    public Integer getTotalBoats(){
+        return records.size();
+    }
+    public Integer getTotalPersons(){
+        Integer totalPersons=0;
+        for(int i =0; i< records.size() ; i++){
+            totalPersons+=records.get(i).getNumberOfGuests()+1;
+        }
+        return totalPersons;
+    }
 }

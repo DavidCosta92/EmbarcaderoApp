@@ -19,8 +19,8 @@ import java.util.Map;
 public class ShiftReportGenerator {
 
     public byte[] staffExportToPdf(Shift shift) throws JRException, IOException {
-        List<User> staffList = shift.getStaff();
-        return JasperExportManager.exportReportToPdf(getReport(staffList));
+        // List<User> staffList = shift.getStaff();
+        return JasperExportManager.exportReportToPdf(getReport(shift));
     }
 /*
     public byte[] exportToXls(List<Pet> list) throws JRException, FileNotFoundException {
@@ -36,9 +36,31 @@ public class ShiftReportGenerator {
 
  */
 
-    private JasperPrint getReport(List<User> staffList) throws IOException, JRException {
+    private JasperPrint getReport(Shift shift) throws IOException, JRException {
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("ds", new JRBeanArrayDataSource(staffList.toArray()));
+
+        // DIQUE
+        String dam = "";
+        if(shift.getDam().name() == "DIQUE_ULLUM") dam="Ullum";
+        if(shift.getDam().name() == "DIQUE_PUNTA_NEGRA") dam="Punta Negra";
+        if(shift.getDam().name() == "DIQUE_CUESTA_DEL_VIENTO") dam="Cuesta del viento";
+        params.put("dam", dam);
+
+        // FECHA
+        params.put("date", shift.getDate().toString());
+
+        // ESTADO GUARDIA
+        String shiftState = "Estado: finalizada";
+        if(!shift.getClose()) shiftState = "Estado: NO FINALIZADA";
+        params.put("state", shiftState);
+
+        // STAFF
+        params.put("staff", new JRBeanArrayDataSource(shift.getStaff().toArray()));
+
+        // RECORDS
+        params.put("totalBoats", shift.getTotalBoats());
+        params.put("totalPersons", shift.getTotalPersons());
+        params.put("records", new JRBeanArrayDataSource(shift.getRecords().toArray()));
 
         JasperPrint report = JasperFillManager.fillReport(JasperCompileManager.compileReport(ResourceUtils.getFile("classpath:Shift_resume_A4.jrxml").getAbsolutePath()), params, new JREmptyDataSource());
 

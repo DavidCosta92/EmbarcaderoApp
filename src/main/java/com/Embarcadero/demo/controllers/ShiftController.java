@@ -87,7 +87,7 @@ public class ShiftController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         LocalDate date = LocalDate.now();
-        headers.setContentDispositionFormData("shiftReport", "shiftReport"+date+".pdf");
+        headers.setContentDispositionFormData("shiftReport", "Reporte guardia "+idShift+" -"+date+".pdf");
         return ResponseEntity.ok().headers(headers).body(shiftService.shiftResumePdf(idShift));
     }
 
