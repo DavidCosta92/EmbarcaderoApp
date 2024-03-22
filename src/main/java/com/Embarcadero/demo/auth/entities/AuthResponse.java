@@ -9,4 +9,5 @@ import lombok.*;
 @Getter
 public class AuthResponse {
     String token;
+    String emailStatus;
 }

@@ -91,4 +91,12 @@ public class ShiftController {
         return ResponseEntity.ok().headers(headers).body(shiftService.shiftResumePdf(idShift));
     }
 
+    @GetMapping("shiftResume/{idShift}/{email}")
+    public ResponseEntity<Void> sendEmailShiftResume(@PathVariable Integer idShift, @PathVariable String email){
+        if(shiftService.sendEmailShiftResume(idShift , email)){
+            return ResponseEntity.accepted().build();
+        }
+        return ResponseEntity.internalServerError().build();
+    }
+
 }

@@ -58,20 +58,16 @@ public class AuthService {
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(registerRequest.getUsername() , registerRequest.getPassword1()));
 
-        // TODO VERIFICAR ERROR DE ENVIO DE EMAILS!
-        // TODO VERIFICAR ERROR DE ENVIO DE EMAILS!
-        mailManager.sendEmail(user.getEmail(), "Test servidor backend java", "Hola, GRACIAS POR REGISTRARTE "+user.getUsername()+"!");
-        // TODO VERIFICAR ERROR DE ENVIO DE EMAILS!
-        // TODO VERIFICAR ERROR DE ENVIO DE EMAILS!
-
+        String sendStatus = mailManager.sendEmail(user.getEmail(), "Test servidor backend java", "Hola, GRACIAS POR REGISTRARTE "+user.getUsername()+"!");
         log.info("NUEVO USUARIO => "+user.getUsername());
 
-        return AuthResponse.builder().token(jwtService.getToken(user)).build();
-
+        return AuthResponse.builder()
+                .token(jwtService.getToken(user))
+                .emailStatus(sendStatus)
+                .build();
     }
 
     public AuthResponse login(LoginRequest loginRequest) {
-        System.out.println("************** >>>>>>>>>>>>>> ENTRE AL LOGIN YA PASE EL FILTRO DE JWT <<<<<<<<<<<<<<<<< **************");
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername() , loginRequest.getPassword()));
         UserDetails userDetails = userRepository
                 .findByUsername(loginRequest.getUsername())

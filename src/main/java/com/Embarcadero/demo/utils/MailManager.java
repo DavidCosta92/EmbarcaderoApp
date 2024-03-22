@@ -12,14 +12,14 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class MailManager {
 
-    // @Value("${spring.mail.username}")
-    // private String sender;
-    private String sender = "davidcst2991@gmail.com";
+    @Value("${spring.mail.username}")
+    private String sender;
+    //private String sender = "davidcst2991@gmail.com";
 
     @Autowired
     JavaMailSender javaMailSender;
 
-    public void sendEmail(String email, String subject,  String msg) {
+    public String sendEmail(String email, String subject,  String msg) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             message.setSubject(subject);
@@ -30,9 +30,11 @@ public class MailManager {
             mimeMessageHelper.setText(msg);
             mimeMessageHelper.setFrom(sender);
             javaMailSender.send(message);
+            return "OK";
         } catch (Exception e){
-            log.info("Email enviando a => "+email);
-            throw new RuntimeException("ERROR ENVIANDO EMAIL");
+            log.info("Error enviando email => "+e);
+            // throw new RuntimeException("ERROR ENVIANDO EMAIL");
+            return "ERROR ENVIANDO EMAIL => "+e;
         }
     }
 

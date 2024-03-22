@@ -250,4 +250,23 @@ public class ShiftService {
     public byte[] shiftResumePdf(Integer shiftId) throws JRException, IOException {
         return shiftReportGenerator.staffExportToPdf(getShiftById(shiftId));
     }
+
+    public Boolean sendEmailShiftResume(Integer shifId, String email){
+        System.out.println("ENVIANDO EMAIL A "+email + " del shift "+shifId);
+        // todo llamar a crear reporte y luego a enviar por email
+        // todo llamar a crear reporte y luego a enviar por email
+        // todo llamar a crear reporte y luego a enviar por email
+        // todo llamar a crear reporte y luego a enviar por email
+        // todo llamar a crear reporte y luego a enviar por email
+        // todo llamar a crear reporte y luego a enviar por email
+        // todo llamar a crear reporte y luego a enviar por email
+        // todo llamar a crear reporte y luego a enviar por email
+        // todo llamar a crear reporte y luego a enviar por email
+        // todo llamar a crear reporte y luego a enviar por email
+        // todo llamar a crear reporte y luego a enviar por email
+        // todo llamar a crear reporte y luego a enviar por email
+        // todo llamar a crear reporte y luego a enviar por email
+
+        return true;
+    }
 }
