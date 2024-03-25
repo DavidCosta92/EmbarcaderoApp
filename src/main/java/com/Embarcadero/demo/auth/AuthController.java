@@ -2,6 +2,8 @@ package com.Embarcadero.demo.auth;
 
 import com.Embarcadero.demo.auth.entities.*;
 import com.Embarcadero.demo.exceptions.ExceptionMessages;
+import com.Embarcadero.demo.model.dtos.user.UserReadDtoArray;
+import com.Embarcadero.demo.model.entities.enums.Dam_enum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,6 +29,30 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
+
+/*
+    @Operation(summary = "This endpoint gets user data, register a new user and returns a JWT with credentials of user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Returns JWT",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AuthResponse.class)) }),
+            @ApiResponse(responseCode = "406", description = "Error as result of sending invalid data, Ex: 'Password debe tener al menos 8 caracteres!' ",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+            @ApiResponse(responseCode = "409", description = "Error as result of sending data already reported, Ex: 'Datos ya existentes, revisa los campos!' ",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }) })
+
+ */
+    @GetMapping("lifeguards")
+    public ResponseEntity<UserReadDtoArray> getAllLifeguards (@RequestParam(required = false) String dni,
+                                                              @RequestParam(required = false, defaultValue = "0") Integer page,
+                                                              @RequestParam(required = false, defaultValue = "10") Integer size,
+                                                              @RequestParam(required = false, defaultValue = "dni") String sortBy){
+        return new ResponseEntity<>(authService.getAllLifeguards(dni, page, size, sortBy), HttpStatus.OK);
+    }
+
+
 
     @Operation(summary = "This endpoint gets user data, register a new user and returns a JWT with credentials of user")
     @ApiResponses(value = {

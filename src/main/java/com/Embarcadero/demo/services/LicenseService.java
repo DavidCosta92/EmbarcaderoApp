@@ -65,6 +65,7 @@ public class LicenseService {
     }
     public LicenseReadDtoArray findAll (String licenseCode, Integer pageNumber, Integer pageSize, String sortBy){
         Page<License> results;
+        System.out.println("------------------------- sort by"+sortBy);
         Sort sort = Sort.by(sortBy);
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 

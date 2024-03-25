@@ -1,24 +1,19 @@
 package com.Embarcadero.demo.utils.reports;
 
-import com.Embarcadero.demo.auth.entities.User;
 import com.Embarcadero.demo.model.entities.Shift;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
 public class ShiftReportGenerator {
 
-    public byte[] staffExportToPdf(Shift shift) throws JRException, IOException {
+    public byte[] shiftExportToPdf(Shift shift) throws JRException, IOException {
         // List<User> staffList = shift.getStaff();
         return JasperExportManager.exportReportToPdf(getReport(shift));
     }

@@ -2,10 +2,19 @@ package com.Embarcadero.demo.auth;
 
 import com.Embarcadero.demo.auth.entities.*;
 import com.Embarcadero.demo.auth.jwt.JwtService;
+import com.Embarcadero.demo.model.dtos.license.LicenseReadDtoArray;
+import com.Embarcadero.demo.model.dtos.shift.ShiftReadDtoArray;
+import com.Embarcadero.demo.model.dtos.user.UserReadDtoArray;
+import com.Embarcadero.demo.model.entities.Shift;
+import com.Embarcadero.demo.model.mappers.UserMapper;
 import com.Embarcadero.demo.utils.MailManager;
 import com.Embarcadero.demo.utils.Validator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -32,6 +42,32 @@ public class AuthService {
     private MailManager mailManager;
     @Autowired
     private Validator validator;
+
+    @Autowired
+    private UserMapper userMapper;
+
+
+    public UserReadDtoArray getAllLifeguards(String dni, Integer page, Integer size, String sortBy){
+        Page<User> results;
+        Sort sort = Sort.by(sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        if (dni != null) {
+            results = userRepository.findAllByRoleAndDniContains(Role.LIFEGUARD,dni, pageable);
+        } else {
+            results = userRepository.findAllByRole(Role.LIFEGUARD, pageable);
+        }
+        Page pagedResults = results.map(entity -> userMapper.toReadDto(entity));
+
+        return UserReadDtoArray.builder()
+                .users(pagedResults.getContent())
+                .total_results(pagedResults.getTotalElements())
+                .results_per_page(size)
+                .current_page(page)
+                .pages(pagedResults.getTotalPages())
+                .sort_by(sortBy)
+                .build();
+    }
 
 
     public AuthResponse register(RegisterRequest registerRequest) {

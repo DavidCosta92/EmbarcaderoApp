@@ -5,7 +5,6 @@ import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
 import com.Embarcadero.demo.exceptions.customsExceptions.ForbiddenAction;
 import com.Embarcadero.demo.exceptions.customsExceptions.InvalidValueException;
 import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
-import com.Embarcadero.demo.model.dtos.license.LicenseReadDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseUpdateDto;
 import com.Embarcadero.demo.model.dtos.records.RecordAddDto;
 import com.Embarcadero.demo.model.dtos.records.RecordReadDto;
@@ -16,8 +15,6 @@ import com.Embarcadero.demo.model.dtos.shift.ShiftReadDtoArray;
 import com.Embarcadero.demo.model.dtos.shift.ShiftUpdateDto;
 import com.Embarcadero.demo.model.dtos.staff.StaffMemberAddDto;
 import com.Embarcadero.demo.model.dtos.user.UserDni;
-import com.Embarcadero.demo.model.entities.License;
-import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.Record;
 import com.Embarcadero.demo.model.entities.Shift;
 import com.Embarcadero.demo.model.entities.enums.Dam_enum;
@@ -25,17 +22,20 @@ import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
 import com.Embarcadero.demo.model.mappers.PersonMapper;
 import com.Embarcadero.demo.model.mappers.ShiftMapper;
 import com.Embarcadero.demo.model.repositories.ShiftRepository;
+import com.Embarcadero.demo.utils.MailManager;
 import com.Embarcadero.demo.utils.Validator;
 import com.Embarcadero.demo.utils.reports.ShiftReportGenerator;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -66,6 +66,9 @@ public class ShiftService {
     private Validator validator;
     @Autowired
     private ShiftReportGenerator shiftReportGenerator;
+
+    @Autowired
+    private MailManager mailManager;
 
 
     public Map<String,Integer> validateDate(String date){
@@ -188,7 +191,7 @@ public class ShiftService {
             List<UserDni> userListDni = shiftAddDto.getStaff();
             userListDni.forEach(userDni ->{
                 User userEntity = userService.getUserStaffMemberByDni(userDni.getDni());
-                if(userEntity.getRole().equals("LIFEGUARD")){
+                if(userEntity.getRole().name().equals("LIFEGUARD")){
                     userListToAdd.add(userEntity);
                 } else{
                     // TODO aca deberia crear un listado de usuarios que no cumplen con la condicion de guardavida y responder que no son gv...
@@ -207,7 +210,7 @@ public class ShiftService {
 
 
 
-    public ShiftReadDto updateShift (Integer idShift, ShiftUpdateDto shiftUpdateDto){
+    public ShiftReadDto updateShift (Integer idShift, ShiftUpdateDto shiftUpdateDto) throws JRException, IOException {
         Shift  shiftBd = getShiftById(idShift);
         if (shiftUpdateDto.getDam() != null){
             // todo validar dam? dam es validada automaticamente por spring, pero deberia validar algo mas? como que solo puede haber un unico uso de la dam en un dia particular?
@@ -222,19 +225,17 @@ public class ShiftService {
         }
         return shiftMapper.toReadDTO(shiftRepository.save(shiftBd));
     }
-    public ShiftReadDto setCloseStatusShift(Shift shiftBd){
+    public ShiftReadDto setCloseStatusShift(Shift shiftBd) throws JRException, IOException {
         if (recordService.getOpenRecords(shiftBd.getRecords()).size() > 0){
             throw new ForbiddenAction("Aun existen registros activos, por favor cierra todos los registros!");
         }
         shiftBd.setClose(shiftBd.getClose() == true? false : true);
         shiftRepository.save(shiftBd);
-        // todo ENVIAR EMAIL con resumen de shift (fecha, staff, records, notas)
-        // todo ENVIAR EMAIL con resumen de shift (fecha, staff, records, notas)
-        // todo ENVIAR EMAIL con resumen de shift (fecha, staff, records, notas)
-        // todo ENVIAR EMAIL con resumen de shift (fecha, staff, records, notas)
-        // todo ENVIAR EMAIL con resumen de shift (fecha, staff, records, notas)
-        // todo ENVIAR EMAIL con resumen de shift (fecha, staff, records, notas)
-        // todo ENVIAR EMAIL con resumen de shift (fecha, staff, records, notas)
+
+        // TODO ACA DEBO PONER UN LISTADO DE EMAILS, DE LOS ADMIN O JEFES A LOS CUALES MANDARLE EL RESUMEN DE GUARDIA, PODRIA MANDARSELOS A LOS QUE ESTAN DENTRO DEL STAFF
+        // TODO ACA DEBO PONER UN LISTADO DE EMAILS, DE LOS ADMIN O JEFES A LOS CUALES MANDARLE EL RESUMEN DE GUARDIA, PODRIA MANDARSELOS A LOS QUE ESTAN DENTRO DEL STAFF
+        // TODO ACA DEBO PONER UN LISTADO DE EMAILS, DE LOS ADMIN O JEFES A LOS CUALES MANDARLE EL RESUMEN DE GUARDIA, PODRIA MANDARSELOS A LOS QUE ESTAN DENTRO DEL STAFF
+        sendEmailShiftResume(shiftBd.getId() , "davidcst2991@gmail.com");
         return shiftMapper.toReadDTO(shiftBd);
     }
 
@@ -248,25 +249,18 @@ public class ShiftService {
 
 
     public byte[] shiftResumePdf(Integer shiftId) throws JRException, IOException {
-        return shiftReportGenerator.staffExportToPdf(getShiftById(shiftId));
+        return shiftReportGenerator.shiftExportToPdf(getShiftById(shiftId));
     }
 
-    public Boolean sendEmailShiftResume(Integer shifId, String email){
-        System.out.println("ENVIANDO EMAIL A "+email + " del shift "+shifId);
-        // todo llamar a crear reporte y luego a enviar por email
-        // todo llamar a crear reporte y luego a enviar por email
-        // todo llamar a crear reporte y luego a enviar por email
-        // todo llamar a crear reporte y luego a enviar por email
-        // todo llamar a crear reporte y luego a enviar por email
-        // todo llamar a crear reporte y luego a enviar por email
-        // todo llamar a crear reporte y luego a enviar por email
-        // todo llamar a crear reporte y luego a enviar por email
-        // todo llamar a crear reporte y luego a enviar por email
-        // todo llamar a crear reporte y luego a enviar por email
-        // todo llamar a crear reporte y luego a enviar por email
-        // todo llamar a crear reporte y luego a enviar por email
-        // todo llamar a crear reporte y luego a enviar por email
+    public Boolean sendEmailShiftResume(Integer shiftId, String email) throws JRException, IOException {
+        byte[] pdfBytes = shiftResumePdf(shiftId);
+        LocalDate date = LocalDate.now();
 
-        return true;
+        File fileToAttach = File.createTempFile("shift_ID_"+shiftId+"_"+date , ".pdf");
+        FileOutputStream fileOutput = new FileOutputStream(fileToAttach);
+        fileOutput.write(pdfBytes);
+        Boolean emailStatus = mailManager.sendEmail(email, "Resumen de guardia con fecha: ", "Este es un resumen enviado automaticamente",fileToAttach).equals("OK");
+        fileToAttach.delete();
+        return emailStatus;
     }
 }

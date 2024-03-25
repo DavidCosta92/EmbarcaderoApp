@@ -35,7 +35,7 @@ public class RegisterRequest {
     String lastName;
 
     @NotNull(message = "Dni no puede ser nulo")
-    @Size(min=2, max=30, message = "Dni debe tener entre 8 caracteres")
+    @Size(min=8, max=10, message = "Dni debe tener entre 8 Y 10 caracteres")
     String dni;
 
     @NotNull(message = "Telefono no puede ser nulo")

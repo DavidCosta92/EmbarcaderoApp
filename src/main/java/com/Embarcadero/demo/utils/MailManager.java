@@ -4,28 +4,56 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+
 @Component
 @Log4j2
+// @Configuration
+// @PropertySource("classpath:email.properties")
 public class MailManager {
 
     @Value("${spring.mail.username}")
     private String sender;
     //private String sender = "davidcst2991@gmail.com";
 
+    // @Value("${spring.mail.password}")
+    // private String password;
+
     @Autowired
     JavaMailSender javaMailSender;
+
+    public String sendEmail (String email, String subject,  String msg, File fileToAttach){
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            message.setSubject(subject);
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message , true);
+
+            if(fileToAttach.isFile()){
+                mimeMessageHelper.addAttachment(fileToAttach.getName(), fileToAttach);
+            }
+            mimeMessageHelper.setTo(email);
+            mimeMessageHelper.setText(msg);
+            mimeMessageHelper.setFrom(sender);
+            javaMailSender.send(message);
+            return "OK";
+        } catch (Exception e){
+            log.info("Error enviando email => "+e);
+            return "ERROR ENVIANDO EMAIL => "+e;
+        }
+    }
 
     public String sendEmail(String email, String subject,  String msg) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             message.setSubject(subject);
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message , true);
-            // File file = new File();
-            // mimeMessageHelper.addAttachment("Mi archivo a enviar", file);
+
             mimeMessageHelper.setTo(email);
             mimeMessageHelper.setText(msg);
             mimeMessageHelper.setFrom(sender);

@@ -2,16 +2,23 @@ package com.Embarcadero.demo.services;
 
 import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
 import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
+import com.Embarcadero.demo.model.dtos.license.LicenseReadDtoArray;
 import com.Embarcadero.demo.model.dtos.person.PersonAddDto;
 import com.Embarcadero.demo.model.dtos.person.PersonReadDto;
+import com.Embarcadero.demo.model.dtos.person.PersonReadDtoArray;
 import com.Embarcadero.demo.model.dtos.person.PersonUpdateDto;
 import com.Embarcadero.demo.model.dtos.records.RecordUpdateDto;
+import com.Embarcadero.demo.model.entities.License;
 import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.Record;
 import com.Embarcadero.demo.model.mappers.PersonMapper;
 import com.Embarcadero.demo.model.repositories.PersonRepository;
 import com.Embarcadero.demo.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -111,6 +118,27 @@ public class PersonService {
     }
     public PersonReadDto findPersonByDni(String dni){
         return personMapper.toReadDto(getPersonByDni(dni));
+    }
+    public PersonReadDtoArray findAll(String dni, Integer pageNumber, Integer pageSize, String sortBy){
+        Page<Person> results;
+        Sort sort = Sort.by(sortBy);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+        if (dni != null) {
+            results = personRepository.findAllByDniContains(dni, pageable);
+        } else {
+            results = personRepository.findAll(pageable);
+        }
+        Page pagedResults = results.map(entity -> personMapper.toReadDto(entity));
+
+        return PersonReadDtoArray.builder()
+                .persons(pagedResults.getContent())
+                .total_results(pagedResults.getTotalElements())
+                .results_per_page(pageSize)
+                .current_page(pageNumber)
+                .pages(pagedResults.getTotalPages())
+                .sort_by(sortBy)
+                .build();
     }
     public void validatePersonNewMatriculaOrNewRecord(PersonAddDto personAddDto){
         if(personAddDtoOnlyHasDni(personAddDto)){ // si solo viene dni, asumo que ya deberia existir la persona, por lo que deberia traer de bd

@@ -56,8 +56,8 @@ public class ShiftController {
     public ResponseEntity<ShiftReadDto> findShiftByIdUser(@PathVariable Integer id){
         return new ResponseEntity<>(shiftService.findShiftByIdUser(id) , HttpStatus.OK);
     }
-    @PatchMapping("{id}")
-    public ResponseEntity<ShiftReadDto> updateShift (@PathVariable Integer id, @RequestBody ShiftUpdateDto shiftUpdateDto){
+    @PutMapping("{id}")
+    public ResponseEntity<ShiftReadDto> updateShift (@PathVariable Integer id, @RequestBody ShiftUpdateDto shiftUpdateDto) throws JRException, IOException {
         return  new ResponseEntity<>(shiftService.updateShift(id , shiftUpdateDto ), HttpStatus.ACCEPTED);
     }
 
@@ -83,7 +83,7 @@ public class ShiftController {
     }
 
     @GetMapping("shiftResume/{idShift}")
-    public ResponseEntity<byte[]> shiftResume(@PathVariable Integer idShift) throws JRException, IOException {
+    public ResponseEntity<byte[]> downloadShiftResume(@PathVariable Integer idShift) throws JRException, IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         LocalDate date = LocalDate.now();
@@ -92,7 +92,7 @@ public class ShiftController {
     }
 
     @GetMapping("shiftResume/{idShift}/{email}")
-    public ResponseEntity<Void> sendEmailShiftResume(@PathVariable Integer idShift, @PathVariable String email){
+    public ResponseEntity<Void> sendEmailShiftResume(@PathVariable Integer idShift, @PathVariable String email) throws JRException, IOException {
         if(shiftService.sendEmailShiftResume(idShift , email)){
             return ResponseEntity.accepted().build();
         }
