@@ -28,10 +28,11 @@ public class PersonController {
     }
     @GetMapping
     public ResponseEntity<PersonReadDtoArray> showAll(@RequestParam(required = false) String dni,
+                                                      @RequestParam(required = false, defaultValue = "") String searchValue,
                                                       @RequestParam(required = false, defaultValue = "0") Integer page,
                                                       @RequestParam(required = false, defaultValue = "10") Integer size,
                                                       @RequestParam(required = false, defaultValue = "dni") String sortBy) {
-        return new ResponseEntity<>(personService.findAll(dni, page, size, sortBy), HttpStatus.OK);
+        return new ResponseEntity<>(personService.findAll(dni,searchValue, page, size, sortBy), HttpStatus.OK);
     }
     @PostMapping()
     public ResponseEntity<PersonReadDto> createPerson (@Valid @RequestBody PersonAddDto addDto){

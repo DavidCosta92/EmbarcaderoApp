@@ -25,10 +25,11 @@ public class LicenseController {
     @GetMapping
     @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
     public ResponseEntity<LicenseReadDtoArray> showAll(@RequestParam(required = false) String licenseCode,
+                                                       @RequestParam(required = false) String searchValue,
                                                        @RequestParam(required = false, defaultValue = "0") Integer page,
                                                        @RequestParam(required = false, defaultValue = "10") Integer size,
                                                        @RequestParam(required = false, defaultValue = "licenseCode") String sortBy) {
-        return new ResponseEntity<>(licenseService.findAll(licenseCode, page, size, sortBy), HttpStatus.OK);
+        return new ResponseEntity<>(licenseService.findAll(licenseCode, searchValue, page, size, sortBy), HttpStatus.OK);
     }
     @GetMapping("{id}")
     @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")

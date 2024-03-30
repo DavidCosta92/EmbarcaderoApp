@@ -119,16 +119,20 @@ public class PersonService {
     public PersonReadDto findPersonByDni(String dni){
         return personMapper.toReadDto(getPersonByDni(dni));
     }
-    public PersonReadDtoArray findAll(String dni, Integer pageNumber, Integer pageSize, String sortBy){
+    public PersonReadDtoArray findAll(String dni, String searchValue, Integer pageNumber, Integer pageSize, String sortBy){
         Page<Person> results;
         Sort sort = Sort.by(sortBy);
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
         if (dni != null) {
             results = personRepository.findAllByDniContains(dni, pageable);
+        } else if(dni == null && !searchValue.equals("")){
+            results = personRepository.getAllBySearchValueContains(searchValue, pageable);
+
         } else {
             results = personRepository.findAll(pageable);
         }
+
         Page pagedResults = results.map(entity -> personMapper.toReadDto(entity));
 
         return PersonReadDtoArray.builder()

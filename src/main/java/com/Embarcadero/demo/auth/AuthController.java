@@ -46,10 +46,11 @@ public class AuthController {
  */
     @GetMapping("lifeguards")
     public ResponseEntity<UserReadDtoArray> getAllLifeguards (@RequestParam(required = false) String dni,
+                                                              @RequestParam(required = false, defaultValue = "") String fullName,
                                                               @RequestParam(required = false, defaultValue = "0") Integer page,
                                                               @RequestParam(required = false, defaultValue = "10") Integer size,
                                                               @RequestParam(required = false, defaultValue = "dni") String sortBy){
-        return new ResponseEntity<>(authService.getAllLifeguards(dni, page, size, sortBy), HttpStatus.OK);
+        return new ResponseEntity<>(authService.getAllLifeguards(dni,fullName, page, size, sortBy), HttpStatus.OK);
     }
 
 

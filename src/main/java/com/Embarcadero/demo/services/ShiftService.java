@@ -195,7 +195,6 @@ public class ShiftService {
                     userListToAdd.add(userEntity);
                 } else{
                     // TODO aca deberia crear un listado de usuarios que no cumplen con la condicion de guardavida y responder que no son gv...
-
                 }
             });
         }

@@ -63,15 +63,16 @@ public class LicenseService {
         personService.validatePersonNewMatriculaOrNewRecord(licenseAddDto.getOwner());
         if (licenseAddDto.getLicenseState_enum() == null) licenseAddDto.setLicenseState_enum(LicenseState_enum.OK);
     }
-    public LicenseReadDtoArray findAll (String licenseCode, Integer pageNumber, Integer pageSize, String sortBy){
+    public LicenseReadDtoArray findAll (String licenseCode, String searchValue, Integer pageNumber, Integer pageSize, String sortBy){
         Page<License> results;
-        System.out.println("------------------------- sort by"+sortBy);
         Sort sort = Sort.by(sortBy);
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
         if (licenseCode != null) {
             results = licenseRepository.findAllByLicenseCodeContains(licenseCode, pageable);
-        } else {
+        } else if(licenseCode == null && !searchValue.equals("")){
+            results = licenseRepository.getAllBySearchValueContains(searchValue, pageable);
+        }else {
             results = licenseRepository.findAll(pageable);
         }
         Page pagedResults = results.map(entity -> licenseMapper.toReadDTO(entity));

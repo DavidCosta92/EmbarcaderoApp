@@ -47,13 +47,15 @@ public class AuthService {
     private UserMapper userMapper;
 
 
-    public UserReadDtoArray getAllLifeguards(String dni, Integer page, Integer size, String sortBy){
+    public UserReadDtoArray getAllLifeguards(String dni, String fullName, Integer page, Integer size, String sortBy){
         Page<User> results;
         Sort sort = Sort.by(sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
 
         if (dni != null) {
             results = userRepository.findAllByRoleAndDniContains(Role.LIFEGUARD,dni, pageable);
+        } else if (dni == null && !fullName.equals("")){
+            results = userRepository.getAllByRoleAndFullName(Role.LIFEGUARD,fullName, pageable);
         } else {
             results = userRepository.findAllByRole(Role.LIFEGUARD, pageable);
         }
