@@ -16,6 +16,7 @@ public class UserReadDto {
     String username;
     String dni;
     String phone;
+    String emergency_phone;
     String firstName;
     String lastName;
     String email;

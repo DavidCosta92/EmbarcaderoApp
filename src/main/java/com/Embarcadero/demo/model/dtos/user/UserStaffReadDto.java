@@ -20,6 +20,7 @@ public class UserStaffReadDto {
     String username;
     String dni;
     String phone;
+    String emergency_phone;
     String firstName;
     String lastName;
     Role role;

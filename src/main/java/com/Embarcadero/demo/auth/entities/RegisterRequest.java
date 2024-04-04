@@ -42,6 +42,10 @@ public class RegisterRequest {
     @Size(min=9, max=14, message = "Telefono debe tener entre 9 y 14 caracteres")
     String phone;
 
+    @NotNull(message = "Telefono de emergencia no puede ser nulo")
+    @Size(min=9, max=14, message = "Telefono debe tener entre 9 y 14 caracteres")
+    String emergency_phone;
+
     @NotNull(message = "Email no puede ser nulo")
     @Email(message = "Email con formato invalido")
     String email;

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
@@ -100,6 +101,28 @@ public class AuthController {
     }
 
 
+    /*
+
+    @Operation(summary = "This endpoint receives an RestorePassRequest as a JSON, SET NEW PASSWORD and returns a new JWT with user credentials")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "202", description = "Accepted",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AuthResponse.class)) }),
+            @ApiResponse(responseCode = "403", description = "JWT Invalid",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+            @ApiResponse(responseCode = "406", description = "Error as result of sending invalid data, Ex: 'Password debe tener al menos 8 caracteres!' ",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+            @ApiResponse(responseCode = "500", description = "ESTE ERROR ESTA PENDIENTE DE DARLE OTRO MANEJO!!! NO ESTA BIEN EL CODIGO 500 ",
+                    content = @Content) })
+    */
+    @PutMapping(path = "userDetails/{idUser}")
+    public ResponseEntity<LoguedUserDetails> editUserDetails (@RequestHeader HttpHeaders headers, @RequestBody LoguedUserDetails userDetails){
+        return new ResponseEntity<>(authService.editUserDetails(headers, userDetails), HttpStatus.OK);
+    }
+
+
     @Operation(summary = "This endpoint receives an email as a parametrer and if it belongs to a registered user, an email with JWT is sent to reset the password.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "Sent an email with JWT to reset the password.",
@@ -130,4 +153,5 @@ public class AuthController {
     public ResponseEntity<AuthResponse> setNewPassword(@Valid RestorePassRequest restorePassRequest){
         return new ResponseEntity<>(authService.setNewPassword(restorePassRequest) , HttpStatus.ACCEPTED);
     }
+
 }

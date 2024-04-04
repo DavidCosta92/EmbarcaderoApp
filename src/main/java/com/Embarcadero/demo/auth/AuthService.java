@@ -86,6 +86,7 @@ public class AuthService {
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
                 .phone(registerRequest.getPhone())
+                .emergency_phone(registerRequest.getEmergency_phone())
                 .dni(registerRequest.getDni())
                 .email(registerRequest.getEmail())
                 .role(createRoleByEmail(registerRequest.getEmail()))
@@ -129,6 +130,7 @@ public class AuthService {
                 .firstName(loguedUser.getFirstName())
                 .lastName(loguedUser.getLastName())
                 .phone(loguedUser.getPhone())
+                .emergency_phone(loguedUser.getEmergency_phone())
                 .dni(loguedUser.getDni())
                 .email((loguedUser.getEmail()))
                 .role(loguedUser.getRole())
@@ -136,6 +138,25 @@ public class AuthService {
                 .userProfileImage(loguedUser.getUserProfileImage())
                 .authorities(loguedUser.getAuthorities())
                 .build();
+    }
+
+    public LoguedUserDetails editUserDetails (HttpHeaders headers, LoguedUserDetails userDetails){
+        // TODO UPDATE DE FIELDS DE PROFILE USER
+        // TODO UPDATE DE FIELDS DE PROFILE USER
+        // TODO UPDATE DE FIELDS DE PROFILE USER
+        // TODO UPDATE DE FIELDS DE PROFILE USER
+        // TODO UPDATE DE FIELDS DE PROFILE USER
+        // TODO UPDATE DE FIELDS DE PROFILE USER
+        // TODO UPDATE DE FIELDS DE PROFILE USER
+        // TODO UPDATE DE FIELDS DE PROFILE USER
+        // TODO UPDATE DE FIELDS DE PROFILE USER
+        // TODO UPDATE DE FIELDS DE PROFILE USER
+        // TODO UPDATE DE FIELDS DE PROFILE USER
+        // TODO UPDATE DE FIELDS DE PROFILE USER
+        // TODO UPDATE DE FIELDS DE PROFILE USER
+        // TODO UPDATE DE FIELDS DE PROFILE USER
+        // TODO UPDATE DE FIELDS DE PROFILE USER
+        return new LoguedUserDetails();
     }
 
     public String restorePassword(String email){

@@ -37,6 +37,7 @@ public class User implements UserDetails {
     String email;
 
     String phone;
+    String emergency_phone;
     String password;
 
     String firstName;

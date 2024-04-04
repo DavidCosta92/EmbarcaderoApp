@@ -24,6 +24,7 @@ public class LoguedUserDetails {
     String firstName;
     String dni;
     String phone;
+    String emergency_phone;
     String email;
     Role role;
     // List<ImageFile> imageFiles;
