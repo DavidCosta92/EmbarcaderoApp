@@ -97,7 +97,7 @@ public class AuthService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(registerRequest.getUsername() , registerRequest.getPassword1()));
 
         String sendStatus = mailManager.sendEmail(user.getEmail(), "Test servidor backend java", "Hola, GRACIAS POR REGISTRARTE "+user.getUsername()+"!");
-        log.info("NUEVO USUARIO => "+user.getUsername());
+        // log.info("NUEVO USUARIO => "+user.getUsername());
 
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
@@ -132,6 +132,8 @@ public class AuthService {
                 .dni(loguedUser.getDni())
                 .email((loguedUser.getEmail()))
                 .role(loguedUser.getRole())
+                // .imageFiles(loguedUser.getImageFiles())
+                .userProfileImage(loguedUser.getUserProfileImage())
                 .authorities(loguedUser.getAuthorities())
                 .build();
     }
@@ -144,6 +146,7 @@ public class AuthService {
         log.warn(">> token enviado para restaurar cuenta: "+email+", token: " +tokenToRestore+" <<");
         return "Se envio un email con mas instrucciones";
     }
+
 
     public AuthResponse setNewPassword(RestorePassRequest restorePassRequest){
         if(!restorePassRequest.getPassword1().equals(restorePassRequest.getPassword2())) throw new com.Embarcadero.demo.exceptions.customsExceptions.InvalidValueException("Passwords no coinciden");

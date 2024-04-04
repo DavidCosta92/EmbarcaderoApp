@@ -17,6 +17,7 @@ public class UserMapper {
                 .firstName(u.getFirstName())
                 .lastName(u.getLastName())
                 .role(u.getRole())
+                .profileImage(u.getUserProfileImage())
                 .email(u.getEmail())
                 .build();
     }
@@ -32,6 +33,7 @@ public class UserMapper {
                 .firstName(u.getFirstName())
                 .lastName(u.getLastName())
                 .role(u.getRole())
+                .profileImage(u.getUserProfileImage())
                 .isAccountNonExpired(u.isAccountNonExpired())
                 .isAccountNonLocked(u.isAccountNonLocked())
                 .isCredentialsNonExpired(u.isCredentialsNonExpired())

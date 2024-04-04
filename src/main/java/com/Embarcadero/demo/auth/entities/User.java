@@ -1,5 +1,7 @@
 package com.Embarcadero.demo.auth.entities;
 
+import com.Embarcadero.demo.model.entities.ImageFile;
+import com.Embarcadero.demo.model.entities.Record;
 import com.Embarcadero.demo.model.entities.Shift;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @Data
@@ -39,11 +42,23 @@ public class User implements UserDetails {
     String firstName;
     String lastName;
 
+
+    @OneToMany(fetch = FetchType.EAGER)
+    List<ImageFile> imageFiles;
+
     // @ManyToMany(mappedBy = "staff", fetch = FetchType.EAGER)
     // private List<Shift> shifts = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     Role role;
+
+    public ImageFile getUserProfileImage(){
+        List<ImageFile> profileImageList = getImageFiles().stream().filter(img -> img.getUsedFor().equals("profile")).collect(Collectors.toList());
+        if(profileImageList.size()>0){
+            return profileImageList.get(0);
+        }
+        return new ImageFile();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities(){

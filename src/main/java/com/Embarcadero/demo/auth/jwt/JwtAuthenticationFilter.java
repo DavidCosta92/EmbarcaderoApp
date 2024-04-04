@@ -42,8 +42,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // si es valido el token, obtengo el username y chequeo si esta authenticado en el security context
 
 
-        System.out.println("******** username "+username);
-
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if(jwtService.isTokenValid(token , userDetails)){

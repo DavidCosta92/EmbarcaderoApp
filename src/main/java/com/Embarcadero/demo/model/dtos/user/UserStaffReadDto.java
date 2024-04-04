@@ -2,6 +2,7 @@ package com.Embarcadero.demo.model.dtos.user;
 
 
 import com.Embarcadero.demo.auth.entities.Role;
+import com.Embarcadero.demo.model.entities.ImageFile;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class UserStaffReadDto {
     String lastName;
     Role role;
     String email;
+    ImageFile profileImage;
     boolean isAccountNonExpired;
     boolean isAccountNonLocked;
     boolean isCredentialsNonExpired;

@@ -207,8 +207,6 @@ public class ShiftService {
         return shiftMapper.toReadDTO(savedShift);
     }
 
-
-
     public ShiftReadDto updateShift (Integer idShift, ShiftUpdateDto shiftUpdateDto) throws JRException, IOException {
         Shift  shiftBd = getShiftById(idShift);
         if (shiftUpdateDto.getDam() != null){

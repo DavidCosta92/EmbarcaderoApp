@@ -1,6 +1,7 @@
 package com.Embarcadero.demo.model.dtos.user;
 
 import com.Embarcadero.demo.auth.entities.Role;
+import com.Embarcadero.demo.model.entities.ImageFile;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +20,5 @@ public class UserReadDto {
     String lastName;
     String email;
     Role role;
+    ImageFile profileImage;
 }
