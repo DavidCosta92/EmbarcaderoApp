@@ -20,13 +20,13 @@ public class LoguedUserDetails {
     String token;
     Integer id;
     String username;
-    String lastName;
-    String firstName;
     String dni;
-    String phone;
-    String emergency_phone;
     String email;
     Role role;
+    String firstName;
+    String lastName;
+    String phone;
+    String emergency_phone;
     // List<ImageFile> imageFiles;
     ImageFile userProfileImage;
     Collection<? extends GrantedAuthority> authorities;

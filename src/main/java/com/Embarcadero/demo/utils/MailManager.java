@@ -67,20 +67,17 @@ public class MailManager {
     }
 
     public void sendEmailToRestorePassword(String email, String token) {
-        // TODO Solo para testing. SE ENVIA TOKEN PARA LUEGO HACER POST CON PASSWORD, Sin embargo, esto deberia estar siendo recibido por email, con un link a un front que obtenga passwords y haga post a el ednpoint enviando el token.
-
-        String template = """
-                <div style="color:#000000; background-color: #e9f2ff; border:1px solid #b1e1ff; border-radius:10px; padding: 10px; text-align: center;">                    
-                     <h3>ESTE ES EL TOKEN PARA RESTAURAR TU CONTRASEÑA</h3> 
-                    <div style="color:#ffffff; background-color:#664d03; border: 1px solid #ffffff; border-radius:5px; padding: 10px; margin: 30px; font-weight: .900;">
-                        <h3>%s</h3>   
+        String template = String.format("""
+                <div style="color:#000000; background-color: #e9f2ff; border:1px solid #b1e1ff; border-radius:10px; width:70%;margin:auto; margin-bottom: 20px; text-align: center;">                    
+                     <h3>Has click en el link para restaurar tu contraseña</h3> 
+                    <div style="color:#ffffff; background-color:#048d2d; border: 2px solid #ffffff; border-radius:5px; padding: 10px; margin: 30px; ">                        
+                        <a href= %s style="color:#ffffff; font-weight: 900; font-size: 1.5em"><h4>Link para restaurar tu contraseña</h4></a>
                     </div>                         
-                    <div style="color:#ffffff; background-color: #ff3d4e; border: 1px solid #ffffff; padding: 10px; font-weight: 600;">
-                         <h3>Solo para testing. SE ENVIA TOKEN PARA LUEGO HACER POST CON PASSWORD, Sin embargo, esto deberia estar siendo recibido por email, con un link a un front que obtenga passwords y haga post a el ednpoint enviando el token.</h3>     
-                        </div>     
+                    <div style="color:#ffffff; background-color: #ff3d4e; border: 1px solid #ffffff; width:40%; margin:auto; border-radius:10px;">
                      <p>Es valido solo por 24hs.</p>      
+                     </div>     
                 </div>
-                """.formatted(token);
+                """, "http://localhost:3000/auth/setNewPassword/"+token);
 
 
         try {

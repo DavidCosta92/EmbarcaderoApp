@@ -152,10 +152,10 @@ public class PersonService {
         }
     }
     public void validateNewPerson(PersonAddDto personAddDto){
-        validator.stringMinSize("Nombre", 3, personAddDto.getName());
+        validator.stringMinSize("Nombre", 2, personAddDto.getName());
         validator.stringOnlyLetters("Nombre", personAddDto.getName());
 
-        validator.stringMinSize("Apellido", 3, personAddDto.getLastName());
+        validator.stringMinSize("Apellido", 2, personAddDto.getLastName());
         validator.stringOnlyLetters("Apellido", personAddDto.getLastName());
 
         validator.validPhoneNumber(personAddDto.getPhone());

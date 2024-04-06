@@ -5,6 +5,7 @@ import com.Embarcadero.demo.auth.jwt.JwtService;
 import com.Embarcadero.demo.model.dtos.license.LicenseReadDtoArray;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDtoArray;
 import com.Embarcadero.demo.model.dtos.user.UserReadDtoArray;
+import com.Embarcadero.demo.model.dtos.user.UserUpdateDto;
 import com.Embarcadero.demo.model.entities.Shift;
 import com.Embarcadero.demo.model.mappers.UserMapper;
 import com.Embarcadero.demo.utils.MailManager;
@@ -119,8 +120,8 @@ public class AuthService {
 
     public LoguedUserDetails getLoguedUserDetails(HttpHeaders headers) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        String token = jwtService.getTokenFromHeader(headers);
         User loguedUser = (User) securityContext.getAuthentication().getPrincipal();
+        String token = jwtService.getTokenFromHeader(headers);
 
         return LoguedUserDetails
                 .builder()
@@ -140,32 +141,40 @@ public class AuthService {
                 .build();
     }
 
-    public LoguedUserDetails editUserDetails (HttpHeaders headers, LoguedUserDetails userDetails){
-        // TODO UPDATE DE FIELDS DE PROFILE USER
-        // TODO UPDATE DE FIELDS DE PROFILE USER
-        // TODO UPDATE DE FIELDS DE PROFILE USER
-        // TODO UPDATE DE FIELDS DE PROFILE USER
-        // TODO UPDATE DE FIELDS DE PROFILE USER
-        // TODO UPDATE DE FIELDS DE PROFILE USER
-        // TODO UPDATE DE FIELDS DE PROFILE USER
-        // TODO UPDATE DE FIELDS DE PROFILE USER
-        // TODO UPDATE DE FIELDS DE PROFILE USER
-        // TODO UPDATE DE FIELDS DE PROFILE USER
-        // TODO UPDATE DE FIELDS DE PROFILE USER
-        // TODO UPDATE DE FIELDS DE PROFILE USER
-        // TODO UPDATE DE FIELDS DE PROFILE USER
-        // TODO UPDATE DE FIELDS DE PROFILE USER
-        // TODO UPDATE DE FIELDS DE PROFILE USER
-        return new LoguedUserDetails();
+    public LoguedUserDetails editUserDetails (HttpHeaders headers, UserUpdateDto userUpdateDto){
+        User loguedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // username, email y dni no se pueden editar. Rol solo puede ser editado por un admin mediante editUserDetailsById(String idUser, Role newRole) // todo rol puede ser editado por si mismo, debera tener un metodo especial que solo los admin puedan acceder y cambien solamente el rol => editUserDetailsById(String idUser, Role newRole)
+
+        if(userUpdateDto.getFirstName() != null){
+            validator.stringMinSize("Nombre", 2, userUpdateDto.getFirstName());
+            validator.stringOnlyLetters("Nombre", userUpdateDto.getFirstName());
+            loguedUser.setFirstName(userUpdateDto.getFirstName());
+        }
+        if(userUpdateDto.getLastName() != null){
+            validator.stringMinSize("Apellido", 2, userUpdateDto.getLastName());
+            validator.stringOnlyLetters("Apellido", userUpdateDto.getLastName());
+            loguedUser.setLastName(userUpdateDto.getLastName());
+        }
+        if(userUpdateDto.getPhone() != null){
+            validator.validPhoneNumber(userUpdateDto.getPhone());
+            loguedUser.setPhone(userUpdateDto.getPhone());
+        }
+        if(userUpdateDto.getEmergency_phone() != null){
+            validator.validPhoneNumber(userUpdateDto.getEmergency_phone());
+            loguedUser.setEmergency_phone(userUpdateDto.getEmergency_phone());
+        }
+        // guardar loguedUser
+        userRepository.save(loguedUser);
+        return getLoguedUserDetails(headers); // todo ES POSIBLE QUE ME DEVUELVA EL USER SIN MOSTRARME CAMBIOS, DEBIDO A QUE CONTEX HOLDER NO ESTA ACTUALIZADO.. REVISAR!!! deberia actualizar el contex holder?
     }
 
-    public String restorePassword(String email){
+    public Boolean restorePassword(String email){
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isEmpty()) throw new com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException("Email no registrado");
         String tokenToRestore = jwtService.createTokenForRestorePassword(user.get().getUsername());
         mailManager.sendEmailToRestorePassword(email , tokenToRestore);
         log.warn(">> token enviado para restaurar cuenta: "+email+", token: " +tokenToRestore+" <<");
-        return "Se envio un email con mas instrucciones";
+        return true;
     }
 
 

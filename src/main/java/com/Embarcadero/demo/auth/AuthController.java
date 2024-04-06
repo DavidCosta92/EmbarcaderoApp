@@ -3,6 +3,7 @@ package com.Embarcadero.demo.auth;
 import com.Embarcadero.demo.auth.entities.*;
 import com.Embarcadero.demo.exceptions.ExceptionMessages;
 import com.Embarcadero.demo.model.dtos.user.UserReadDtoArray;
+import com.Embarcadero.demo.model.dtos.user.UserUpdateDto;
 import com.Embarcadero.demo.model.entities.enums.Dam_enum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -117,9 +118,9 @@ public class AuthController {
             @ApiResponse(responseCode = "500", description = "ESTE ERROR ESTA PENDIENTE DE DARLE OTRO MANEJO!!! NO ESTA BIEN EL CODIGO 500 ",
                     content = @Content) })
     */
-    @PutMapping(path = "userDetails/{idUser}")
-    public ResponseEntity<LoguedUserDetails> editUserDetails (@RequestHeader HttpHeaders headers, @RequestBody LoguedUserDetails userDetails){
-        return new ResponseEntity<>(authService.editUserDetails(headers, userDetails), HttpStatus.OK);
+    @PutMapping(path = "userDetails")
+    public ResponseEntity<LoguedUserDetails> editUserDetails (@RequestHeader HttpHeaders headers, @RequestBody UserUpdateDto userUpdateDto){
+        return new ResponseEntity<>(authService.editUserDetails(headers, userUpdateDto), HttpStatus.ACCEPTED);
     }
 
 
@@ -132,8 +133,9 @@ public class AuthController {
                             schema = @Schema(implementation = ExceptionMessages.class)) }),
             @ApiResponse(responseCode = "500", description = "ESTE ERROR ESTA PENDIENTE DE DARLE OTRO MANEJO!!! NO ESTA BIEN EL CODIGO 500 ",
                     content = @Content) })
+
     @GetMapping("restorePassword")
-    public ResponseEntity<String> restorePassword(@RequestParam @Email String email){
+    public ResponseEntity<Boolean> restorePassword (@RequestParam @Email String email){
         return new ResponseEntity<>(authService.restorePassword(email), HttpStatus.ACCEPTED);
     }
     @Operation(summary = "This endpoint receives an RestorePassRequest as a JSON, SET NEW PASSWORD and returns a new JWT with user credentials")
@@ -150,7 +152,7 @@ public class AuthController {
             @ApiResponse(responseCode = "500", description = "ESTE ERROR ESTA PENDIENTE DE DARLE OTRO MANEJO!!! NO ESTA BIEN EL CODIGO 500 ",
                     content = @Content) })
     @PostMapping(path = "setNewPassword") // AGREGAR PARA FORMS=> , consumes = "application/x-www-form-urlencoded")
-    public ResponseEntity<AuthResponse> setNewPassword(@Valid RestorePassRequest restorePassRequest){
+    public ResponseEntity<AuthResponse> setNewPassword(@RequestBody @Valid RestorePassRequest restorePassRequest){
         return new ResponseEntity<>(authService.setNewPassword(restorePassRequest) , HttpStatus.ACCEPTED);
     }
 
