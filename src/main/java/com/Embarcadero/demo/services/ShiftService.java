@@ -89,13 +89,14 @@ public class ShiftService {
         resp.put("d",day);
         return resp;
     }
-    public ShiftReadDtoArray findAll (Dam_enum dam, String stringDate, Integer page, Integer size, String sortBy){
+    public ShiftReadDtoArray findAll (Dam_enum dam, String stringDate, Boolean shiftState, Integer page, Integer size, String sortBy){
         Page<Shift> results;
         Sort sort = Sort.by(sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
+
         Map<String, Integer> date = validateDate(stringDate);
 
-        results = shiftRepository.findAllByOptionalParameters(dam , date.get("y"), date.get("m"), date.get("d"), pageable);
+        results = shiftRepository.findAllByOptionalParameters(dam ,shiftState, date.get("y"), date.get("m"), date.get("d"), pageable);
 
         Page pagedResults = results.map(entity -> shiftMapper.toReadDTO(entity));
         return ShiftReadDtoArray.builder()

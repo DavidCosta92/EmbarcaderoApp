@@ -31,6 +31,7 @@ public class ShiftMapper {
                 .records(recordReadDtos)
                 .staff(userReadDtos)
                 .notes(shift.getNotes())
+                .close(shift.getClose())
                 .build();
     }
 

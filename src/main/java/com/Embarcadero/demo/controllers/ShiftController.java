@@ -9,6 +9,7 @@ import com.Embarcadero.demo.model.dtos.staff.StaffMemberAddDto;
 import com.Embarcadero.demo.model.dtos.user.UserReadDto;
 import com.Embarcadero.demo.model.dtos.user.UserStaffReadDto;
 import com.Embarcadero.demo.model.entities.enums.Dam_enum;
+import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
 import com.Embarcadero.demo.services.ShiftService;
 import com.Embarcadero.demo.services.UserService;
 import jakarta.validation.Valid;
@@ -43,10 +44,11 @@ public class ShiftController {
     @GetMapping
     public ResponseEntity<ShiftReadDtoArray> showAll (@RequestParam(required = false) Dam_enum dam,
                                                       @RequestParam(required = false) String date,
+                                                      @RequestParam(required = false) Boolean shiftState,
                                                       @RequestParam(required = false, defaultValue = "0") Integer page,
                                                       @RequestParam(required = false, defaultValue = "10") Integer size,
                                                       @RequestParam(required = false, defaultValue = "dam") String sortBy){
-        return new ResponseEntity<>(shiftService.findAll(dam,date, page, size, sortBy), HttpStatus.OK);
+        return new ResponseEntity<>(shiftService.findAll(dam,date,shiftState, page, size, sortBy), HttpStatus.OK);
     }
     @GetMapping("{id}")
     public ResponseEntity<ShiftReadDto> findById(@PathVariable Integer id){

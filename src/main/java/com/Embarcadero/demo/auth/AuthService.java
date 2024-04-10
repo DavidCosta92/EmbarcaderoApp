@@ -2,8 +2,10 @@ package com.Embarcadero.demo.auth;
 
 import com.Embarcadero.demo.auth.entities.*;
 import com.Embarcadero.demo.auth.jwt.JwtService;
+import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
 import com.Embarcadero.demo.model.dtos.license.LicenseReadDtoArray;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDtoArray;
+import com.Embarcadero.demo.model.dtos.user.UserReadDto;
 import com.Embarcadero.demo.model.dtos.user.UserReadDtoArray;
 import com.Embarcadero.demo.model.dtos.user.UserUpdateDto;
 import com.Embarcadero.demo.model.entities.Shift;
@@ -46,6 +48,41 @@ public class AuthService {
 
     @Autowired
     private UserMapper userMapper;
+
+    public UserReadDto editUserRoleById(Integer idUser, Role newRole){
+        Optional<User> userOp = userRepository.findById(idUser);
+        if (userOp.isPresent()) {
+            User user = userOp.get();
+            user.setRole(newRole);
+            userRepository.save(user);
+            return userMapper.toReadDto(user);
+        } else {
+            throw new NotFoundException("No se encontro usuario por ID: "+idUser);
+        }
+    }
+    public UserReadDtoArray getAllUsers (String dni, String fullName, Integer page, Integer size, String sortBy){
+        Page<User> results;
+        Sort sort = Sort.by(sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        if (dni != null) {
+            results = userRepository.findAllByDniContains(dni, pageable);
+        } else if (dni == null && !fullName.equals("")){
+            results = userRepository.getAllByFullName(fullName, pageable);
+        } else {
+            results = userRepository.findAll(pageable);
+        }
+        Page pagedResults = results.map(entity -> userMapper.toReadDto(entity));
+
+        return UserReadDtoArray.builder()
+                .users(pagedResults.getContent())
+                .total_results(pagedResults.getTotalElements())
+                .results_per_page(size)
+                .current_page(page)
+                .pages(pagedResults.getTotalPages())
+                .sort_by(sortBy)
+                .build();
+    }
 
 
     public UserReadDtoArray getAllLifeguards(String dni, String fullName, Integer page, Integer size, String sortBy){
