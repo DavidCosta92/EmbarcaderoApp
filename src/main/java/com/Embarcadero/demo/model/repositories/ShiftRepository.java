@@ -19,11 +19,15 @@ public interface ShiftRepository extends JpaRepository<Shift , Integer> {
     Page<Shift> findAllByDamContainsAndDateContains(Dam_enum dam , Date date, Pageable pageable);
 
 
+    @Query("SELECT s FROM Shift s JOIN s.staff u WHERE (:dam is null or CAST(s.dam AS string) LIKE %:dam%) AND (:shiftState is null or s.close = :shiftState) AND (:year is null or YEAR(s.date) = :year) AND (:month is null or MONTH(s.date) = :month) AND (:day is null or DAY(s.date) = :day) AND (:byUser is null or u.id = :byUser)")
+    Page<Shift> findAllByOptionalParametersAndUser(Dam_enum dam , Boolean shiftState,Integer byUser, Integer year, Integer month, Integer day, Pageable pageable);
+
+
     @Query("SELECT s FROM Shift s WHERE (:dam is null or CAST(s.dam AS string) LIKE %:dam%)AND (:shiftState is null or s.close = :shiftState) AND (:year is null or YEAR(s.date) = :year) AND (:month is null or MONTH(s.date) = :month) AND (:day is null or DAY(s.date) = :day)")
     Page<Shift> findAllByOptionalParameters(Dam_enum dam , Boolean shiftState, Integer year, Integer month, Integer day, Pageable pageable);
 
 
-    @Query("SELECT s from FROM Shift s JOIN s.staff u WHERE u.id = :id")
+    @Query("SELECT s FROM Shift s JOIN s.staff u WHERE u.id = :id AND s.close = false")
     Optional<Shift> getShiftByIdUser (Integer id);
 
 }

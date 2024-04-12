@@ -45,10 +45,11 @@ public class ShiftController {
     public ResponseEntity<ShiftReadDtoArray> showAll (@RequestParam(required = false) Dam_enum dam,
                                                       @RequestParam(required = false) String date,
                                                       @RequestParam(required = false) Boolean shiftState,
+                                                      @RequestParam(required = false) Integer byUser,
                                                       @RequestParam(required = false, defaultValue = "0") Integer page,
                                                       @RequestParam(required = false, defaultValue = "10") Integer size,
                                                       @RequestParam(required = false, defaultValue = "dam") String sortBy){
-        return new ResponseEntity<>(shiftService.findAll(dam,date,shiftState, page, size, sortBy), HttpStatus.OK);
+        return new ResponseEntity<>(shiftService.findAll(dam,date,shiftState,byUser, page, size, sortBy), HttpStatus.OK);
     }
     @GetMapping("{id}")
     public ResponseEntity<ShiftReadDto> findById(@PathVariable Integer id){
