@@ -267,7 +267,7 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
-					<finalName>Embarcadero-app</finalName>
+					<finalName>embarcadero-app</finalName>
 				</configuration>
 			</plugin>
 		</plugins>
