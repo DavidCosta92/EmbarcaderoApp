@@ -33,10 +33,10 @@ public class Shift {
     private LocalDate date;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @OrderBy("recordState, startTime")
+    @OrderBy("startTime, recordState")
     private List<Record> records;
 
-    // @OneToMany(fetch = FetchType.LAZY)
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name= "shift_staff", joinColumns = @JoinColumn(name = "shift_id"), inverseJoinColumns = @JoinColumn(name="staff_id"))
     private List<User> staff;

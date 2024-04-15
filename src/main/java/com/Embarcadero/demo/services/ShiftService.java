@@ -93,16 +93,11 @@ public class ShiftService {
         Page<Shift> results;
         Sort sort = Sort.by(sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
-
         Map<String, Integer> date = validateDate(stringDate);
-
         results = shiftRepository.findAllByOptionalParametersAndUser(dam ,shiftState,byUser, date.get("y"), date.get("m"), date.get("d"), pageable);
-
         if(byUser == null){
             results = shiftRepository.findAllByOptionalParameters(dam ,shiftState, date.get("y"), date.get("m"), date.get("d"), pageable);
         }
-
-
         Page pagedResults = results.map(entity -> shiftMapper.toReadDTO(entity));
         return ShiftReadDtoArray.builder()
                 .shifts(pagedResults.getContent())
@@ -116,7 +111,11 @@ public class ShiftService {
     public ShiftReadDto findById (Integer id){
         return shiftMapper.toReadDTO(getShiftById(id));
     }
-
+    public Shift getShiftById (Integer id){
+        Optional<Shift> shift = shiftRepository.findById(id);
+        if(shift.isEmpty()) throw new NotFoundException("Turno no encontrado por id: "+id);
+        return shift.get();
+    }
     public ShiftReadDto findShiftByIdUser (Integer id){
         return shiftMapper.toReadDTO(getShiftByIdUser(id));
     }
@@ -126,11 +125,7 @@ public class ShiftService {
         return shift.get();
     }
 
-    public Shift getShiftById (Integer id){
-        Optional<Shift> shift = shiftRepository.findById(id);
-        if(shift.isEmpty()) throw new NotFoundException("Turno no encontrado por id: "+id);
-        return shift.get();
-    }
+
     public ShiftReadDto deleteShift (Integer id){
         Shift shiftToDelete = getShiftById(id);
         if (!shiftToDelete.getStaff().isEmpty()) throw new ForbiddenAction("Para eliminar turno, este no puede tener personal cargado!");

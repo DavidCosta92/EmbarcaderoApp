@@ -14,7 +14,7 @@
 	<name>EmbarcaderoApp</name>
 	<description>EmbarcaderoApp</description>
 	<properties>
-		<java.version>17</java.version> <!-- DOWNGRADE DE 17 A 11, porque AWS NO SOPORTA JAVA 17 -->
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

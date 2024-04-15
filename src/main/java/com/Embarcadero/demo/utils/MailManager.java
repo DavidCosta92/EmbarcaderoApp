@@ -67,11 +67,11 @@ public class MailManager {
     }
 
     public void sendEmailToRestorePassword(String email, String token) {
-        String template = String.format("""
+        /*String template = String.format("""
                 <div style="color:#000000; background-color: #e9f2ff; border:1px solid #b1e1ff; border-radius:10px; width:70%;margin:auto; margin-bottom: 20px; text-align: center;">                    
                      <h3>Has click en el link para restaurar tu contraseña</h3> 
                     <div style="color:#ffffff; background-color:#048d2d; border: 2px solid #ffffff; border-radius:5px; padding: 10px; margin: 30px; ">                        
-                        <a href= %s style="color:#ffffff; font-weight: 900; font-size: 1.5em"><h4>Link para restaurar tu contraseña</h4></a>
+                        <a href= %s style="color:#ffffff; font-weight: 900; font-size: 1.5em;"><h4>Link para restaurar tu contraseña</h4></a>
                     </div>                         
                     <div style="color:#ffffff; background-color: #ff3d4e; border: 1px solid #ffffff; width:40%; margin:auto; border-radius:10px;">
                      <p>Es valido solo por 24hs.</p>      
@@ -79,6 +79,18 @@ public class MailManager {
                 </div>
                 """, "http://localhost:3000/auth/setNewPassword/"+token);
 
+         */
+        String template = String.format("""
+                <div style=\"color:#000000; background-color: #e9f2ff; border:1px solid #b1e1ff; border-radius:10px; width:70%%;margin:auto; margin-bottom: 20px; text-align: center;\">                    
+                     <h3>Has click en el link para restaurar tu contraseña</h3> 
+                    <div style=\"color:#ffffff; background-color:#048d2d; border: 2px solid #ffffff; border-radius:5px; padding: 10px; margin: 30px; \">                        
+                        <a href= %s style=\"color:#ffffff; font-weight: 900; font-size: 1.5em;\"><h4>Link para restaurar tu contraseña</h4></a>
+                    </div>                         
+                    <div style=\"color:#ffffff; background-color: #ff3d4e; border: 1px solid #ffffff; width:40%%; margin:auto; border-radius:10px;\">
+                     <p>Es valido solo por 24hs.</p>      
+                     </div>     
+                </div>
+                """, "http://localhost:3000/auth/setNewPassword/"+token);
 
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
