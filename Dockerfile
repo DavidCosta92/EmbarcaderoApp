@@ -1,4 +1,4 @@
 
 FROM amazoncorretto:17-alpine-jdk
-COPY target/Embarcadero-app.jar Embarcadero-app.jar
-ENTRYPOINT [ "java","-jar","/app-app.jar"]
+COPY target/demo-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
