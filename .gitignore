@@ -38,5 +38,4 @@ build/
 ### LOGS ###
 *.log
 *.gz
-/target/
 /bin/
