@@ -202,7 +202,7 @@ public class AuthService {
         }
         // guardar loguedUser
         userRepository.save(loguedUser);
-        return getLoguedUserDetails(headers); // todo ES POSIBLE QUE ME DEVUELVA EL USER SIN MOSTRARME CAMBIOS, DEBIDO A QUE CONTEX HOLDER NO ESTA ACTUALIZADO.. REVISAR!!! deberia actualizar el contex holder?
+        return getLoguedUserDetails(headers);
     }
 
     public Boolean restorePassword(String email){

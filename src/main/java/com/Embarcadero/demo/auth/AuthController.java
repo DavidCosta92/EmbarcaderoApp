@@ -2,6 +2,7 @@ package com.Embarcadero.demo.auth;
 
 import com.Embarcadero.demo.auth.entities.*;
 import com.Embarcadero.demo.exceptions.ExceptionMessages;
+import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
 import com.Embarcadero.demo.model.dtos.user.UserReadDto;
 import com.Embarcadero.demo.model.dtos.user.UserReadDtoArray;
 import com.Embarcadero.demo.model.dtos.user.UserUpdateDto;
@@ -33,57 +34,18 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-/*
-    @Operation(summary = "This endpoint gets user data, register a new user and returns a JWT with credentials of user")
+    @Operation(summary = "This endpoint gets username and password and returns a JWT with credentials of user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Returns JWT",
+            @ApiResponse(responseCode = "200", description = "Returns JWT",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = AuthResponse.class)) }),
-            @ApiResponse(responseCode = "406", description = "Error as result of sending invalid data, Ex: 'Password debe tener al menos 8 caracteres!' ",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ExceptionMessages.class)) }),
-            @ApiResponse(responseCode = "409", description = "Error as result of sending data already reported, Ex: 'Datos ya existentes, revisa los campos!' ",
+            @ApiResponse(responseCode = "400", description = "Bad credentials",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionMessages.class)) }) })
-
- */
-    @GetMapping("lifeguards")
-    public ResponseEntity<UserReadDtoArray> getAllLifeguards (@RequestParam(required = false) String dni,
-                                                              @RequestParam(required = false, defaultValue = "") String fullName,
-                                                              @RequestParam(required = false, defaultValue = "0") Integer page,
-                                                              @RequestParam(required = false, defaultValue = "10") Integer size,
-                                                              @RequestParam(required = false, defaultValue = "dni") String sortBy){
-        return new ResponseEntity<>(authService.getAllLifeguards(dni,fullName, page, size, sortBy), HttpStatus.OK);
+    @PostMapping("login")
+    public ResponseEntity<AuthResponse> login (@Valid @RequestBody LoginRequest loginRequest){
+        return new ResponseEntity<>(authService.login(loginRequest), HttpStatus.OK);
     }
-
-
-    /*
-        @Operation(summary = "This endpoint gets user data, register a new user and returns a JWT with credentials of user")
-        @ApiResponses(value = {
-                @ApiResponse(responseCode = "201", description = "Returns JWT",
-                        content = { @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = AuthResponse.class)) }),
-                @ApiResponse(responseCode = "406", description = "Error as result of sending invalid data, Ex: 'Password debe tener al menos 8 caracteres!' ",
-                        content = { @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = ExceptionMessages.class)) }),
-                @ApiResponse(responseCode = "409", description = "Error as result of sending data already reported, Ex: 'Datos ya existentes, revisa los campos!' ",
-                        content = { @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = ExceptionMessages.class)) }) })
-
-     */
-    @GetMapping("users")
-    public ResponseEntity<UserReadDtoArray> getAllUsers(@RequestParam(required = false) String dni,
-                                                              @RequestParam(required = false, defaultValue = "") String fullName,
-                                                              @RequestParam(required = false, defaultValue = "0") Integer page,
-                                                              @RequestParam(required = false, defaultValue = "10") Integer size,
-                                                              @RequestParam(required = false, defaultValue = "dni") String sortBy){
-        return new ResponseEntity<>(authService.getAllUsers(dni,fullName, page, size, sortBy), HttpStatus.OK);
-    }
-    @PutMapping("users/{idUser}")
-    public ResponseEntity<UserReadDto> editUserRoleById (@PathVariable Integer idUser, @RequestParam Role newRole){
-        return new ResponseEntity<>(authService.editUserRoleById(idUser, newRole), HttpStatus.ACCEPTED);
-    }
-
 
     @Operation(summary = "This endpoint gets user data, register a new user and returns a JWT with credentials of user")
     @ApiResponses(value = {
@@ -101,56 +63,81 @@ public class AuthController {
         return new ResponseEntity<>(authService.register(registerRequest), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "This endpoint gets username and password and returns a JWT with credentials of user")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Returns JWT",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AuthResponse.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad credentials",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ExceptionMessages.class)) }) })
-    @PostMapping("login")
-    public ResponseEntity<AuthResponse> login (@Valid @RequestBody LoginRequest loginRequest){
-        return new ResponseEntity<>(authService.login(loginRequest), HttpStatus.OK);
-    }
-
     @Operation(summary = "This endpoint gets a JWT, and returns an Object with User details")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Returns an Object with User details",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = LoguedUserDetails.class)) }),
-            @ApiResponse(responseCode = "403", description = "JWT not found",
+            @ApiResponse(responseCode = "400", description = "JWT not found",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionMessages.class)) }),
-            @ApiResponse(responseCode = "500", description = "ESTE ERROR ESTA PENDIENTE DE DARLE OTRO MANEJO!!! NO ESTA BIEN EL CODIGO 500 ",
-                    content = @Content) })
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) })
+    })
     @GetMapping("/userDetails")
     public ResponseEntity<LoguedUserDetails> getLoguedUserDetails (@RequestHeader HttpHeaders headers){
         return new ResponseEntity<>(authService.getLoguedUserDetails(headers), HttpStatus.OK);
     }
 
-
-    /*
-
-    @Operation(summary = "This endpoint receives an RestorePassRequest as a JSON, SET NEW PASSWORD and returns a new JWT with user credentials")
+    @Operation(summary = "This endpoint returns a pageable List of users with role 'LIFEGUARD', accepts search by dni, name or lastname. And sort by fields, on other hand for Paginated results gets size and page number")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "202", description = "Accepted",
+            @ApiResponse(responseCode = "200", description = "Returns List of lifeguards, and page data.",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AuthResponse.class)) }),
-            @ApiResponse(responseCode = "403", description = "JWT Invalid",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ExceptionMessages.class)) }),
-            @ApiResponse(responseCode = "406", description = "Error as result of sending invalid data, Ex: 'Password debe tener al menos 8 caracteres!' ",
+                            schema = @Schema(implementation = UserReadDtoArray.class)) }),
+            @ApiResponse(responseCode = "400", description = "Error as result of sending invalid data, for example sort by invaild field ",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionMessages.class)) }),
-            @ApiResponse(responseCode = "500", description = "ESTE ERROR ESTA PENDIENTE DE DARLE OTRO MANEJO!!! NO ESTA BIEN EL CODIGO 500 ",
-                    content = @Content) })
-    */
-    @PutMapping(path = "userDetails")
-    public ResponseEntity<LoguedUserDetails> editUserDetails (@RequestHeader HttpHeaders headers, @RequestBody UserUpdateDto userUpdateDto){
-        return new ResponseEntity<>(authService.editUserDetails(headers, userUpdateDto), HttpStatus.ACCEPTED);
+            @ApiResponse(responseCode = "403", description = "Error as result of invalid credentials' ",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) })
+    })
+    @GetMapping("lifeguards")
+    public ResponseEntity<UserReadDtoArray> getAllLifeguards (@RequestParam(required = false) String dni,
+                                                              @RequestParam(required = false, defaultValue = "") String fullName,
+                                                              @RequestParam(required = false, defaultValue = "0") Integer page,
+                                                              @RequestParam(required = false, defaultValue = "10") Integer size,
+                                                              @RequestParam(required = false, defaultValue = "dni") String sortBy){
+        return new ResponseEntity<>(authService.getAllLifeguards(dni,fullName, page, size, sortBy), HttpStatus.OK);
     }
 
+    @Operation(summary = "This endpoint returns a pageable List of users, accepts search by dni, name or lastname. And sort by fields, on other hand for Paginated results gets size and page number")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Returns List of all users, and page data.",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserReadDtoArray.class)) }),
+            @ApiResponse(responseCode = "400", description = "Error as result of sending invalid data, for example sort by invaild field ",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+            @ApiResponse(responseCode = "403", description = "Error as result of invalid credentials' ",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) })
+    })
+    @GetMapping("users")
+    public ResponseEntity<UserReadDtoArray> getAllUsers(@RequestParam(required = false) String dni,
+                                                              @RequestParam(required = false, defaultValue = "") String fullName,
+                                                              @RequestParam(required = false, defaultValue = "0") Integer page,
+                                                              @RequestParam(required = false, defaultValue = "10") Integer size,
+                                                              @RequestParam(required = false, defaultValue = "dni") String sortBy){
+        return new ResponseEntity<>(authService.getAllUsers(dni,fullName, page, size, sortBy), HttpStatus.OK);
+    }
+
+    @Operation(summary = "This endpoint sets a new role for an user, this endpoint need an user ID and a Role to set")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "202", description = "Returns updated data",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserReadDto.class)) }),
+            @ApiResponse(responseCode = "400", description = "Error as result of sending invalid data, for example invaild field ",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+            @ApiResponse(responseCode = "404", description = "Not found ",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = NotFoundException.class)) })
+    })
+    @PutMapping("users/{idUser}")
+    public ResponseEntity<UserReadDto> editUserRoleById (@PathVariable Integer idUser, @RequestParam Role newRole){
+        return new ResponseEntity<>(authService.editUserRoleById(idUser, newRole), HttpStatus.ACCEPTED);
+    }
 
     @Operation(summary = "This endpoint receives an email as a parametrer and if it belongs to a registered user, an email with JWT is sent to reset the password.")
     @ApiResponses(value = {
@@ -158,15 +145,14 @@ public class AuthController {
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Email Not Found",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ExceptionMessages.class)) }),
-            @ApiResponse(responseCode = "500", description = "ESTE ERROR ESTA PENDIENTE DE DARLE OTRO MANEJO!!! NO ESTA BIEN EL CODIGO 500 ",
-                    content = @Content) })
-
+                            schema = @Schema(implementation = ExceptionMessages.class)) })
+    })
     @GetMapping("restorePassword")
     public ResponseEntity<Boolean> restorePassword (@RequestParam @Email String email){
         return new ResponseEntity<>(authService.restorePassword(email), HttpStatus.ACCEPTED);
     }
-    @Operation(summary = "This endpoint receives an RestorePassRequest as a JSON, SET NEW PASSWORD and returns a new JWT with user credentials")
+
+    @Operation(summary = "This endpoint receives an RestorePassRequest as a JSON, that includes sent token, new password, and password confirm")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "Accepted",
                     content = { @Content(mediaType = "application/json",
@@ -176,12 +162,18 @@ public class AuthController {
                             schema = @Schema(implementation = ExceptionMessages.class)) }),
             @ApiResponse(responseCode = "406", description = "Error as result of sending invalid data, Ex: 'Password debe tener al menos 8 caracteres!' ",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ExceptionMessages.class)) }),
-            @ApiResponse(responseCode = "500", description = "ESTE ERROR ESTA PENDIENTE DE DARLE OTRO MANEJO!!! NO ESTA BIEN EL CODIGO 500 ",
-                    content = @Content) })
-    @PostMapping(path = "setNewPassword") // AGREGAR PARA FORMS=> , consumes = "application/x-www-form-urlencoded")
-    public ResponseEntity<AuthResponse> setNewPassword(@RequestBody @Valid RestorePassRequest restorePassRequest){
+                            schema = @Schema(implementation = ExceptionMessages.class)) })
+    })
+    @PostMapping(path = "setNewPassword")
+    public ResponseEntity<AuthResponse> setNewPassword (@RequestBody @Valid RestorePassRequest restorePassRequest){
         return new ResponseEntity<>(authService.setNewPassword(restorePassRequest) , HttpStatus.ACCEPTED);
+    }
+
+
+    // TODO DOCS
+    @PutMapping(path = "userDetails")
+    public ResponseEntity<LoguedUserDetails> editUserDetails (@RequestHeader HttpHeaders headers, @RequestBody UserUpdateDto userUpdateDto){
+        return new ResponseEntity<>(authService.editUserDetails(headers, userUpdateDto), HttpStatus.ACCEPTED);
     }
 
 }

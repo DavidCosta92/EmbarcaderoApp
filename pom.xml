@@ -88,13 +88,6 @@
 			<scope>runtime</scope>
 		</dependency>
 		<!-- para JWT -->
-		<!-- para postgresql desploy FL0 -->
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<!-- para postgresql desploy FL0 -->
 
 		<!-- para swagger -->
 		<dependency>
