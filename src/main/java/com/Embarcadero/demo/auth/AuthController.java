@@ -165,7 +165,7 @@ public class AuthController {
                             schema = @Schema(implementation = ExceptionMessages.class)) })
     })
     @PostMapping(path = "setNewPassword")
-    public ResponseEntity<AuthResponse> setNewPassword (@RequestBody @Valid RestorePassRequest restorePassRequest){
+    public ResponseEntity<AuthResponse> setNewPassword(@RequestBody @Valid RestorePassRequest restorePassRequest){
         return new ResponseEntity<>(authService.setNewPassword(restorePassRequest) , HttpStatus.ACCEPTED);
     }
 
