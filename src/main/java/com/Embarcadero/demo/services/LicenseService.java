@@ -121,7 +121,6 @@ public class LicenseService {
             Person updatedPerson =  personService.updatePerson(licenseBD.getOwner() , personToUpdate);
             licenseBD.setOwner(updatedPerson);
         }
-
         licenseRepository.save(licenseBD);
         return licenseMapper.toReadDTO(licenseBD);
     }

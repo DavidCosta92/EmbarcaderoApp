@@ -59,29 +59,77 @@ public class LicenseController {
                                                        @RequestParam(required = false, defaultValue = "licenseCode") String sortBy) {
         return new ResponseEntity<>(licenseService.findAll(licenseCode, searchValue, page, size, sortBy), HttpStatus.OK);
     }
+
+   @Operation(summary = "This endpoint returns license by Id")
+   @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Returns license by Id",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = LicenseReadDto.class)) }),
+            @ApiResponse(responseCode = "403", description = "Invalid credentials",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+            @ApiResponse(responseCode = "404", description = "Not found by Id",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) })
+    })
     @GetMapping("{id}")
-    @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
-    public ResponseEntity<LicenseReadDto> showById(@PathVariable Integer id) {
+    // @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
+    public ResponseEntity<LicenseReadDto> showById (@PathVariable Integer id) {
         return new ResponseEntity<>(licenseService.findById(id), HttpStatus.OK);
     }
+
+    @Operation(summary = "This endpoint returns license by Id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Returns license by Id",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = LicenseReadDto.class)) }),
+            @ApiResponse(responseCode = "403", description = "Invalid credentials",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+            @ApiResponse(responseCode = "404", description = "Not found by Id",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) })
+    })
     @GetMapping("licenseCode/{licenseCode}")
     @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
     public ResponseEntity<LicenseReadDto> showByLicenseCode(@PathVariable String licenseCode) {
         return new ResponseEntity<>(licenseService.findByLicenseCode(licenseCode), HttpStatus.OK);
     }
+
+    @Operation(summary = "This endpoint gets an Id, and data to update license. It is capable to receive one or more fields to update")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Returns updated license",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = LicenseReadDto.class)) }),
+            @ApiResponse(responseCode = "403", description = "Invalid credentials",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+            @ApiResponse(responseCode = "404", description = "Not found by Id",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+            @ApiResponse(responseCode = "406", description = "Invalid inputs",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = InvalidValueException.class)) })
+    })
     @PutMapping("{id}")
     // @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
     public ResponseEntity<LicenseReadDto> updateById(@PathVariable Integer id , @RequestBody LicenseUpdateDto licenseUpdateDto) {
         return new ResponseEntity<>(licenseService.updateById(id , licenseUpdateDto), HttpStatus.OK);
     }
+
+    @Operation(summary = "This endpoint delete a license by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Returns deleted license",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = LicenseReadDto.class)) }),
+            @ApiResponse(responseCode = "403", description = "Invalid credentials",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+            @ApiResponse(responseCode = "404", description = "Not found by Id",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionMessages.class)) }),
+    })
     @DeleteMapping("{id}")
     // @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
     public ResponseEntity<LicenseReadDto> deleteById(@PathVariable Integer id) {
         return new ResponseEntity<>(licenseService.deleteById(id), HttpStatus.OK);
     }
 
-
     // TODO ENDPOINT PARA SUMINISTRAR UN ARCHIVO EXCEL QUE LEVANTE TODOS LOS DATOS NECESARIOS DE MATRICULAS...
-
-
 }
