@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import jakarta.validation.constraints.Email;
@@ -28,9 +30,8 @@ import javax.validation.constraints.NotEmpty;
 @RestController
 @RequestMapping("/auth/")
 @RequiredArgsConstructor
-
+@Tag(name = "Authentication") // name of endpoint grup in swagger
 public class AuthController {
-
     @Autowired
     private AuthService authService;
 
@@ -75,6 +76,7 @@ public class AuthController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionMessages.class)) })
     })
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/userDetails")
     public ResponseEntity<LoguedUserDetails> getLoguedUserDetails (@RequestHeader HttpHeaders headers){
         return new ResponseEntity<>(authService.getLoguedUserDetails(headers), HttpStatus.OK);
@@ -92,6 +94,7 @@ public class AuthController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionMessages.class)) })
     })
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("lifeguards")
     public ResponseEntity<UserReadDtoArray> getAllLifeguards (@RequestParam(required = false) String dni,
                                                               @RequestParam(required = false, defaultValue = "") String fullName,
@@ -113,6 +116,7 @@ public class AuthController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionMessages.class)) })
     })
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("users")
     public ResponseEntity<UserReadDtoArray> getAllUsers(@RequestParam(required = false) String dni,
                                                               @RequestParam(required = false, defaultValue = "") String fullName,
@@ -134,6 +138,7 @@ public class AuthController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = NotFoundException.class)) })
     })
+    @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("users/{idUser}")
     public ResponseEntity<UserReadDto> editUserRoleById (@PathVariable Integer idUser, @RequestParam Role newRole){
         return new ResponseEntity<>(authService.editUserRoleById(idUser, newRole), HttpStatus.ACCEPTED);
@@ -171,6 +176,7 @@ public class AuthController {
 
 
     // TODO DOCS
+    @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping(path = "userDetails")
     public ResponseEntity<LoguedUserDetails> editUserDetails (@RequestHeader HttpHeaders headers, @RequestBody UserUpdateDto userUpdateDto){
         return new ResponseEntity<>(authService.editUserDetails(headers, userUpdateDto), HttpStatus.ACCEPTED);

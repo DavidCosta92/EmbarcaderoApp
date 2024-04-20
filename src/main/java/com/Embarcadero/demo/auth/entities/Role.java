@@ -26,15 +26,12 @@ public enum Role {
     ),
     ADMIN(
             Set.of(
-                    Permission.READ_ALL,
-                    Permission.EDIT_ALL
+                    Permission.READ_ALL
             )
     ),
     SUPER_ADMIN(
             Set.of(
-            Permission.READ_ALL,
-            Permission.EDIT_ALL,
-            Permission.DELETE_ALL
+                    Permission.READ_ALL
             )
     );
 

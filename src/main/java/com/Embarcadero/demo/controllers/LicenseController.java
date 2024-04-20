@@ -14,6 +14,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/licences/")
+@Tag(name = "Licences")
+@SecurityRequirement(name = "Bearer Authentication")
+@PreAuthorize("isAuthenticated()")
 public class LicenseController {
     @Autowired
     private LicenseService licenseService;
@@ -36,8 +41,8 @@ public class LicenseController {
             @ApiResponse(responseCode = "409", description = "Conflict",
                     content = { @Content(mediaType = "application/json", schema = @Schema(implementation = AlreadyExistException.class)) })
     })
+    @PreAuthorize("hasAnyRole('OFFICE', 'ADMIN', 'SUPER_ADMIN')")
     @PostMapping
-    // @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
     public ResponseEntity<LicenseReadDto> addLicence (@Valid @RequestBody LicenseAddDto licenseAddDto){
         return new ResponseEntity<>(licenseService.addLicense(licenseAddDto) , HttpStatus.CREATED);
     }
@@ -51,7 +56,6 @@ public class LicenseController {
                             schema = @Schema(implementation = ExceptionMessages.class)) })
     })
     @GetMapping
-    // @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
     public ResponseEntity<LicenseReadDtoArray> showAll(@RequestParam(required = false) String licenseCode,
                                                        @RequestParam(required = false) String searchValue,
                                                        @RequestParam(required = false, defaultValue = "0") Integer page,
@@ -60,8 +64,8 @@ public class LicenseController {
         return new ResponseEntity<>(licenseService.findAll(licenseCode, searchValue, page, size, sortBy), HttpStatus.OK);
     }
 
-   @Operation(summary = "This endpoint returns license by Id")
-   @ApiResponses(value = {
+    @Operation(summary = "This endpoint returns license by Id")
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Returns license by Id",
                     content = { @Content(mediaType = "application/json", schema = @Schema(implementation = LicenseReadDto.class)) }),
             @ApiResponse(responseCode = "403", description = "Invalid credentials",
@@ -72,7 +76,6 @@ public class LicenseController {
                             schema = @Schema(implementation = ExceptionMessages.class)) })
     })
     @GetMapping("{id}")
-    // @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
     public ResponseEntity<LicenseReadDto> showById (@PathVariable Integer id) {
         return new ResponseEntity<>(licenseService.findById(id), HttpStatus.OK);
     }
@@ -89,7 +92,6 @@ public class LicenseController {
                             schema = @Schema(implementation = ExceptionMessages.class)) })
     })
     @GetMapping("licenseCode/{licenseCode}")
-    @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
     public ResponseEntity<LicenseReadDto> showByLicenseCode(@PathVariable String licenseCode) {
         return new ResponseEntity<>(licenseService.findByLicenseCode(licenseCode), HttpStatus.OK);
     }
@@ -108,8 +110,8 @@ public class LicenseController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = InvalidValueException.class)) })
     })
+    @PreAuthorize("hasAnyRole('OFFICE', 'ADMIN', 'SUPER_ADMIN')")
     @PutMapping("{id}")
-    // @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
     public ResponseEntity<LicenseReadDto> updateById(@PathVariable Integer id , @RequestBody LicenseUpdateDto licenseUpdateDto) {
         return new ResponseEntity<>(licenseService.updateById(id , licenseUpdateDto), HttpStatus.OK);
     }
@@ -126,7 +128,7 @@ public class LicenseController {
                             schema = @Schema(implementation = ExceptionMessages.class)) }),
     })
     @DeleteMapping("{id}")
-    // @PreAuthorize("hasAuthority('READ_ALL') OR isAnonymous()")
+    @PreAuthorize("hasAnyRole('OFFICE', 'ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<LicenseReadDto> deleteById(@PathVariable Integer id) {
         return new ResponseEntity<>(licenseService.deleteById(id), HttpStatus.OK);
     }

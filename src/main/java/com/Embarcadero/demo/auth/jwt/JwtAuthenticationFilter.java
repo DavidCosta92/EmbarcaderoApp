@@ -37,23 +37,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (token == null){
             filterChain.doFilter(request, response);
             return;
-        }
-        username = jwtService.getUsernameFromToken(token);
-        // si es valido el token, obtengo el username y chequeo si esta authenticado en el security context
+        } else if (token.equals("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYXZpZENvc3RhIiwiaWF0IjoxNzEzNTMzNzY4LCJleHAiOjE3MTM2MjAxNjh9.8Hmj-z-cIU0GTOELnso1VAJwmKvL7aWj8pTgEEq7cRo")){
+            // todo ELIMINAR EN PRODUCCION token para testing con swagger ELIMINAR EN PRODUCCION
+            // todo ELIMINAR EN PRODUCCION token para testing con swagger ELIMINAR EN PRODUCCION
 
-
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if(jwtService.isTokenValid(token , userDetails)){
+            username = "onlyTesting"; // todo busca user hardcodeado, con poder de "ADMIN"
+            if(SecurityContextHolder.getContext().getAuthentication() == null){
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 // actualizo security contex
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities());
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
+            filterChain.doFilter(request, response);
+            // todo ELIMINAR EN PRODUCCION token para testing con swagger ELIMINAR EN PRODUCCION
+            // todo ELIMINAR EN PRODUCCION token para testing con swagger ELIMINAR EN PRODUCCION
+        } else {
+            username = jwtService.getUsernameFromToken(token);
+            // si es valido el token, obtengo el username y chequeo si esta authenticado en el security context
+            if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                if(jwtService.isTokenValid(token , userDetails)){
+                    // actualizo security contex
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            }
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
     }
 }

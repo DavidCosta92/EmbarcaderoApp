@@ -20,16 +20,22 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
 @RestController
 @RequestMapping("/records/")
+@Tag(name = "Records") // name of endpoint grup in swagger
+@SecurityRequirement(name = "Bearer Authentication")
+@PreAuthorize("isAuthenticated() AND hasAnyRole('LIFEGUARD', 'ADMIN', 'SUPER_ADMIN')")
 public class RecordController {
     @Autowired
     private RecordService recordService;
@@ -45,6 +51,7 @@ public class RecordController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionMessages.class)) })
     })
+    @PreAuthorize("hasAnyRole('LIFEGUARD', 'ADMIN', 'SUPER_ADMIN')")
     @GetMapping
     public ResponseEntity<RecordReadDtoArray> findAllRecords (@RequestParam(required = false) RecordState_enum recordState,
                                                               @RequestParam(required = false) String startTime,

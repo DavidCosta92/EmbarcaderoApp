@@ -1,6 +1,7 @@
 package com.Embarcadero.demo.controllers;
 
-import com.Embarcadero.demo.exceptions.ExceptionMessages;
+import
+        com.Embarcadero.demo.exceptions.ExceptionMessages;
 import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
 import com.Embarcadero.demo.exceptions.customsExceptions.InvalidValueException;
 import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
@@ -18,6 +19,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -34,6 +38,9 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/shifts/")
+@Tag(name = "Shifts") // name of endpoint grup in swagger
+@SecurityRequirement(name = "Bearer Authentication")
+@PreAuthorize("hasAnyRole('OFFICE', 'ADMIN', 'SUPER_ADMIN')")
 public class ShiftController {
     @Autowired
     ShiftService shiftService;
@@ -43,7 +50,9 @@ public class ShiftController {
 
     @Operation(summary = "This endpoint returns a pageable List of shifts, accepts search by dam, date, shiftState and user id. And sort by fields, on other hand for Paginated results gets size and page number")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Returns all shifts",
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Returns all shifts",
                     content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ShiftReadDtoArray.class)) }),
             @ApiResponse(responseCode = "403", description = "Invalid credentials",
                     content = { @Content(mediaType = "application/json",
