@@ -15,7 +15,7 @@ public class PersonMapper {
                 .name(personAddDto.getName())
                 .lastName(personAddDto.getLastName())
                 .phone(personAddDto.getPhone())
-                .emergency_phone(personAddDto.getEmergency_phone())
+                .emergencyPhone(personAddDto.getEmergencyPhone())
                 .address(personAddDto.getAddress())
                 .notes(personAddDto.getNotes())
                 .build();
@@ -26,7 +26,7 @@ public class PersonMapper {
                 .name(readDto.getName())
                 .lastName(readDto.getLastName())
                 .phone(readDto.getPhone())
-                .emergency_phone(readDto.getEmergency_phone())
+                .emergencyPhone(readDto.getEmergencyPhone())
                 .address(readDto.getAddress())
                 .notes(readDto.getNotes())
                 .build();
@@ -37,7 +37,7 @@ public class PersonMapper {
                 .name(updateDto.getName())
                 .lastName(updateDto.getLastName())
                 .phone(updateDto.getPhone())
-                .emergency_phone(updateDto.getEmergency_phone())
+                .emergencyPhone(updateDto.getEmergencyPhone())
                 .address(updateDto.getAddress())
                 .notes(updateDto.getNotes())
                 .build();
@@ -52,7 +52,7 @@ public class PersonMapper {
                 .lastName(person.getLastName())
                 .dni(person.getDni())
                 .phone(person.getPhone())
-                .emergency_phone(person.getEmergency_phone())
+                .emergencyPhone(person.getEmergencyPhone())
                 .address(person.getAddress())
                 .notes(person.getNotes())
                 .build();
@@ -65,7 +65,7 @@ public class PersonMapper {
                 .name(addDto.getName())
                 .lastName(addDto.getLastName())
                 .phone(addDto.getPhone())
-                .emergency_phone(addDto.getEmergency_phone())
+                .emergencyPhone(addDto.getEmergencyPhone())
                 .address(addDto.getAddress())
                 .notes(addDto.getNotes())
                 .build();
@@ -77,7 +77,7 @@ public class PersonMapper {
                 .name(updateDto.getName())
                 .lastName(updateDto.getLastName())
                 .phone(updateDto.getPhone())
-                .emergency_phone(updateDto.getEmergency_phone())
+                .emergencyPhone(updateDto.getEmergencyPhone())
                 .address(updateDto.getAddress())
                 .notes(updateDto.getNotes())
                 .build();
@@ -88,7 +88,7 @@ public class PersonMapper {
                 .name(person.getName())
                 .lastName(person.getLastName())
                 .phone(person.getPhone())
-                .emergency_phone(person.getEmergency_phone())
+                .emergencyPhone(person.getEmergencyPhone())
                 .address(person.getAddress())
                 .notes(person.getNotes())
                 .build();

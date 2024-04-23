@@ -1,7 +1,7 @@
 package com.Embarcadero.demo.model.dtos.boat;
 
 import com.Embarcadero.demo.model.dtos.engine.EngineUpdateDto;
-import com.Embarcadero.demo.model.entities.enums.TypeLicencedBoat_enum;
+import com.Embarcadero.demo.model.entities.enums.TypeLicencedBoat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +18,5 @@ public class RegisteredBoatUpdateDto {
     private String name;
     private String details;
     private Integer capacity;
-    private TypeLicencedBoat_enum typeLicencedBoat_enum;
+    private TypeLicencedBoat typeLicencedBoat;
 }

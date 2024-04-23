@@ -3,7 +3,6 @@ package com.Embarcadero.demo.controllers;
 import com.Embarcadero.demo.exceptions.ExceptionMessages;
 import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
 import com.Embarcadero.demo.exceptions.customsExceptions.InvalidValueException;
-import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
 import com.Embarcadero.demo.model.dtos.license.LicenseAddDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseReadDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseReadDtoArray;
@@ -24,7 +23,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/licences/")
+@RequestMapping("/v1/licences/")
 @Tag(name = "Licences")
 @SecurityRequirement(name = "Bearer Authentication")
 @PreAuthorize("isAuthenticated()")
@@ -47,7 +46,7 @@ public class LicenseController {
         return new ResponseEntity<>(licenseService.addLicense(licenseAddDto) , HttpStatus.CREATED);
     }
 
-    @Operation(summary = "This endpoint returns a pageable List of users, accepts search by licenseCode, name, lastname, and boat name. And sort by fields, on other hand for Paginated results gets size and page number")
+    @Operation(summary = "This endpoint returns a pageable List of users, accepts search by code, name, lastname, and boat name. And sort by fields, on other hand for Paginated results gets size and page number")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Returns all licences",
                     content = { @Content(mediaType = "application/json", schema = @Schema(implementation = LicenseReadDtoArray.class)) }),
@@ -56,12 +55,12 @@ public class LicenseController {
                             schema = @Schema(implementation = ExceptionMessages.class)) })
     })
     @GetMapping
-    public ResponseEntity<LicenseReadDtoArray> showAll(@RequestParam(required = false) String licenseCode,
+    public ResponseEntity<LicenseReadDtoArray> showAll(@RequestParam(required = false) String code,
                                                        @RequestParam(required = false) String searchValue,
                                                        @RequestParam(required = false, defaultValue = "0") Integer page,
                                                        @RequestParam(required = false, defaultValue = "10") Integer size,
-                                                       @RequestParam(required = false, defaultValue = "licenseCode") String sortBy) {
-        return new ResponseEntity<>(licenseService.findAll(licenseCode, searchValue, page, size, sortBy), HttpStatus.OK);
+                                                       @RequestParam(required = false, defaultValue = "code") String sortBy) {
+        return new ResponseEntity<>(licenseService.findAll(code, searchValue, page, size, sortBy), HttpStatus.OK);
     }
 
     @Operation(summary = "This endpoint returns license by Id")
@@ -91,9 +90,9 @@ public class LicenseController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionMessages.class)) })
     })
-    @GetMapping("licenseCode/{licenseCode}")
-    public ResponseEntity<LicenseReadDto> showByLicenseCode(@PathVariable String licenseCode) {
-        return new ResponseEntity<>(licenseService.findByLicenseCode(licenseCode), HttpStatus.OK);
+    @GetMapping("code/{code}")
+    public ResponseEntity<LicenseReadDto> showByCode(@PathVariable String code) {
+        return new ResponseEntity<>(licenseService.findByCode(code), HttpStatus.OK);
     }
 
     @Operation(summary = "This endpoint gets an Id, and data to update license. It is capable to receive one or more fields to update")

@@ -2,9 +2,8 @@ package com.Embarcadero.demo.model.dtos.records;
 
 import com.Embarcadero.demo.model.dtos.license.LicenseUpdateDto;
 import com.Embarcadero.demo.model.dtos.person.PersonUpdateDto;
-import com.Embarcadero.demo.model.entities.License;
 import com.Embarcadero.demo.model.entities.boat.SimpleBoat;
-import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
+import com.Embarcadero.demo.model.entities.enums.RecordState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +24,7 @@ public class RecordUpdateDto {
     private SimpleBoat simpleBoat;
 
     // todo VALIDAR DATOS EN SHIFT SERVICE PORQUE ES OPCIONAL!
-    private RecordState_enum recordState;
+    private RecordState recordState;
     private Integer numberOfGuests;
     private String car;
     private String notes;

@@ -22,7 +22,7 @@ public class PersonAddDto {
     // ESTAS VALIDACIONES ESTAN COMENTADAS, PORQUE EN CASO DE UN OWNER YA EXISTENTE, SOLO SE ENVIA DNI Y NO HACE FALTA ENVIAR EL RESTO DE DATOS...
     // @NotNull(message = "Telefono de emergencia  no puede ser nulo.")
     // @Size(min = 7, max = 14, message = "Telefono de emergencia debe ser un numero de 7 a 14 digitos.")
-    private String emergency_phone ;
+    private String emergencyPhone;
 
     private String name;
 

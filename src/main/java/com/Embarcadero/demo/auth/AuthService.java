@@ -3,12 +3,9 @@ package com.Embarcadero.demo.auth;
 import com.Embarcadero.demo.auth.entities.*;
 import com.Embarcadero.demo.auth.jwt.JwtService;
 import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
-import com.Embarcadero.demo.model.dtos.license.LicenseReadDtoArray;
-import com.Embarcadero.demo.model.dtos.shift.ShiftReadDtoArray;
 import com.Embarcadero.demo.model.dtos.user.UserReadDto;
 import com.Embarcadero.demo.model.dtos.user.UserReadDtoArray;
 import com.Embarcadero.demo.model.dtos.user.UserUpdateDto;
-import com.Embarcadero.demo.model.entities.Shift;
 import com.Embarcadero.demo.model.mappers.UserMapper;
 import com.Embarcadero.demo.utils.MailManager;
 import com.Embarcadero.demo.utils.Validator;
@@ -27,7 +24,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -124,7 +120,7 @@ public class AuthService {
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
                 .phone(registerRequest.getPhone())
-                .emergency_phone(registerRequest.getEmergency_phone())
+                .emergencyPhone(registerRequest.getEmergencyPhone())
                 .dni(registerRequest.getDni())
                 .email(registerRequest.getEmail())
                 .role(createRoleByEmail(registerRequest.getEmail()))
@@ -168,7 +164,7 @@ public class AuthService {
                 .firstName(loguedUser.getFirstName())
                 .lastName(loguedUser.getLastName())
                 .phone(loguedUser.getPhone())
-                .emergency_phone(loguedUser.getEmergency_phone())
+                .emergencyPhone(loguedUser.getEmergencyPhone())
                 .dni(loguedUser.getDni())
                 .email((loguedUser.getEmail()))
                 .role(loguedUser.getRole())
@@ -196,9 +192,9 @@ public class AuthService {
             validator.validPhoneNumber(userUpdateDto.getPhone());
             loguedUser.setPhone(userUpdateDto.getPhone());
         }
-        if(userUpdateDto.getEmergency_phone() != null){
-            validator.validPhoneNumber(userUpdateDto.getEmergency_phone());
-            loguedUser.setEmergency_phone(userUpdateDto.getEmergency_phone());
+        if(userUpdateDto.getEmergencyPhone() != null){
+            validator.validPhoneNumber(userUpdateDto.getEmergencyPhone());
+            loguedUser.setEmergencyPhone(userUpdateDto.getEmergencyPhone());
         }
         // guardar loguedUser
         userRepository.save(loguedUser);

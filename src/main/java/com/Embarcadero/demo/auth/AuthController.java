@@ -6,7 +6,6 @@ import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
 import com.Embarcadero.demo.model.dtos.user.UserReadDto;
 import com.Embarcadero.demo.model.dtos.user.UserReadDtoArray;
 import com.Embarcadero.demo.model.dtos.user.UserUpdateDto;
-import com.Embarcadero.demo.model.entities.enums.Dam_enum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,13 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotEmpty;
-
 @RestController
-@RequestMapping("/auth/")
+@RequestMapping("/v1/auth/")
 @RequiredArgsConstructor
 @Tag(name = "Authentication") // name of endpoint grup in swagger
 public class AuthController {

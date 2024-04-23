@@ -17,10 +17,10 @@ public class LicenseMapper {
     public LicenseReadDto toReadDTO(License license){
         return new LicenseReadDto().builder()
                 .id(license.getId())
-                .licenseCode(license.getLicenseCode())
+                .code(license.getCode())
                 .owner(license.getOwner())
                 .registeredBoat(license.getRegisteredBoat())
-                .licenseState_enum(license.getLicenseState_enum())
+                .state(license.getState())
                 .notes(license.getNotes())
                 .build();
     }
@@ -28,10 +28,10 @@ public class LicenseMapper {
     public License toEntity (LicenseReadDto license){
         return new License().builder()
                 .id(license.getId())
-                .licenseCode(license.getLicenseCode())
+                .code(license.getCode())
                 .owner(license.getOwner())
                 .registeredBoat(license.getRegisteredBoat())
-                .licenseState_enum(license.getLicenseState_enum())
+                .state(license.getState())
                 .notes(license.getNotes())
                 .build();
 

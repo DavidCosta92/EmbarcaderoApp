@@ -1,8 +1,7 @@
 package com.Embarcadero.demo.model.entities;
 
 import com.Embarcadero.demo.model.entities.boat.SimpleBoat;
-import com.Embarcadero.demo.model.entities.enums.Dam_enum;
-import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
+import com.Embarcadero.demo.model.entities.enums.RecordState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,20 +26,20 @@ public class Record {
     private Date endTime;
 
     @Enumerated(EnumType.STRING)
-    private RecordState_enum recordState;
+    private RecordState recordState;
 
 
     @ManyToOne(cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "license_id", nullable = true)
+    @JoinColumn(name = "license", nullable = true)
     private License license;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="simpleBoat_id", referencedColumnName="id", nullable = true) // TODO, PONER QUE AL BORRAR, BORRE EN CASCADA ASI LIMPO BD!
+    @JoinColumn(name="simpleBoat", referencedColumnName="id", nullable = true)
     private SimpleBoat simpleBoat;
 
     // TODO MANY RECORDS TO ONE private Person driver;
     @ManyToOne(cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "person_id" , nullable = false)
+    @JoinColumn(name = "person" , nullable = false)
     private Person person;
 
     private Integer numberOfGuests;

@@ -10,8 +10,8 @@ import com.Embarcadero.demo.model.dtos.records.RecordUpdateDto;
 import com.Embarcadero.demo.model.entities.License;
 import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.Record;
-import com.Embarcadero.demo.model.entities.enums.LicenseState_enum;
-import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
+import com.Embarcadero.demo.model.entities.enums.LicenseState;
+import com.Embarcadero.demo.model.entities.enums.RecordState;
 import com.Embarcadero.demo.model.mappers.BoatMapper;
 import com.Embarcadero.demo.model.mappers.PersonMapper;
 import com.Embarcadero.demo.model.mappers.RecordMapper;
@@ -73,7 +73,7 @@ public class RecordService {
         return  recordMapper.toReadDto(record.get());
     }
 
-    public RecordReadDtoArray findAllRecords(RecordState_enum recState, String sTime , String eTime, Integer page, Integer size, String sortBy){
+    public RecordReadDtoArray findAllRecords(RecordState recState, String sTime , String eTime, Integer page, Integer size, String sortBy){
         Map<String, Integer> startT = validateDate(sTime);
         Map<String, Integer> endT = validateDate(eTime);
 
@@ -103,13 +103,13 @@ public class RecordService {
         }
         Date startTime = new Date();
         recordAddDto.setStartTime(startTime);;
-        recordAddDto.setRecordState(RecordState_enum.ACTIVO);
+        recordAddDto.setRecordState(RecordState.ACTIVO);
         return recordAddDto;
     }
     public void changeRecordState (Record recordBd , RecordUpdateDto updateDto){
         recordBd.setRecordState(updateDto.getRecordState());
 
-        if(!updateDto.getRecordState().equals(RecordState_enum.ACTIVO) && !updateDto.getRecordState().equals(RecordState_enum.DESCONOCIDO)){
+        if(!updateDto.getRecordState().equals(RecordState.ACTIVO) && !updateDto.getRecordState().equals(RecordState.DESCONOCIDO)){
             recordBd.setEndTime(new Date()); // si estado da baja al record, setear endtime con la fecha de baja
         } else {
             recordBd.setEndTime(null);// si estado da alta al record, eliminar endtime
@@ -137,8 +137,8 @@ public class RecordService {
             // todo, aca deberia permitir que solo cambie algunos datos de simple boat. osea, si me mandan un solo campo, lo debo recibir y actualizar solo ese campo.. pendiente!!
             recordBd.setSimpleBoat(updateDto.getSimpleBoat());
         } else if (updateDto.getSimpleBoat() == null && updateDto.getLicense() != null){ // solo puede cambiar de licenseCode!
-            License newLicenseBd = licenseService.getByLicenseCode(updateDto.getLicense().getLicenseCode()); //  verificar que exista
-            if(! newLicenseBd.getLicenseState_enum().equals(LicenseState_enum.OK.name())) throw new ForbiddenAction("Matricula no esta activa, el estado actual es: "+newLicenseBd.getLicenseState_enum().name()); //  verificar que este OK
+            License newLicenseBd = licenseService.getByCode(updateDto.getLicense().getCode()); //  verificar que exista
+            if(! newLicenseBd.getState().equals(LicenseState.OK.name())) throw new ForbiddenAction("Matricula no esta activa, el estado actual es: "+newLicenseBd.getState().name()); //  verificar que este OK
             recordBd.setLicense(newLicenseBd);
         }
         if(updateDto.getPerson()!= null){
@@ -154,11 +154,11 @@ public class RecordService {
         RecordAddDto addDto = setDefaultValuesAddNewRecord(recordAddDto); // setea los valores por defecto que no sean enviados, segun la logica de negocio
         validateCar(addDto.getCar());
         if(addDto.getHasLicense()) { // si tiene licencia, ya debe existir en bd, ya que solo oficina las crea,
-            License licenseBd = licenseService.getByLicenseCode(addDto.getLicense().getLicenseCode()); // si no existe, getByLicenseCode, lanzara exception
-            if( ! licenseBd.getLicenseState_enum().equals(LicenseState_enum.OK)){ // SI NO ESTA ACTIVA
-                throw new ForbiddenAction("Matricula no esta activa, el estado actual es: "+licenseBd.getLicenseState_enum().name());
+            License licenseBd = licenseService.getByCode(addDto.getLicense().getCode()); // si no existe, getByLicenseCode, lanzara exception
+            if( ! licenseBd.getState().equals(LicenseState.OK)){ // SI NO ESTA ACTIVA
+                throw new ForbiddenAction("Matricula no esta activa, el estado actual es: "+licenseBd.getState().name());
             }
-            LicenseReadDto license = licenseService.findByLicenseCode(recordAddDto.getLicense().getLicenseCode());
+            LicenseReadDto license = licenseService.findByCode(recordAddDto.getLicense().getCode());
             recordAddDto.setLicense(license);
 
         } else{
@@ -177,7 +177,7 @@ public class RecordService {
     }
 
     public List<RecordReadDto> getOpenRecords(List<Record> records){
-        List<Record> activeRecordsEntities = records.stream().filter(record -> record.getRecordState().equals(RecordState_enum.ACTIVO)).collect(Collectors.toList());
+        List<Record> activeRecordsEntities = records.stream().filter(record -> record.getRecordState().equals(RecordState.ACTIVO)).collect(Collectors.toList());
         return activeRecordsEntities.stream().map(record -> recordMapper.toReadDto(record)).collect(Collectors.toList());
     }
 

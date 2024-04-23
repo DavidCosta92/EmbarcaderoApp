@@ -4,15 +4,12 @@ import com.Embarcadero.demo.exceptions.ExceptionMessages;
 import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
 import com.Embarcadero.demo.exceptions.customsExceptions.InvalidValueException;
 import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
-import com.Embarcadero.demo.model.dtos.person.PersonReadDto;
-import com.Embarcadero.demo.model.dtos.person.PersonReadDtoArray;
 import com.Embarcadero.demo.model.dtos.records.RecordAddDto;
 import com.Embarcadero.demo.model.dtos.records.RecordReadDto;
 import com.Embarcadero.demo.model.dtos.records.RecordReadDtoArray;
 import com.Embarcadero.demo.model.dtos.records.RecordUpdateDto;
 import com.Embarcadero.demo.model.dtos.shift.ShiftReadDto;
-import com.Embarcadero.demo.model.entities.enums.Dam_enum;
-import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
+import com.Embarcadero.demo.model.entities.enums.RecordState;
 import com.Embarcadero.demo.services.RecordService;
 import com.Embarcadero.demo.services.ShiftService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,10 +26,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-
 @RestController
-@RequestMapping("/records/")
+@RequestMapping("/v1/records/")
 @Tag(name = "Records") // name of endpoint grup in swagger
 @SecurityRequirement(name = "Bearer Authentication")
 @PreAuthorize("isAuthenticated() AND hasAnyRole('LIFEGUARD', 'ADMIN', 'SUPER_ADMIN')")
@@ -53,7 +48,7 @@ public class RecordController {
     })
     @PreAuthorize("hasAnyRole('LIFEGUARD', 'ADMIN', 'SUPER_ADMIN')")
     @GetMapping
-    public ResponseEntity<RecordReadDtoArray> findAllRecords (@RequestParam(required = false) RecordState_enum recordState,
+    public ResponseEntity<RecordReadDtoArray> findAllRecords (@RequestParam(required = false) RecordState recordState,
                                                               @RequestParam(required = false) String startTime,
                                                               @RequestParam(required = false) String endTime,
                                                               @RequestParam(required = false, defaultValue = "0") Integer page,

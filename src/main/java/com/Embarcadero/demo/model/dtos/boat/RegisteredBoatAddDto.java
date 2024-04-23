@@ -1,7 +1,7 @@
 package com.Embarcadero.demo.model.dtos.boat;
 
 import com.Embarcadero.demo.model.dtos.engine.EngineAddDto;
-import com.Embarcadero.demo.model.entities.enums.TypeLicencedBoat_enum;
+import com.Embarcadero.demo.model.entities.enums.TypeLicencedBoat;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -33,7 +33,7 @@ public class RegisteredBoatAddDto {
 
     private String details;
 
-    private TypeLicencedBoat_enum typeLicencedBoat_enum;
+    private TypeLicencedBoat typeLicencedBoat;
 
 }
 

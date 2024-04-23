@@ -1,7 +1,7 @@
 package com.Embarcadero.demo.model.dtos.boat;
 
 
-import com.Embarcadero.demo.model.entities.enums.TypeSimpleBoat_enum;
+import com.Embarcadero.demo.model.entities.enums.TypeSimpleBoat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SimpleBoatUpdateDto {
-    TypeSimpleBoat_enum typeSimpleBoat_enum;
+    TypeSimpleBoat typeSimpleBoat;
     String details;
     String notes;
 }

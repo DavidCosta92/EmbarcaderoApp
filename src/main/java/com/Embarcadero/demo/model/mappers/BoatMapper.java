@@ -20,7 +20,7 @@ public class BoatMapper {
         Engine engine = engineService.getEngineByEngineNumber(registeredBoatAddDto.getEngine().getEngineNumber());
 
         return new RegisteredBoat().builder()
-                .typeLicencedBoat_enum(registeredBoatAddDto.getTypeLicencedBoat_enum())
+                .typeLicencedBoat(registeredBoatAddDto.getTypeLicencedBoat())
                 .hull(registeredBoatAddDto.getHull())
                 .engine(engine)
                 .capacity(registeredBoatAddDto.getCapacity())
@@ -30,14 +30,14 @@ public class BoatMapper {
     }
     public SimpleBoat toEntity(SimpleBoatAddDto addDto){
         return new SimpleBoat().builder()
-                .typeSimpleBoat_enum(addDto.getTypeSimpleBoat_enum())
+                .typeSimpleBoat(addDto.getTypeSimpleBoat())
                 .details(addDto.getDetails())
                 .notes(addDto.getNotes())
                 .build();
     }
     public SimpleBoat toEntity(SimpleBoatReadDto readDto){
         return new SimpleBoat().builder()
-                .typeSimpleBoat_enum(readDto.getTypeSimpleBoat_enum())
+                .typeSimpleBoat(readDto.getTypeSimpleBoat())
                 .details(readDto.getDetails())
                 .notes(readDto.getNotes())
                 .build();
@@ -47,7 +47,7 @@ public class BoatMapper {
 
         return new RegisteredBoat().builder()
                 .id(readDto.getId())
-                .typeLicencedBoat_enum(readDto.getTypeLicencedBoat_enum())
+                .typeLicencedBoat(readDto.getTypeLicencedBoat())
                 .hull(readDto.getHull())
                 .engine(engine)
                 .capacity(readDto.getCapacity())
@@ -63,13 +63,13 @@ public class BoatMapper {
                 .name(registeredBoat.getName())
                 .capacity(registeredBoat.getCapacity())
                 .details(registeredBoat.getDetails())
-                .typeLicencedBoat_enum(registeredBoat.getTypeLicencedBoat_enum())
+                .typeLicencedBoat(registeredBoat.getTypeLicencedBoat())
                 .build();
     }
         public SimpleBoatReadDto toReadDto(SimpleBoat simpleBoat){
         return new SimpleBoatReadDto().builder()
                 .id(simpleBoat.getId())
-                .typeSimpleBoat_enum(simpleBoat.getTypeSimpleBoat_enum())
+                .typeSimpleBoat(simpleBoat.getTypeSimpleBoat())
                 .details(simpleBoat.getDetails())
                 .notes(simpleBoat.getNotes())
                 .build();
@@ -81,7 +81,7 @@ public class BoatMapper {
                 .name(boat.getName())
                 .capacity(boat.getCapacity())
                 .details(boat.getDetails())
-                .typeLicencedBoat_enum(boat.getTypeLicencedBoat_enum())
+                .typeLicencedBoat(boat.getTypeLicencedBoat())
                 .build();
     }
 }

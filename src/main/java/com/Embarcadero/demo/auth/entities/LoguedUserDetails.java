@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -26,7 +24,7 @@ public class LoguedUserDetails {
     String firstName;
     String lastName;
     String phone;
-    String emergency_phone;
+    String emergencyPhone;
     // List<ImageFile> imageFiles;
     ImageFile userProfileImage;
     Collection<? extends GrantedAuthority> authorities;

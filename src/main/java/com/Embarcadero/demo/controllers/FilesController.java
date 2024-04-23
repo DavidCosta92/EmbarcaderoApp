@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/files/")
+@RequestMapping("/v1/files/")
 @Tag(name = "Files") // name of endpoint grup in swagger
 @PreAuthorize("isAuthenticated()")
 public class FilesController {

@@ -1,6 +1,6 @@
 package com.Embarcadero.demo.model.entities.enums;
 
-public enum RecordState_enum {
+public enum RecordState {
     ACTIVO, // MIENTRAS ESTA EN AGUA
     DESCONOCIDO, // SI NO SE REGISTRA EGRESO Y YA PASO UN TIEMPO PRUDENCIAL (24HS?)
     EGRESADO, // UNA VEZ QUE SALE

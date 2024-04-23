@@ -20,12 +20,12 @@ public class UserStaffReadDto {
     String username;
     String dni;
     String phone;
-    String emergency_phone;
+    String emergencyPhone;
     String firstName;
     String lastName;
     Role role;
     String email;
-    ImageFile profileImage;
+    // ImageFile profileImage;
     boolean isAccountNonExpired;
     boolean isAccountNonLocked;
     boolean isCredentialsNonExpired;

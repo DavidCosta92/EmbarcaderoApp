@@ -5,7 +5,6 @@ import com.Embarcadero.demo.model.dtos.engine.EngineAddDto;
 import com.Embarcadero.demo.model.dtos.engine.EngineReadDto;
 import com.Embarcadero.demo.model.dtos.engine.EngineUpdateDto;
 import com.Embarcadero.demo.model.entities.Engine;
-import com.Embarcadero.demo.model.entities.enums.EngineType_enum;
 import com.Embarcadero.demo.model.mappers.EngineMapper;
 import com.Embarcadero.demo.model.repositories.EngineRepository;
 import com.Embarcadero.demo.utils.Validator;
@@ -48,11 +47,11 @@ public class EngineService {
         validator.stringOnlyIntegerPositiveNumbers("Cilindradas", cc);
     }
     public Engine updateEngine(Engine engineBd , EngineUpdateDto engineUpdate){
-        if(engineUpdate.getEngineType_enum() != null && engineUpdate.getEngineNumber() != null && engineUpdate.getCc() != null && engineUpdate.getNotes() != null){
+        if(engineUpdate.getEngineType() != null && engineUpdate.getEngineNumber() != null && engineUpdate.getCc() != null && engineUpdate.getNotes() != null){
             return engineMapper.toEntity(addEngine(engineMapper.toAddDto(engineUpdate))); // si vienen todos los datos, creo un engine nuevo y lo devuelvo
         } else{
-            if (engineUpdate.getEngineType_enum() != null) {
-                engineBd.setEngineType_enum(engineUpdate.getEngineType_enum());
+            if (engineUpdate.getEngineType() != null) {
+                engineBd.setEngineType(engineUpdate.getEngineType());
             }
             if (engineUpdate.getEngineNumber() != null) {
                 validateEngineNumber( engineUpdate.getEngineNumber());

@@ -1,6 +1,6 @@
 package com.Embarcadero.demo.model.dtos.engine;
 
-import com.Embarcadero.demo.model.entities.enums.EngineType_enum;
+import com.Embarcadero.demo.model.entities.enums.EngineType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EngineAddDto {
-    private EngineType_enum engineType_enum;
+    private EngineType engineType;
 
     @NotNull(message = "Numero de motor no puede ser nulo.")
     @Size(min = 7, max = 30, message = "Numero de motor debe contener de 7 a 30 digitos")

@@ -1,8 +1,6 @@
 package com.Embarcadero.demo.auth.entities;
 
 import com.Embarcadero.demo.model.entities.ImageFile;
-import com.Embarcadero.demo.model.entities.Record;
-import com.Embarcadero.demo.model.entities.Shift;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +34,7 @@ public class User implements UserDetails {
     String email;
 
     String phone;
-    String emergency_phone;
+    String emergencyPhone;
     String password;
 
     String firstName;

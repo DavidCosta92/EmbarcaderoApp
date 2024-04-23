@@ -50,10 +50,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionMessages> enumInputError (HttpMessageNotReadableException ex){
         String cause = ex.getCause().toString();
         String msg = "";
-        if(cause.contains("EngineType_enum")) msg = "Error en tipo de motor, las opciones son : " + Arrays.asList(EngineType_enum.class.getEnumConstants());
-        if(cause.contains("LicenseState_enum")) msg = "Error estado de matricula, las opciones son : " +  Arrays.asList(LicenseState_enum.class.getEnumConstants());
-        if(cause.contains("TypeLicencedBoat_enum")) msg = "Error en tipo de embarcacion, las opciones con matricula son : " +  Arrays.asList(TypeLicencedBoat_enum.class.getEnumConstants());
-        if(cause.contains("TypeSimpleBoat_enum")) msg = "Error en tipo de embarcacion, las opciones sin matricula son : " +  Arrays.asList(TypeSimpleBoat_enum.class.getEnumConstants());
+        if(cause.contains("EngineType")) msg = "Error en tipo de motor, las opciones son : " + Arrays.asList(EngineType.class.getEnumConstants());
+        if(cause.contains("LicenseState")) msg = "Error estado de matricula, las opciones son : " +  Arrays.asList(LicenseState.class.getEnumConstants());
+        if(cause.contains("TypeLicencedBoat")) msg = "Error en tipo de embarcacion, las opciones con matricula son : " +  Arrays.asList(TypeLicencedBoat.class.getEnumConstants());
+        if(cause.contains("TypeSimpleBoat")) msg = "Error en tipo de embarcacion, las opciones sin matricula son : " +  Arrays.asList(TypeSimpleBoat.class.getEnumConstants());
         return new ResponseEntity<ExceptionMessages>(new ExceptionMessages(msg, InternalExceptionCodes.ILLEGAL_ARGS.ordinal()) , HttpStatus.BAD_REQUEST);
     }
 

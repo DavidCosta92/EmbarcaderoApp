@@ -17,8 +17,8 @@ import com.Embarcadero.demo.model.dtos.staff.StaffMemberAddDto;
 import com.Embarcadero.demo.model.dtos.user.UserDni;
 import com.Embarcadero.demo.model.entities.Record;
 import com.Embarcadero.demo.model.entities.Shift;
-import com.Embarcadero.demo.model.entities.enums.Dam_enum;
-import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
+import com.Embarcadero.demo.model.entities.enums.Dam;
+import com.Embarcadero.demo.model.entities.enums.RecordState;
 import com.Embarcadero.demo.model.mappers.PersonMapper;
 import com.Embarcadero.demo.model.mappers.ShiftMapper;
 import com.Embarcadero.demo.model.repositories.ShiftRepository;
@@ -27,7 +27,6 @@ import com.Embarcadero.demo.utils.Validator;
 import com.Embarcadero.demo.utils.reports.ShiftReportGenerator;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -89,7 +88,7 @@ public class ShiftService {
         resp.put("d",day);
         return resp;
     }
-    public ShiftReadDtoArray findAll (Dam_enum dam, String stringDate, Boolean shiftState, Integer byUser, Integer page, Integer size, String sortBy){
+    public ShiftReadDtoArray findAll (Dam dam, String stringDate, Boolean shiftState, Integer byUser, Integer page, Integer size, String sortBy){
         Page<Shift> results;
         Sort sort = Sort.by(sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
@@ -170,11 +169,11 @@ public class ShiftService {
         List<Record> recordBdList = shiftBd.getRecords().stream().filter(record -> record.getId() == idRecord).collect(Collectors.toList());
         if (recordBdList.isEmpty()) throw new NotFoundException("El registro a actualzar con id: "+idRecord+", no existe en el turno id: "+recordUpdateDTO.getIdShift()+", verifica los datos!");
 
-        List<Record> activeRecords = shiftBd.getRecords().stream().filter(rec -> rec.getRecordState().equals(RecordState_enum.ACTIVO)).collect(Collectors.toList());
+        List<Record> activeRecords = shiftBd.getRecords().stream().filter(rec -> rec.getRecordState().equals(RecordState.ACTIVO)).collect(Collectors.toList());
         if (!activeRecords.isEmpty()){ // si hay registros activos
             LicenseUpdateDto licenseToUpdate = recordUpdateDTO.getLicense();
             if(licenseToUpdate != null){
-                if(activeRecords.stream().anyMatch(record -> record.getLicense().getLicenseCode().equals(licenseToUpdate.getLicenseCode()))) throw new InvalidValueException("Ya existe un registro ACTIVO con la misma matricula: " + recordUpdateDTO.getLicense().getLicenseCode());
+                if(activeRecords.stream().anyMatch(record -> record.getLicense().getCode().equals(licenseToUpdate.getCode()))) throw new InvalidValueException("Ya existe un registro ACTIVO con la misma matricula: " + recordUpdateDTO.getLicense().getCode());
             } else if (recordUpdateDTO.getSimpleBoat() != null){
                 // TODO ACA DEBO CREAR UNA FORMA DE VALIDAR QUE NO EXISTE EL MISMO CONJUNTO DE EMBARCACION + PATENTE AUTO + TIPO DE EMBARCACION? O CUAL SERIA LA REGLA DE NEGOCIO NECESARIA?
                 // TODO ACA DEBO CREAR UNA FORMA DE VALIDAR QUE NO EXISTE EL MISMO CONJUNTO DE EMBARCACION + PATENTE AUTO + TIPO DE EMBARCACION? O CUAL SERIA LA REGLA DE NEGOCIO NECESARIA?
@@ -239,9 +238,9 @@ public class ShiftService {
 
 
     public void validateNonDuplicatedRecordsByLicense (List<Record> records , RecordAddDto recordAddDTO){
-        List<Record> activeRecords = records.stream().filter(rec -> (rec.getRecordState().equals(RecordState_enum.ACTIVO) && rec.getLicense() != null)).collect(Collectors.toList());
+        List<Record> activeRecords = records.stream().filter(rec -> (rec.getRecordState().equals(RecordState.ACTIVO) && rec.getLicense() != null)).collect(Collectors.toList());
         if (!activeRecords.isEmpty()){ // si hay registros activos y que tengan licencia
-            if(activeRecords.stream().anyMatch(record -> record.getLicense().getLicenseCode().equals(recordAddDTO.getLicense().getLicenseCode()))) throw new InvalidValueException("Ya existe un registro ACTIVO con la misma matricula: " + recordAddDTO.getLicense().getLicenseCode());
+            if(activeRecords.stream().anyMatch(record -> record.getLicense().getCode().equals(recordAddDTO.getLicense().getCode()))) throw new InvalidValueException("Ya existe un registro ACTIVO con la misma matricula: " + recordAddDTO.getLicense().getCode());
         }
     }
 

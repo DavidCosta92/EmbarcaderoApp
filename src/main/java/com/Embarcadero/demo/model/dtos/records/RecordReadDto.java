@@ -3,7 +3,7 @@ package com.Embarcadero.demo.model.dtos.records;
 import com.Embarcadero.demo.model.dtos.boat.SimpleBoatReadDto;
 import com.Embarcadero.demo.model.dtos.person.PersonReadDto;
 import com.Embarcadero.demo.model.entities.License;
-import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
+import com.Embarcadero.demo.model.entities.enums.RecordState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class RecordReadDto {
     private Integer id;
     private Date startTime;
     private Date endTime;
-    private RecordState_enum recordState;
+    private RecordState recordState;
     private License license;
     private SimpleBoatReadDto simpleBoat;
     private PersonReadDto person;

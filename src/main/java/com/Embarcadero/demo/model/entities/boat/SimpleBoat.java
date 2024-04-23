@@ -1,6 +1,6 @@
 package com.Embarcadero.demo.model.entities.boat;
 
-import com.Embarcadero.demo.model.entities.enums.TypeSimpleBoat_enum;
+import com.Embarcadero.demo.model.entities.enums.TypeSimpleBoat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ public class SimpleBoat {
     Integer id;
 
     @Enumerated(EnumType.STRING)
-    TypeSimpleBoat_enum typeSimpleBoat_enum;
+    TypeSimpleBoat typeSimpleBoat;
 
     String details;
     String notes;

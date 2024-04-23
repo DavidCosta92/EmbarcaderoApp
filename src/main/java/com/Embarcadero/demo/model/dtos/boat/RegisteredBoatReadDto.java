@@ -1,7 +1,7 @@
 package com.Embarcadero.demo.model.dtos.boat;
 
 import com.Embarcadero.demo.model.dtos.engine.EngineReadDto;
-import com.Embarcadero.demo.model.entities.enums.TypeLicencedBoat_enum;
+import com.Embarcadero.demo.model.entities.enums.TypeLicencedBoat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +18,7 @@ public class RegisteredBoatReadDto {
     private String hull;
     private String name;
     private Integer capacity;
-    private TypeLicencedBoat_enum typeLicencedBoat_enum;
+    private TypeLicencedBoat typeLicencedBoat;
 
     private String details;
     public RegisteredBoatReadDto (String name){

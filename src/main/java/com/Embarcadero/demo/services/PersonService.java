@@ -2,13 +2,11 @@ package com.Embarcadero.demo.services;
 
 import com.Embarcadero.demo.exceptions.customsExceptions.AlreadyExistException;
 import com.Embarcadero.demo.exceptions.customsExceptions.NotFoundException;
-import com.Embarcadero.demo.model.dtos.license.LicenseReadDtoArray;
 import com.Embarcadero.demo.model.dtos.person.PersonAddDto;
 import com.Embarcadero.demo.model.dtos.person.PersonReadDto;
 import com.Embarcadero.demo.model.dtos.person.PersonReadDtoArray;
 import com.Embarcadero.demo.model.dtos.person.PersonUpdateDto;
 import com.Embarcadero.demo.model.dtos.records.RecordUpdateDto;
-import com.Embarcadero.demo.model.entities.License;
 import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.Record;
 import com.Embarcadero.demo.model.mappers.PersonMapper;
@@ -89,9 +87,9 @@ public class PersonService {
             validator.stringOnlyLetters("Apellido", newPerson.getLastName());
             bdPerson.setLastName(newPerson.getLastName());
         }
-        if (newPerson.getEmergency_phone() != null) {
-            validator.validPhoneNumber(newPerson.getEmergency_phone());
-            bdPerson.setEmergency_phone(newPerson.getEmergency_phone());
+        if (newPerson.getEmergencyPhone() != null) {
+            validator.validPhoneNumber(newPerson.getEmergencyPhone());
+            bdPerson.setEmergencyPhone(newPerson.getEmergencyPhone());
         }
         if (newPerson.getAddress() != null) {
             validator.stringMinSize("Direccion", 5 , newPerson.getAddress());
@@ -159,7 +157,7 @@ public class PersonService {
         validator.stringOnlyLetters("Apellido", personAddDto.getLastName());
 
         validator.validPhoneNumber(personAddDto.getPhone());
-        validator.validPhoneNumber(personAddDto.getEmergency_phone());
+        validator.validPhoneNumber(personAddDto.getEmergencyPhone());
         validator.stringText("Direccion", personAddDto.getAddress());
         if(personRepository.existsByDni(personAddDto.getDni())) throw new AlreadyExistException("Persona ya existe con ese dni");
     }
@@ -167,19 +165,19 @@ public class PersonService {
         if(!personRepository.existsByDni(personAddDto.getDni())) throw new AlreadyExistException("Persona no existe, revisa dni o crea una nueva persona");
     }
     public Boolean personAddDtoOnlyHasDni (PersonAddDto personAddDto){
-        if(personAddDto.getPhone() == null && personAddDto.getEmergency_phone() == null && personAddDto.getName() == null && personAddDto.getLastName() == null && personAddDto.getAddress() == null && personAddDto.getNotes() == null && personAddDto.getDni() != null ){
+        if(personAddDto.getPhone() == null && personAddDto.getEmergencyPhone() == null && personAddDto.getName() == null && personAddDto.getLastName() == null && personAddDto.getAddress() == null && personAddDto.getNotes() == null && personAddDto.getDni() != null ){
             return true;
         }
         return false;
     }
     public Boolean personDtoIsComplete(PersonAddDto personAddDto ){
-        if(personAddDto.getName() != null && personAddDto.getLastName() != null && personAddDto.getPhone() != null && personAddDto.getEmergency_phone() != null && personAddDto.getAddress() != null && personAddDto.getNotes() != null && personAddDto.getDni() != null ){
+        if(personAddDto.getName() != null && personAddDto.getLastName() != null && personAddDto.getPhone() != null && personAddDto.getEmergencyPhone() != null && personAddDto.getAddress() != null && personAddDto.getNotes() != null && personAddDto.getDni() != null ){
             return true;
         }
         return false;
     }
     public Boolean personDtoIsComplete(PersonUpdateDto personUpdateDto ){
-        if(personUpdateDto.getName() != null && personUpdateDto.getLastName() != null && personUpdateDto.getPhone() != null && personUpdateDto.getEmergency_phone() != null && personUpdateDto.getAddress() != null && personUpdateDto.getNotes() != null && personUpdateDto.getDni() != null ){
+        if(personUpdateDto.getName() != null && personUpdateDto.getLastName() != null && personUpdateDto.getPhone() != null && personUpdateDto.getEmergencyPhone() != null && personUpdateDto.getAddress() != null && personUpdateDto.getNotes() != null && personUpdateDto.getDni() != null ){
             return true;
         }
         return false;

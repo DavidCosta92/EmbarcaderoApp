@@ -1,7 +1,6 @@
 package com.Embarcadero.demo.model.dtos.boat;
 
-import com.Embarcadero.demo.model.entities.enums.TypeSimpleBoat_enum;
-import jakarta.persistence.*;
+import com.Embarcadero.demo.model.entities.enums.TypeSimpleBoat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class SimpleBoatReadDto {
     Integer id;
-    TypeSimpleBoat_enum typeSimpleBoat_enum;
+    TypeSimpleBoat typeSimpleBoat;
     String details;
     String notes;
 }

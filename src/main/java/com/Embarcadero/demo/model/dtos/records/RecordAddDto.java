@@ -3,7 +3,7 @@ package com.Embarcadero.demo.model.dtos.records;
 import com.Embarcadero.demo.model.dtos.boat.SimpleBoatAddDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseReadDto;
 import com.Embarcadero.demo.model.dtos.person.PersonAddDto;
-import com.Embarcadero.demo.model.entities.enums.RecordState_enum;
+import com.Embarcadero.demo.model.entities.enums.RecordState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +22,7 @@ import java.util.Date;
 public class RecordAddDto {
     private Integer idShift;
     private Date startTime;
-    private RecordState_enum recordState;
+    private RecordState recordState;
     @Valid
     private PersonAddDto person;
     @NotNull(message = "La cantidad de acompañantes no puede ser nula, el valor correspondiente deberia ser 0")

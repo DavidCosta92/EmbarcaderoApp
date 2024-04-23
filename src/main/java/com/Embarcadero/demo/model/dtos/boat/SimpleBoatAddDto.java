@@ -1,6 +1,6 @@
 package com.Embarcadero.demo.model.dtos.boat;
 
-import com.Embarcadero.demo.model.entities.enums.TypeSimpleBoat_enum;
+import com.Embarcadero.demo.model.entities.enums.TypeSimpleBoat;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class SimpleBoatAddDto {
-    TypeSimpleBoat_enum typeSimpleBoat_enum;
+    TypeSimpleBoat typeSimpleBoat;
 
     @NotNull(message = "Detalles no pueden ser nulos")
     @Size(min=3, max=255, message = "nombre debe tener entre 3 y 25 caracteres")

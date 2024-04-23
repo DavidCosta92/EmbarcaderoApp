@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/person/")
+@RequestMapping("/v1/person/")
 @Tag(name = "Persons") // name of endpoint grup in swagger
 @SecurityRequirement(name = "Bearer Authentication")
 @PreAuthorize("isAuthenticated() AND hasAnyRole('OFFICE','LIFEGUARD', 'ADMIN', 'SUPER_ADMIN')")

@@ -15,7 +15,7 @@ public class PersonReadDto {
     private String phone;
     private String name;
     private String lastName;
-    private String emergency_phone;
+    private String emergencyPhone;
     private String address;
     private String notes;
 }

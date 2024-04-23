@@ -11,7 +11,7 @@ import com.Embarcadero.demo.model.dtos.person.PersonUpdateDto;
 import com.Embarcadero.demo.model.entities.License;
 import com.Embarcadero.demo.model.entities.Person;
 import com.Embarcadero.demo.model.entities.boat.RegisteredBoat;
-import com.Embarcadero.demo.model.entities.enums.LicenseState_enum;
+import com.Embarcadero.demo.model.entities.enums.LicenseState;
 import com.Embarcadero.demo.model.mappers.LicenseMapper;
 import com.Embarcadero.demo.model.repositories.LicenseRepository;
 import com.Embarcadero.demo.utils.Validator;
@@ -45,32 +45,32 @@ public class LicenseService {
         Person person = personService.getOrAddPersonForLicensesOrRecord(licenseAddDto.getOwner());
 
         License license = License.builder()
-                .licenseCode(licenseAddDto.getLicenseCode())
+                .code(licenseAddDto.getCode())
                 .registeredBoat(boat)
                 .owner(person)
-                .licenseState_enum(licenseAddDto.getLicenseState_enum())
+                .state(licenseAddDto.getState())
                 .notes(licenseAddDto.getNotes())
                 .build();
         licenseRepository.save(license);
         return licenseMapper.toReadDTO(license);
     }
-    public void validateLicenseCode(String licenseCode){
-        if(licenseRepository.existsByLicenseCode(licenseCode)) throw new AlreadyExistException("Matricula ya existente!");
+    public void validateCode(String code){
+        if(licenseRepository.existsByCode(code)) throw new AlreadyExistException("Matricula ya existente!");
     }
     public void validateNewLicense(LicenseAddDto licenseAddDto){
-        validateLicenseCode(licenseAddDto.getLicenseCode());
+        validateCode(licenseAddDto.getCode());
         boatService.validateNewBoat(licenseAddDto.getRegisteredBoat());
         personService.validatePersonNewMatriculaOrNewRecord(licenseAddDto.getOwner());
-        if (licenseAddDto.getLicenseState_enum() == null) licenseAddDto.setLicenseState_enum(LicenseState_enum.OK);
+        if (licenseAddDto.getState() == null) licenseAddDto.setState(LicenseState.OK);
     }
-    public LicenseReadDtoArray findAll (String licenseCode, String searchValue, Integer pageNumber, Integer pageSize, String sortBy){
+    public LicenseReadDtoArray findAll (String code, String searchValue, Integer pageNumber, Integer pageSize, String sortBy){
         Page<License> results;
         Sort sort = Sort.by(sortBy);
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
-        if (licenseCode != null) {
-            results = licenseRepository.findAllByLicenseCodeContains(licenseCode, pageable);
-        } else if(licenseCode == null && !searchValue.equals("")){
+        if (code != null) {
+            results = licenseRepository.findAllByCodeContains(code, pageable);
+        } else if(code == null && !searchValue.equals("")){
             results = licenseRepository.getAllBySearchValueContains(searchValue, pageable);
         }else {
             results = licenseRepository.findAll(pageable);
@@ -94,24 +94,24 @@ public class LicenseService {
     public LicenseReadDto findById(Integer id){
         return licenseMapper.toReadDTO(getById(id));
     }
-    public LicenseReadDto findByLicenseCode(String licenseCode){
-        return licenseMapper.toReadDTO(getByLicenseCode(licenseCode));
+    public LicenseReadDto findByCode(String code){
+        return licenseMapper.toReadDTO(getByCode(code));
     }
 
     public LicenseReadDto updateById(Integer id , LicenseUpdateDto licenseUpdateDto){
         License licenseBD = getById(id); // obtener los datos originales en la base de datos
         // verificar que datos me envian.. y los que lleguen mandar a actualizarlos
-        String licenseCode = licenseUpdateDto.getLicenseCode();
+        String code = licenseUpdateDto.getCode();
         RegisteredBoatUpdateDto boat = licenseUpdateDto.getBoat();
         PersonUpdateDto personToUpdate = licenseUpdateDto.getOwner();
-        LicenseState_enum state = licenseUpdateDto.getLicenseState_enum();
-        if (licenseCode != null){
-            validator.stringMinSize("Matricula",5 , licenseCode);
-            validator.stringText("Matricula" , licenseCode);
-            licenseBD.setLicenseCode(licenseCode);
+        LicenseState state = licenseUpdateDto.getState();
+        if (code != null){
+            validator.stringMinSize("Matricula",5 , code);
+            validator.stringText("Matricula" , code);
+            licenseBD.setCode(code);
         }
         if (state!= null){
-            licenseBD.setLicenseState_enum(state);
+            licenseBD.setState(state);
         }
         if (boat!= null){
             RegisteredBoat updatedBoatELIMINAR =  boatService.updateBoat(licenseBD.getRegisteredBoat() , boat);
@@ -133,9 +133,9 @@ public class LicenseService {
         if(!licenseRepository.existsById(id)) throw new NotFoundException("No existe licencia por id");
     }
 
-    public License getByLicenseCode(String licenseCode){
-        Optional<License> license = licenseRepository.findByLicenseCode(licenseCode);
-        if (license.isEmpty())  throw new NotFoundException("No se encontro Licencia con codigo: "+licenseCode);
+    public License getByCode(String code){
+        Optional<License> license = licenseRepository.findByCode(code);
+        if (license.isEmpty())  throw new NotFoundException("No se encontro Licencia con codigo: "+code);
         return license.get();
     }
 

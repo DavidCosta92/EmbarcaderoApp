@@ -11,15 +11,15 @@ import java.util.Optional;
 
 @Repository
 public interface LicenseRepository extends JpaRepository<License, Integer> {
-    Page<License> findAllByLicenseCodeContains(String licenseCode, Pageable pageable);
-    Optional<License> findByLicenseCode(String licenseCode);
+    Page<License> findAllByCodeContains(String code, Pageable pageable);
+    Optional<License> findByCode(String code);
 
-    Boolean existsByLicenseCode (String licenseCode);
+    Boolean existsByCode(String code);
 
     @Query("SELECT l FROM License l " +
             "JOIN Person p ON p.id = l.owner.id " +
             "JOIN RegisteredBoat b ON b.id = l.registeredBoat.id " +
-            "WHERE ( l.licenseCode LIKE %:searchValue% " +
+            "WHERE ( l.code LIKE %:searchValue% " +
             "OR p.name LIKE %:searchValue%  " +
             "OR p.lastName LIKE %:searchValue% " +
             "OR b.name LIKE %:searchValue%)")

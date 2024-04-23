@@ -60,7 +60,7 @@ public class BoatService {
     }
 
     public RegisteredBoat updateBoat(RegisteredBoat boatBd, RegisteredBoatUpdateDto newBoat){
-        if(newBoat.getEngine() != null && newBoat.getHull() != null && newBoat.getName() != null && newBoat.getCapacity() != null && newBoat.getTypeLicencedBoat_enum() != null ){
+        if(newBoat.getEngine() != null && newBoat.getHull() != null && newBoat.getName() != null && newBoat.getCapacity() != null && newBoat.getTypeLicencedBoat() != null ){
             return addBoat(boatMapper.toAddDto(newBoat)); // SI OWNER UPDATE TRAE TODOS LOS DATOS.. CREO UN OWNER NUEVO Y LO devuelvo
         } else{
             // Uso el boatDB y actualizo los datos que vienen, valido, guardo y devuelvo boatDB actualizado
@@ -80,8 +80,8 @@ public class BoatService {
                 validator.stringOnlyIntegerPositiveNumbers("Capacidad", String.valueOf(newBoat.getCapacity()));
                 boatBd.setCapacity(newBoat.getCapacity());
             }
-            if (newBoat.getTypeLicencedBoat_enum() != null) {
-                boatBd.setTypeLicencedBoat_enum(newBoat.getTypeLicencedBoat_enum());
+            if (newBoat.getTypeLicencedBoat() != null) {
+                boatBd.setTypeLicencedBoat(newBoat.getTypeLicencedBoat());
             }
             registeredBoatRepository.save(boatBd);
         }

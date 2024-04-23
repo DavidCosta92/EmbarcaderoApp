@@ -1,6 +1,6 @@
 package com.Embarcadero.demo.model.entities;
 
-import com.Embarcadero.demo.model.entities.enums.EngineType_enum;
+import com.Embarcadero.demo.model.entities.enums.EngineType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +20,7 @@ public class Engine {
     private Integer id;
 
     @Enumerated(EnumType.STRING)
-    private EngineType_enum engineType_enum;
+    private EngineType engineType;
 
     @Column(unique = true)
     private String engineNumber;

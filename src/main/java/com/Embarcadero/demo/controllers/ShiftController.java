@@ -11,7 +11,7 @@ import com.Embarcadero.demo.model.dtos.shift.ShiftReadDtoArray;
 import com.Embarcadero.demo.model.dtos.shift.ShiftUpdateDto;
 import com.Embarcadero.demo.model.dtos.staff.StaffMemberAddDto;
 import com.Embarcadero.demo.model.dtos.user.UserStaffReadDto;
-import com.Embarcadero.demo.model.entities.enums.Dam_enum;
+import com.Embarcadero.demo.model.entities.enums.Dam;
 import com.Embarcadero.demo.services.ShiftService;
 import com.Embarcadero.demo.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,14 +33,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
 
 
 @RestController
-@RequestMapping("/shifts/")
+@RequestMapping("/v1/shifts/")
 @Tag(name = "Shifts") // name of endpoint grup in swagger
 @SecurityRequirement(name = "Bearer Authentication")
-@PreAuthorize("hasAnyRole('OFFICE', 'ADMIN', 'SUPER_ADMIN')")
+@PreAuthorize("hasAnyRole('LIFEGUARD', 'ADMIN', 'SUPER_ADMIN')")
 public class ShiftController {
     @Autowired
     ShiftService shiftService;
@@ -59,7 +58,7 @@ public class ShiftController {
                             schema = @Schema(implementation = ExceptionMessages.class)) })
     })
     @GetMapping
-    public ResponseEntity<ShiftReadDtoArray> showAll (@RequestParam(required = false) Dam_enum dam,
+    public ResponseEntity<ShiftReadDtoArray> showAll (@RequestParam(required = false) Dam dam,
                                                       @RequestParam(required = false) String date,
                                                       @RequestParam(required = false) Boolean shiftState,
                                                       @RequestParam(required = false) Integer byUser,

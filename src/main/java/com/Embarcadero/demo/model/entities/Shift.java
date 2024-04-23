@@ -1,7 +1,7 @@
 package com.Embarcadero.demo.model.entities;
 
 import com.Embarcadero.demo.auth.entities.User;
-import com.Embarcadero.demo.model.entities.enums.Dam_enum;
+import com.Embarcadero.demo.model.entities.enums.Dam;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -26,7 +24,7 @@ public class Shift {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Dam_enum dam;
+    private Dam dam;
 
     @Column(nullable = false, updatable = false)
     // @Temporal(TemporalType.DATE) // para que solo se almacene la fecha sin hora
@@ -38,7 +36,7 @@ public class Shift {
 
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name= "shift_staff", joinColumns = @JoinColumn(name = "shift_id"), inverseJoinColumns = @JoinColumn(name="staff_id"))
+    @JoinTable(name= "shift_staff", joinColumns = @JoinColumn(name = "shift"), inverseJoinColumns = @JoinColumn(name="staff"))
     private List<User> staff;
 
     private String notes;

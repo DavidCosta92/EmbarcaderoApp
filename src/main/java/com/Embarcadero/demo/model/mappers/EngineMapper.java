@@ -11,7 +11,7 @@ public class EngineMapper {
 
     public Engine toEntity(EngineAddDto engineAddDto){
         return new Engine().builder()
-                .engineType_enum(engineAddDto.getEngineType_enum())
+                .engineType(engineAddDto.getEngineType())
                 .engineNumber(engineAddDto.getEngineNumber())
                 .cc(engineAddDto.getCc())
                 .notes(engineAddDto.getNotes())
@@ -20,7 +20,7 @@ public class EngineMapper {
     public Engine toEntity(EngineReadDto engine){
         return new Engine().builder()
                 .id(engine.getId())
-                .engineType_enum(engine.getEngineType_enum())
+                .engineType(engine.getEngineType())
                 .engineNumber(engine.getEngineNumber())
                 .cc(engine.getCc())
                 .notes(engine.getNotes())
@@ -29,7 +29,7 @@ public class EngineMapper {
     public EngineReadDto toReadDto (Engine engine){
         return new EngineReadDto().builder()
                 .id(engine.getId())
-                .engineType_enum(engine.getEngineType_enum())
+                .engineType(engine.getEngineType())
                 .engineNumber(engine.getEngineNumber())
                 .cc(engine.getCc())
                 .notes(engine.getNotes())
@@ -37,7 +37,7 @@ public class EngineMapper {
     }
     public EngineAddDto toAddDto (EngineUpdateDto engine){
         return new EngineAddDto().builder()
-                .engineType_enum(engine.getEngineType_enum())
+                .engineType(engine.getEngineType())
                 .engineNumber(engine.getEngineNumber())
                 .cc(engine.getCc())
                 .notes(engine.getNotes())

@@ -1,7 +1,7 @@
 package com.Embarcadero.demo.model.entities.boat;
 
 import com.Embarcadero.demo.model.entities.Engine;
-import com.Embarcadero.demo.model.entities.enums.TypeLicencedBoat_enum;
+import com.Embarcadero.demo.model.entities.enums.TypeLicencedBoat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +19,7 @@ public class RegisteredBoat {
     private Integer id;
 
     @OneToOne
-    @JoinColumn(name="motor_id", referencedColumnName="id", nullable = true)
+    @JoinColumn(name="motor", referencedColumnName="id", nullable = true)
     private Engine engine;
 
     private String hull;
@@ -31,5 +31,5 @@ public class RegisteredBoat {
     private String details;
 
     @Enumerated(EnumType.STRING)
-    private TypeLicencedBoat_enum typeLicencedBoat_enum;
+    private TypeLicencedBoat typeLicencedBoat;
 }
