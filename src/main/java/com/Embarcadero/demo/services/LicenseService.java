@@ -70,7 +70,7 @@ public class LicenseService {
 
         if (code != null) {
             results = licenseRepository.findAllByCodeContains(code, pageable);
-        } else if(code == null && !searchValue.equals("")){
+        } else if(code == null && searchValue !=null && !searchValue.equals("")){
             results = licenseRepository.getAllBySearchValueContains(searchValue, pageable);
         }else {
             results = licenseRepository.findAll(pageable);
