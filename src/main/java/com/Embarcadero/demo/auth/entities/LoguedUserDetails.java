@@ -29,6 +29,7 @@ public class LoguedUserDetails {
     ImageFile userProfileImage;
     Collection<? extends GrantedAuthority> authorities;
 
+
     /*
     public ImageFile getUserProfileImage(){
         List<ImageFile> profileImageList = getImageFiles().stream().filter(img -> img.getUsedFor().equals("profile")).collect(Collectors.toList());
