@@ -1,6 +1,7 @@
 package com.Embarcadero.demo.auth;
 
 import com.Embarcadero.demo.auth.entities.*;
+import com.Embarcadero.demo.model.dtos.user.UserReadDto;
 import com.Embarcadero.demo.model.dtos.user.UserReadDtoArray;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,11 +24,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-// @WebAppConfiguration
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-// @Testcontainers
-// @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AuthControllerTest {
 
@@ -92,14 +90,21 @@ class AuthControllerTest {
             .lastName("costa")
             .password("123456789")
             .build();
+    User userPreloadLifeguard = new User().builder()
+            .username("lifeguarrrrsd")
+            .dni("35924710")
+            .email("dlifeguard@gv.com")
+            .phone("2644i647572")
+            .emergencyPhone("26h44647572")
+            .firstName("david")
+            .lastName("costa")
+            .password("123456789")
+            .build();
 
     @BeforeAll
     void initialSetUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        // userRepository.save(goodUser);
-
         userRepository.save(userPreload1);
-
         // registro de good user
         RegisterRequest  goodUserRegisterRequest = userRegisterRequest(goodUser);
         ResponseEntity<AuthResponse> responseAuthAdmin = restTemplate.postForEntity(BASE_URL+"register", goodUserRegisterRequest,AuthResponse.class);
@@ -111,19 +116,13 @@ class AuthControllerTest {
         ResponseEntity<AuthResponse> responseAuthAdmin2 = restTemplate.postForEntity(BASE_URL+"register", goodUser2RegisterRequest,AuthResponse.class);
         AuthResponse authResponse2 =  responseAuthAdmin2.getBody();
         goodUser2Token = authResponse2.getToken();
-
-
     }
 
     @BeforeEach
     void setUp() {
-
-
     }
     @AfterEach
     void restoreBd(){
-
-
     }
 
     @AfterAll
@@ -131,7 +130,6 @@ class AuthControllerTest {
         userRepository.delete(userRepository.findByUsername(userPreload1.getUsername()).get());
         userRepository.delete(userRepository.findByUsername(goodUser2.getUsername()).get());
     }
-
 
     @DisplayName("Login Exitoso")
     @Test
@@ -181,51 +179,9 @@ class AuthControllerTest {
     }
 
 
-
-    @DisplayName("PENDIENTEEEE ")
+    @DisplayName("Obtener guardavidas, cuando no hay ninguno seteado")
     @Test
-    void getLoguedUserDetails() throws Exception {
-        /*
-        // registro de good user
-        RegisterRequest  goodUser2RegisterRequest = userRegisterRequest(goodUser2);
-        ResponseEntity<AuthResponse> responseAuthAdmin = restTemplate.postForEntity(BASE_URL+"register", goodUser2RegisterRequest,AuthResponse.class);
-        AuthResponse authResponse =  responseAuthAdmin.getBody();
-        goodUser2Token = authResponse.getToken();
-
-        // LoginRequest goodUserLoginData = new LoginRequest(goodUser.getUsername(),goodUser.getPassword());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(goodUser2Token);
-
-        HttpEntity<String> requestEntity = new HttpEntity<>(null, headers); // null es el body, que al ser un get es null
-        ResponseEntity<LoguedUserDetails> response = restTemplate.exchange(BASE_URL+"userDetails", HttpMethod.GET, requestEntity, LoguedUserDetails.class);
-        assertThat(response.getBody().getUsername()).isEqualTo(goodUser2.getUsername());
-        assertThat(response.getBody().getEmail()).isEqualTo(goodUser2.getEmail());
-        assertThat(response.getBody().getDni()).isEqualTo(goodUser2.getDni());
-        assertTrue(response.getStatusCode().is2xxSuccessful());
-
-         */
-        /*
-        tokenAdminUser = newRegisterUserResult(userRegisterRequest(goodUser2)).getResponse().getContentAsString().substring(10,142);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(tokenAdminUser);
-
-        MvcResult mockMvcResult = mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL+"userDetails")
-                .headers(headers)
-        ).andReturn();
-
-        MockHttpServletResponse mockMvcResult2 = mockMvcResult.getResponse();
-
-        assertEquals(200, mockMvcResult.getResponse().getStatus());
-        assertTrue( mockMvcResult.getResponse().getContentAsString().contains(goodUser2.getUsername()));
-        assertTrue( mockMvcResult.getResponse().getContentAsString().contains(goodUser2.getDni()));
-        assertTrue( mockMvcResult.getResponse().getContentAsString().contains(goodUser2.getEmail()));
-        */
-
-    }
-    @DisplayName("PENDIENTEEEE ")
-    @Test
-    void getAllLifeguards() {
+    void getAllLifeguardsEmpty() {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(goodUser2Token);
         HttpEntity<String> requestEntity = new HttpEntity<>(null, headers); // null es el body, que al ser un get es null
@@ -234,26 +190,70 @@ class AuthControllerTest {
         assertThat(response.getBody().getTotal_results()).isEqualTo(0);
         assertThat(response.getBody().getCurrent_page()).isEqualTo(0);
         assertTrue(response.getStatusCode().is2xxSuccessful());
-
     }
-    @DisplayName("PENDIENTEEEE ")
+    @DisplayName("Obtener guardavidas, cuando si guardavidas")
+    @Test
+    void getAllLifeguards() throws Exception {
+        newRegisterUserResult(userRegisterRequest(userPreloadLifeguard)); // guardo un gv
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(goodUser2Token);
+        HttpEntity<String> requestEntity = new HttpEntity<>(null, headers); // null es el body, que al ser un get es null
+        ResponseEntity<UserReadDtoArray> response = restTemplate.exchange(BASE_URL+"lifeguards", HttpMethod.GET, requestEntity, UserReadDtoArray.class);
+        assertThat(response.getBody().getUsers().size()).isEqualTo(1);
+        assertThat(response.getBody().getTotal_results()).isEqualTo(1);
+        assertThat(response.getBody().getCurrent_page()).isEqualTo(0);
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+        userRepository.delete(userRepository.findByUsername(userPreloadLifeguard.getUsername()).get()); // elimino el gv guardado
+    }
+
+    @DisplayName("Obtener todos los usuarios ")
     @Test
     void getAllUsers() throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(goodUser2Token);
-
         HttpEntity<String> requestEntity = new HttpEntity<>(null, headers); // null es el body, que al ser un get es null
-        ResponseEntity<UserReadDtoArray> response = restTemplate.exchange(BASE_URL+"lifeguards", HttpMethod.GET, requestEntity, UserReadDtoArray.class);
-        ResponseEntity<UserReadDtoArray> response2 = restTemplate.exchange(BASE_URL+"users", HttpMethod.GET, requestEntity, UserReadDtoArray.class);
-
-        assertThat(response.getBody().getUsers().size()).isEqualTo(0);
-        assertThat(response.getBody().getTotal_results()).isEqualTo(0);
+        ResponseEntity<UserReadDtoArray> response = restTemplate.exchange(BASE_URL+"users", HttpMethod.GET, requestEntity, UserReadDtoArray.class);
+        assertThat(response.getBody().getUsers().size()).isEqualTo(4);
+        assertThat(response.getBody().getTotal_results()).isEqualTo(4);
         assertThat(response.getBody().getCurrent_page()).isEqualTo(0);
         assertTrue(response.getStatusCode().is2xxSuccessful());
     }
+    @DisplayName("Cambio de rol")
+    @Test
+    void editUserRoleById() throws Exception {
+        // guardo un gv
+        newRegisterUserResult(userRegisterRequest(userPreloadLifeguard));
+        User savedGv = userRepository.findByUsername(userPreloadLifeguard.getUsername()).get();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(goodUser2Token);
+        HttpEntity<String> requestEntity = new HttpEntity<>(null, headers); // null es el body, que al ser un get es null
+
+        // valido que tengo un gv
+        ResponseEntity<UserReadDtoArray> responseAllLifeguard = restTemplate.exchange(BASE_URL+"lifeguards", HttpMethod.GET, requestEntity, UserReadDtoArray.class);
+        assertThat(responseAllLifeguard.getBody().getUsers().size()).isEqualTo(1);
+        assertThat(responseAllLifeguard.getBody().getTotal_results()).isEqualTo(1);
+
+        // cambio el rol del gv a USER
+        Role newRole = Role.USER;
+        ResponseEntity<UserReadDto> responseUpdateRole = restTemplate.exchange(
+                BASE_URL+"users/"+savedGv.getId()+"?newRole="+newRole.name(), // v1/auth/users/1?newRole=USER
+                HttpMethod.PUT, requestEntity,
+                UserReadDto.class);
+        assertTrue(responseUpdateRole.getStatusCode().is2xxSuccessful());
+
+        // valido que no tengo ningun gv
+        ResponseEntity<UserReadDtoArray> responseNoLifeguard = restTemplate.exchange(BASE_URL+"lifeguards", HttpMethod.GET, requestEntity, UserReadDtoArray.class);
+        assertThat(responseNoLifeguard.getBody().getUsers().size()).isEqualTo(0);
+        assertThat(responseNoLifeguard.getBody().getTotal_results()).isEqualTo(0);
+
+        // elimino el gv guardado
+        userRepository.delete(savedGv);
+    }
+    /*
     @DisplayName("PENDIENTEEEE ")
     @Test
-    void editUserRoleById() {
+    void getUserDetails() {
     }
     @DisplayName("PENDIENTEEEE ")
     @Test
@@ -267,6 +267,7 @@ class AuthControllerTest {
     @Test
     void editUserDetails() {
     }
+     */
 
 
 
@@ -298,8 +299,5 @@ class AuthControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(object);
     }
-
-    // MOCKS
-
 
 }
