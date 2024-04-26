@@ -31,7 +31,6 @@ class AuthControllerTest {
 
     final String BASE_URL = "/v1/auth/";
     private MockMvc mockMvc;
-    private String tokenAdminUser;
     private String goodUserToken;
     private String goodUser2Token;
 
