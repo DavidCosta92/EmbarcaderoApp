@@ -144,6 +144,14 @@
 		</dependency>
 		<!-- testing mockito  -->
 
+		<!-- testing convertir datos xml a json
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>2.16.0</version>
+		</dependency>
+	-->
+		<!-- testing convertir datos xml a json  -->
 
 		<!-- base datos de testing  -->
 		<dependency>
