@@ -36,7 +36,7 @@ import java.time.LocalDate;
 
 
 @RestController
-@RequestMapping("/v1/shifts/")
+@RequestMapping(value = "/v1/shifts/", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Shifts") // name of endpoint grup in swagger
 @SecurityRequirement(name = "Bearer Authentication")
 @PreAuthorize("hasAnyRole('LIFEGUARD', 'ADMIN', 'SUPER_ADMIN')")

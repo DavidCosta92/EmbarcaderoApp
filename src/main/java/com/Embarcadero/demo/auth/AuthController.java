@@ -20,11 +20,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/auth/")
+@RequestMapping(value = "/v1/auth/", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 @Tag(name = "Authentication") // name of endpoint grup in swagger
 public class AuthController {

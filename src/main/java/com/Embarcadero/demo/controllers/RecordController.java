@@ -22,12 +22,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/records/")
+@RequestMapping(value = "/v1/records/", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Records") // name of endpoint grup in swagger
 @SecurityRequirement(name = "Bearer Authentication")
 @PreAuthorize("isAuthenticated() AND hasAnyRole('LIFEGUARD', 'ADMIN', 'SUPER_ADMIN')")

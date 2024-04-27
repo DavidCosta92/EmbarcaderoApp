@@ -135,7 +135,7 @@ class AuthControllerTest {
     void login() throws Exception {
         LoginRequest goodUserLoginData = new LoginRequest(goodUser.getUsername(),goodUser.getPassword());
         ResponseEntity<AuthResponse> response = restTemplate.postForEntity(BASE_URL+"login", goodUserLoginData,AuthResponse.class);
-        assertTrue(response.getStatusCode().isSameCodeAs(HttpStatus.OK));
+        assertEquals(true, response.getStatusCode().isSameCodeAs(HttpStatus.OK));
     }
 
     @DisplayName("Login error credenciales")
