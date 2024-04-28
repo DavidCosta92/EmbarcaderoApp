@@ -84,6 +84,28 @@ public class BoatMapper {
                 .typeLicencedBoat(boat.getTypeLicencedBoat())
                 .build();
     }
+    public RegisteredBoatAddDto toAddDto(RegisteredBoat boat){
+        return new RegisteredBoatAddDto().builder()
+                .engine(engineMapper.toAddDto(boat.getEngine()))
+                .hull(boat.getHull())
+                .name(boat.getName())
+                .capacity(boat.getCapacity())
+                .details(boat.getDetails())
+                .typeLicencedBoat(boat.getTypeLicencedBoat())
+                .build();
+    }
+
+    public RegisteredBoatUpdateDto toUpdateDto(RegisteredBoat boat){
+        return new RegisteredBoatUpdateDto().builder()
+                .engine(engineMapper.toUpdateDto(boat.getEngine()))
+                .hull(boat.getHull())
+                .name(boat.getName())
+                .capacity(boat.getCapacity())
+                .details(boat.getDetails())
+                .typeLicencedBoat(boat.getTypeLicencedBoat())
+                .build();
+    }
+
 }
 
 

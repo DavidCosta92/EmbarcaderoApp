@@ -35,3 +35,4 @@ public class License {
 
     private String notes;
 }
+

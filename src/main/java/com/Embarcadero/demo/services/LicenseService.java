@@ -121,6 +121,10 @@ public class LicenseService {
             Person updatedPerson =  personService.updatePerson(licenseBD.getOwner() , personToUpdate);
             licenseBD.setOwner(updatedPerson);
         }
+        if (licenseUpdateDto.getNotes() != null){
+            validator.stringText("Notas de matricula" , licenseUpdateDto.getNotes());
+            licenseBD.setNotes(licenseUpdateDto.getNotes());
+        }
         licenseRepository.save(licenseBD);
         return licenseMapper.toReadDTO(licenseBD);
     }

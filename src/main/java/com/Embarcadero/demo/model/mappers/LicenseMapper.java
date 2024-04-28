@@ -1,5 +1,6 @@
 package com.Embarcadero.demo.model.mappers;
 
+import com.Embarcadero.demo.model.dtos.license.LicenseAddDto;
 import com.Embarcadero.demo.model.dtos.license.LicenseReadDto;
 import com.Embarcadero.demo.model.entities.License;
 import com.Embarcadero.demo.services.BoatService;

@@ -43,6 +43,22 @@ public class EngineMapper {
                 .notes(engine.getNotes())
                 .build();
     }
+    public EngineAddDto toAddDto (Engine engine){
+        return new EngineAddDto().builder()
+                .engineType(engine.getEngineType())
+                .engineNumber(engine.getEngineNumber())
+                .cc(engine.getCc())
+                .notes(engine.getNotes())
+                .build();
+    }
+    public EngineUpdateDto toUpdateDto (Engine engine){
+        return new EngineUpdateDto().builder()
+                .engineType(engine.getEngineType())
+                .engineNumber(engine.getEngineNumber())
+                .cc(engine.getCc())
+                .notes(engine.getNotes())
+                .build();
+    }
 
 
 }

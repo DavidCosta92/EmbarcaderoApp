@@ -11,7 +11,6 @@ import com.Embarcadero.demo.model.mappers.PersonMapper;
 import com.Embarcadero.demo.model.repositories.PersonRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Jwt;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +18,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -114,8 +106,6 @@ class PersonControllerTest {
             .build();
     final String BASE_URL = "/v1/person/";
     final String BASE_URL_AUTH = "/v1/auth/";
-    private String adminToken;
-    private String goodUser2Token;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -129,7 +119,6 @@ class PersonControllerTest {
     @Autowired
     TestRestTemplate restTemplate;
 
-
     @BeforeAll
     void initialSetUp() throws Exception {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
@@ -137,10 +126,10 @@ class PersonControllerTest {
         personRepository.save(personPreload2);
 
         // register admin
-        RegisterRequest  adminRegisterRequest = userRegisterRequest(superAdminUser);
-        ResponseEntity<AuthResponse> responseAuthAdmin = restTemplate.postForEntity(BASE_URL_AUTH+"register", adminRegisterRequest,AuthResponse.class);
-        AuthResponse authResponse2 =  responseAuthAdmin.getBody();
-        adminToken = authResponse2.getToken();
+        // RegisterRequest  adminRegisterRequest = userRegisterRequest(superAdminUser);
+        // ResponseEntity<AuthResponse> responseAuthAdmin = restTemplate.postForEntity(BASE_URL_AUTH+"register", adminRegisterRequest,AuthResponse.class);
+        // AuthResponse authResponse2 =  responseAuthAdmin.getBody();
+        // adminToken = authResponse2.getToken();
     }
 
     @Test
@@ -238,20 +227,6 @@ class PersonControllerTest {
     }
 
     // funciones extras
-    private RegisterRequest userRegisterRequest(User u){
-        return new RegisterRequest().builder()
-                .username(u.getUsername())
-                .dni(u.getDni())
-                .email(u.getEmail())
-                .phone(u.getPhone())
-                .emergencyPhone(u.getEmergencyPhone())
-                .firstName(u.getFirstName())
-                .lastName(u.getLastName())
-                .password1(u.getPassword())
-                .password2(u.getPassword())
-                .build();
-    }
-
     private String mapperStringToJSON(Object object) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(object);
