@@ -167,12 +167,6 @@ public class RecordService {
         Record recordEntity = recordMapper.toEntity(addDto);
         Person person = personService.getOrAddPersonForLicensesOrRecord(addDto.getPerson());
         recordEntity.setPerson(person);
-
-        /*
-
-        400: org.hibernate.TransientPropertyValueException: object references an unsaved transient instance - save the transient instance before flushing : com.Embarcadero.demo.model.entities.Record.simpleBoat -> com.Embarcadero.demo.model.entities.boat.SimpleBoat - Cod: 6
-
-         */
         return recordRepository.save(recordEntity);
     }
 

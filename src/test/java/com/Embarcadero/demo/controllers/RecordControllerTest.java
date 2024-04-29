@@ -1,9 +1,19 @@
 package com.Embarcadero.demo.controllers;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RecordControllerTest {
 /*
  todo AUTH - agregar headers con auth
@@ -27,13 +37,44 @@ class RecordControllerTest {
         PersonReadDto personReadDto = objectMapper.readValue(respAsString, PersonReadDto.class);
  */
 
-    @Test
-    void findAllRecords() {
+    final String BASE_URL = "/v1/records/";
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+    private MockMvc mockMvc;
+
+    @BeforeAll
+    private void initialSetUp(){
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
     }
 
     @Test
     void addNewRecord() {
+        // tengo que tener un shift creado
+
+
+        // tengo registros simples
+        // tengo registros con licencias
+
+        /*
+         Integer idShift;
+         Date startTime;
+         RecordState recordState;
+         PersonAddDto person;
+         Integer numberOfGuests;
+         String car;
+         String notes;
+
+        // TODO SOLO ACCEPTABLE QUE VENGA UNO, no pueden venir o faltar ambos..
+         LicenseReadDto license; // Es un read porque solo envio license code
+         SimpleBoatAddDto simpleBoat; // es un add porque simpre creare un bote nuevo, ya que es un bote por cada registro!
+         Boolean hasLicense;
+        */
     }
+    @Test
+    void findAllRecords() {
+    }
+
 
     @Test
     void updateRecord() {

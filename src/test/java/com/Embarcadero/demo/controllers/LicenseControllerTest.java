@@ -47,29 +47,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LicenseControllerTest {
 
-    // crear usuarios en base de datos..
-    User superAdminUser = new User().builder()
-            .username("david1")
-            .dni("11111111")
-            .email("david1@gmail.com")
-            .phone("2644647572")
-            .emergencyPhone("2644647572")
-            .firstName("david")
-            .lastName("costa")
-            .password("123456789")
-            .role(Role.SUPER_ADMIN)
-            .build();
-    User goodUser2 = new User().builder()
-            .username("david2")
-            .dni("22222222")
-            .email("david2@gmail.com")
-            .phone("2644647572")
-            .emergencyPhone("2644647572")
-            .firstName("david")
-            .lastName("costa")
-            .password("123456789")
-            .build();
-
     Person owner = new Person().builder()
             .dni("35924410")
             .notes("davidcst29921@gmail.com")
@@ -170,9 +147,9 @@ class LicenseControllerTest {
         registeredBoatRepository.save(boat);
         licenseRepository.save(licensePreload1);
     }
+    @Test
     @DisplayName("Create a license")
     @WithMockUser(username = "david", roles = {"SUPER_ADMIN"})
-    @Test
     void addLicence() throws Exception {
         LicenseAddDto newLicenseAdd = new LicenseAddDto().builder()
                 .code(licenseToCreate.getCode())
@@ -212,7 +189,7 @@ class LicenseControllerTest {
         LicenseReadDtoArray allLicensesPaginated = objectMapper.readValue(respAsString, LicenseReadDtoArray.class);
 
         assertTrue(findAllLicenseResult.getResponse().getStatus() == HttpServletResponse.SC_OK);
-        assertTrue( !allLicensesPaginated.getLicenses().isEmpty());
+        assertFalse( allLicensesPaginated.getLicenses().isEmpty());
         assertTrue( allLicensesPaginated.getTotal_results() > 0);
         assertTrue( allLicensesPaginated.getCurrent_page().equals(0));
     }
