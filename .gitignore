@@ -37,5 +37,7 @@ build/
 
 ### LOGS ###
 *.log
+*.log.*
+*.tmp
 *.gz
 /bin/
