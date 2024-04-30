@@ -1,12 +1,10 @@
 HELP.md
 
-application.properties
+email.properties
 
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
-email.properties
 
 ### STS ###
 .apt_generated
