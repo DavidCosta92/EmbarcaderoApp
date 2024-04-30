@@ -1,5 +1,6 @@
 HELP.md
 
+application.properties
 
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -41,3 +42,5 @@ build/
 *.tmp
 *.gz
 /bin/
+
+

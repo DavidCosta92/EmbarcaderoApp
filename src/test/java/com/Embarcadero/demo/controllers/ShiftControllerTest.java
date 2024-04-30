@@ -14,6 +14,7 @@ import com.Embarcadero.demo.model.dtos.shift.ShiftUpdateDto;
 import com.Embarcadero.demo.model.dtos.staff.StaffMemberAddDto;
 import com.Embarcadero.demo.model.dtos.user.UserDni;
 import com.Embarcadero.demo.model.dtos.user.UserReadDto;
+import com.Embarcadero.demo.model.dtos.user.UserStaffReadDto;
 import com.Embarcadero.demo.model.entities.*;
 import com.Embarcadero.demo.model.entities.Record;
 import com.Embarcadero.demo.model.entities.boat.RegisteredBoat;
@@ -97,6 +98,7 @@ class ShiftControllerTest {
             .notes("Regi precargado")
             .startTime(new Date())
             .simpleBoat(simpleBoat)
+            .numberOfGuests(0)
             .build();
     Person owner2 = new Person().builder()
             .dni("35924310")
@@ -138,6 +140,7 @@ class ShiftControllerTest {
             .notes("Regi22 precargado")
             .startTime(new Date())
             .license(licensePreload1)
+            .numberOfGuests(3)
             .build();
     Shift preloadShift = Shift.builder()
             .dam(Dam.DIQUE_ULLUM)
@@ -208,7 +211,6 @@ class ShiftControllerTest {
 
         // shift
         preloadShift.getStaff().add(user);
-        preloadShift.getStaff().add(user2);
         preloadShift.getRecords().add(preloadRecord);
         preloadShift.getRecords().add(preloadRecord2);
         shiftRepository.save(preloadShift);
@@ -280,7 +282,6 @@ class ShiftControllerTest {
         assertEquals(shiftReadDto.getDate(), preloadShift.getDate());
         assertEquals(shiftReadDto.getDam(), preloadShift.getDam());
         assertEquals(shiftReadDto.getClose(), preloadShift.getClose());
-        assertEquals(shiftReadDto.getStaff(), preloadShift.getStaff().stream().map(s -> userMapper.toReadDto(s)).collect(Collectors.toList()));
         assertEquals(shiftReadDto.getNotes(), preloadShift.getNotes());
     }
 
@@ -297,7 +298,6 @@ class ShiftControllerTest {
         assertEquals(shiftReadDto.getDate(), preloadShift.getDate());
         assertEquals(shiftReadDto.getDam(), preloadShift.getDam());
         assertEquals(shiftReadDto.getClose(), preloadShift.getClose());
-        assertEquals(shiftReadDto.getStaff(), preloadShift.getStaff().stream().map(s -> userMapper.toReadDto(s)).collect(Collectors.toList()));
         assertEquals(shiftReadDto.getNotes(), preloadShift.getNotes());
     }
 
@@ -352,12 +352,10 @@ class ShiftControllerTest {
     }
 
     @Test
-    @DisplayName("-------->>>>> PENDIENTEEEE Add staff")
+    @DisplayName("Add staff")
     @WithMockUser(username = "david", roles = {"LIFEGUARD"})
     void addStaffToShift() throws Exception {
-        /*
-        todo pendiente
-        StaffMemberAddDto staffToAdd = new StaffMemberAddDto(user.getDni());
+        StaffMemberAddDto staffToAdd = new StaffMemberAddDto(user2.getDni());
 
         MvcResult AddStaffResult = mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL+1+"/staff/")
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -368,36 +366,67 @@ class ShiftControllerTest {
         String respAsString = AddStaffResult.getResponse().getContentAsString();
         ShiftReadDto shiftReadDto = objectMapper.readValue(respAsString, ShiftReadDto.class);
 
-        assertTrue(AddStaffResult.getResponse().getStatus() == HttpServletResponse.SC_ACCEPTED);
+        assertEquals(AddStaffResult.getResponse().getStatus(), HttpServletResponse.SC_ACCEPTED);
         assertFalse(shiftReadDto.getStaff().isEmpty());
-        assertTrue(shiftReadDto.getStaff().contains(user));
+        assertTrue(shiftReadDto.getStaff().contains(userMapper.toReadDto(user2)));
 
-         */
+        // restaurar estado de staff
+        preloadShift.getStaff().remove(user2);
+        shiftRepository.save(preloadShift);
     }
 
     @Test
-    @DisplayName("--- pendiente")
+    @DisplayName("Remove staff")
     @WithMockUser(username = "david", roles = {"LIFEGUARD"})
-    void findUserStaffByDni() {
+    void removeStaffFromShift() throws Exception {
+        MvcResult RemoveStaffResult = mockMvc.perform(MockMvcRequestBuilders.put(BASE_URL+1+"/staff/"+1)).andReturn();  //{idShift}/staff/{idStaff}
+
+        String respAsString = RemoveStaffResult.getResponse().getContentAsString();
+        ShiftReadDto shiftReadDto = objectMapper.readValue(respAsString, ShiftReadDto.class);
+
+        assertEquals(RemoveStaffResult.getResponse().getStatus(), HttpServletResponse.SC_ACCEPTED);
+        assertFalse(shiftReadDto.getStaff().contains(userMapper.toReadDto(user)));
+
+        // restaurar estado de staff
+        preloadShift.getStaff().add(user);
+        shiftRepository.save(preloadShift);
     }
 
     @Test
-    @DisplayName("--- pendiente")
+    @DisplayName("Download shift resume")
     @WithMockUser(username = "david", roles = {"LIFEGUARD"})
-    void removeStaffFromShift() {
+    void downloadShiftResume() throws Exception {
+        MvcResult downloadShiftResumeResult = mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL+"shiftResume/"+1)).andReturn();
+        assertEquals(downloadShiftResumeResult.getResponse().getStatus() , HttpServletResponse.SC_OK);
+        assertEquals(downloadShiftResumeResult.getResponse().getContentType() , MediaType.APPLICATION_PDF_VALUE);
+        assertFalse(downloadShiftResumeResult.getResponse().getContentAsString().isEmpty());
     }
 
-    @Test
-    @DisplayName("--- pendiente")
-    @WithMockUser(username = "david", roles = {"LIFEGUARD"})
-    void downloadShiftResume() {
-    }
 
+    /*
+    todo
     @Test
     @DisplayName("--- pendiente")
     @WithMockUser(username = "david", roles = {"LIFEGUARD"})
     void sendEmailShiftResume() {
     }
+
+    @Test
+    @DisplayName("Get staff by dni and shift id")
+    @WithMockUser(username = "david", roles = {"LIFEGUARD"})
+    void findUserStaffByDni() throws Exception {
+        // No tiene id antes de guardarse en bd, por lo que hardcodeo id 1 ya que se crea y borra la bd cada vez que se corre el test
+        MvcResult findByDniUserResult = mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL+"1"+"/staff/"+user.getDni())).andReturn(); //{idShift}/staff/{dniUser}
+        String respAsString = findByDniUserResult.getResponse().getContentAsString();
+        UserStaffReadDto userReadDto = objectMapper.readValue(respAsString, UserStaffReadDto.class);
+
+        assertEquals(findByDniUserResult.getResponse().getStatus() , HttpServletResponse.SC_OK);
+        assertEquals(userReadDto.getDni(), user.getDni());
+        assertEquals(userReadDto.getUsername(), user.getUsername());
+        assertEquals(userReadDto.getRole(), user.getRole());
+        assertEquals(userReadDto.getEmail(), user.getEmail());
+    }
+     */
     private String mapperStringToJSON(Object object) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(object);

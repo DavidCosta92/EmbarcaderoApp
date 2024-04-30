@@ -5,8 +5,10 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class StaffMemberAddDto {
     @NotNull(message = "Dni no puede ser nulo")
