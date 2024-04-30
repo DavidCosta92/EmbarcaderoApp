@@ -215,7 +215,6 @@ class ShiftControllerTest {
         preloadShift.getRecords().add(preloadRecord2);
         shiftRepository.save(preloadShift);
         shiftRepository.save(preloadShiftToDelete);
-
     }
 
     @Test

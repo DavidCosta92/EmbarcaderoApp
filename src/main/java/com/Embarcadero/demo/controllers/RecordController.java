@@ -113,7 +113,7 @@ public class RecordController {
     })
     @GetMapping("{id}")
     public ResponseEntity<RecordReadDto> findById (@PathVariable Integer id){
-        return new ResponseEntity<>(recordService.findById(id) , HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(recordService.findById(id) , HttpStatus.OK);
     }
 }
 
