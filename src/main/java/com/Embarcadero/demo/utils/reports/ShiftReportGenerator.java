@@ -1,15 +1,16 @@
 package com.Embarcadero.demo.utils.reports;
 
-import com.Embarcadero.demo.exceptions.customsExceptions.ForbiddenAction;
 import com.Embarcadero.demo.exceptions.customsExceptions.InvalidValueException;
 import com.Embarcadero.demo.model.entities.Shift;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,9 +34,38 @@ public class ShiftReportGenerator {
     }
 
  */
+    private FileInputStream getMainIcon() throws FileNotFoundException {
+        File mainIcon = ResourceUtils.getFile("classpath:images/mainIcon.png");
+        return new FileInputStream(mainIcon);
+    }
+    private FileInputStream getChartDataHoursPersonsBoats() throws FileNotFoundException {
+        File chart = ResourceUtils.getFile("classpath:images/chart.png");
+        return new FileInputStream(chart);
+    }
+    private FileInputStream getChartDataBoatTypesByLicences() throws FileNotFoundException {
+        File chart = ResourceUtils.getFile("classpath:images/chart.png");
+        return new FileInputStream(chart);
+    }
+    private FileInputStream getChartDataBoatTypes() throws FileNotFoundException {
+        File chart = ResourceUtils.getFile("classpath:images/chart.png");
+        return new FileInputStream(chart);
+    }
+
 
     private JasperPrint getReport(Shift shift) throws IOException, JRException {
         Map<String, Object> params = new HashMap<String, Object>();
+
+        params.put("logoPrincipal", getMainIcon());
+        // todo agregar a jasper report params.put("chartDataHoursPersonsBoats", getChartDataHoursPersonsBoats());
+        // todo agregar a jasper report params.put("chartDataBoatTypesByLicences", getChartDataBoatTypesByLicences());
+        // todo agregar a jasper report params.put("chartDataBoatTypes", getChartDataBoatTypes());
+
+        // reportes
+        // - Total personas por hora Personas
+        // - Tipos embarcaciones
+        // - - Con matriculas / sin matriculas
+        // - - Tipos embarcaciones (sup, kayak, ecys)
+        // -
 
         // DIQUE
         String dam = "";
@@ -63,7 +93,6 @@ public class ShiftReportGenerator {
         try {
             InputStream jrxmlStream = getClass().getResourceAsStream("/Shift_resume_A4.jrxml");
             JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlStream);
-            // JasperCompileManager.compileReport(ResourceUtils.getFile("classpath:Shift_resume_A4.jrxml").getAbsolutePath()
             JasperPrint report = JasperFillManager.fillReport(jasperReport, params, new JREmptyDataSource());
             return report;
         } catch (Exception e) {

@@ -43,8 +43,8 @@ public class Validator {
     }
 
     public void validPhoneNumber(String phone){
-        Pattern pattern = Pattern.compile("^\\+?[0-9]{9,14}");
-        if(!pattern.matcher(phone).matches()) throw new InvalidValueException("Telefono solo puede contener numeros, un signo + al principio y debe tener entre 9 y 14 caracteres!");
+        Pattern pattern = Pattern.compile("^\\+?[0-9]{7,14}");
+        if(!pattern.matcher(phone).matches()) throw new InvalidValueException("Telefono solo puede contener numeros, un signo + al principio y debe tener entre 7 y 14 caracteres!");
     }
 
     /* validacion datos negocio */

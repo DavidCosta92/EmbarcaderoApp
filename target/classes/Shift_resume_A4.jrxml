@@ -105,10 +105,16 @@
 	<title>
 		<band height="92" splitType="Stretch">
 			<rectangle radius="5">
-				<reportElement mode="Opaque" x="70" y="10" width="468" height="82" backcolor="rgba(47, 162, 197, 0.08627451)" uuid="c2b96e89-9ddb-4a22-aa36-005c494e7e2a"/>
+				<reportElement x="70" y="10" width="468" height="82" uuid="c2b96e89-9ddb-4a22-aa36-005c494e7e2a"/>
 			</rectangle>
 			<image onErrorType="Blank">
-				<reportElement x="10" y="10" width="50" height="50" uuid="42a778fb-4186-46fb-9ac4-16d065c6d4e7"/>
+				<reportElement style="Table_CH" x="10" y="10" width="50" height="50" backcolor="rgba(191, 225, 255, 0.0)" uuid="42a778fb-4186-46fb-9ac4-16d065c6d4e7"/>
+				<box leftPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
 				<imageExpression><![CDATA[$P{logoPrincipal}]]></imageExpression>
 			</image>
 			<staticText>
