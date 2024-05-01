@@ -1,5 +1,7 @@
 package com.Embarcadero.demo.utils.reports;
 
+import com.Embarcadero.demo.exceptions.customsExceptions.ForbiddenAction;
+import com.Embarcadero.demo.exceptions.customsExceptions.InvalidValueException;
 import com.Embarcadero.demo.model.entities.Shift;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,8 +60,14 @@ public class ShiftReportGenerator {
         params.put("totalPersons", shift.getTotalPersons());
         params.put("records", new JRBeanArrayDataSource(shift.getRecords().toArray()));
 
-        JasperPrint report = JasperFillManager.fillReport(JasperCompileManager.compileReport(ResourceUtils.getFile("classpath:Shift_resume_A4.jrxml").getAbsolutePath()), params, new JREmptyDataSource());
-
-        return report;
+        try {
+            InputStream jrxmlStream = getClass().getResourceAsStream("/Shift_resume_A4.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(jrxmlStream);
+            // JasperCompileManager.compileReport(ResourceUtils.getFile("classpath:Shift_resume_A4.jrxml").getAbsolutePath()
+            JasperPrint report = JasperFillManager.fillReport(jasperReport, params, new JREmptyDataSource());
+            return report;
+        } catch (Exception e) {
+            throw new InvalidValueException("Error generando reporte: "+e.getMessage());
+        }
     }
 }
