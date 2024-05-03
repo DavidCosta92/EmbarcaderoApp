@@ -80,6 +80,30 @@
 		<field name="numberOfGuests" class="java.lang.Integer"/>
 		<field name="car" class="java.lang.String"/>
 	</subDataset>
+	<subDataset name="dataSetBoatTypes" uuid="4c86b5c7-d9e7-4dca-8cb7-a37037ee6574">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="valueBoatTypes" class="java.lang.Integer"/>
+		<field name="nameBoatTypes" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="dataSetBoatLicence" uuid="65509766-440a-4b7a-bb82-be113341bc92">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="licenceType" class="java.lang.String"/>
+		<field name="valueLicenceType" class="java.lang.Integer"/>
+	</subDataset>
+	<subDataset name="dataSetPersonHours" uuid="85959f6e-1661-4958-91bd-e97fab38b75b">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="timePersonHours" class="java.lang.String"/>
+		<field name="valuePersonHours" class="java.lang.Integer"/>
+	</subDataset>
 	<parameter name="logoPrincipal" class="java.io.InputStream"/>
 	<parameter name="staff" class="net.sf.jasperreports.engine.data.JRBeanArrayDataSource"/>
 	<parameter name="records" class="net.sf.jasperreports.engine.data.JRBeanArrayDataSource"/>
@@ -88,27 +112,22 @@
 	<parameter name="totalBoats" class="java.lang.Integer"/>
 	<parameter name="totalPersons" class="java.lang.Integer"/>
 	<parameter name="state" class="java.lang.String"/>
+	<parameter name="dataSetBoatTypes" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="dataSetBoatLicence" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="dataSetPersonHours" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
 	<background>
-		<band height="10" splitType="Stretch">
-			<textField pattern="HH:mm">
-				<reportElement x="453" y="-479" width="24" height="20" uuid="cb569249-f813-4de0-9e29-207d671306cf"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-		</band>
+		<band height="10" splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="92" splitType="Stretch">
 			<rectangle radius="5">
-				<reportElement x="20" y="10" width="518" height="82" uuid="c2b96e89-9ddb-4a22-aa36-005c494e7e2a"/>
+				<reportElement x="0" y="9" width="554" height="82" uuid="c2b96e89-9ddb-4a22-aa36-005c494e7e2a"/>
 			</rectangle>
 			<image onErrorType="Blank">
-				<reportElement style="Table_CH" x="30" y="21" width="60" height="60" backcolor="rgba(191, 225, 255, 0.0)" uuid="42a778fb-4186-46fb-9ac4-16d065c6d4e7"/>
+				<reportElement style="Table_CH" x="10" y="20" width="60" height="60" backcolor="rgba(191, 225, 255, 0.0)" uuid="42a778fb-4186-46fb-9ac4-16d065c6d4e7"/>
 				<box leftPadding="0">
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -118,26 +137,26 @@
 				<imageExpression><![CDATA[$P{logoPrincipal}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="390" y="20" width="70" height="20" uuid="83d46823-1277-4521-96bc-ab5fcb27a297"/>
+				<reportElement x="407" y="20" width="70" height="20" uuid="83d46823-1277-4521-96bc-ab5fcb27a297"/>
 				<text><![CDATA[Fecha guardia]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="119" y="20" width="190" height="20" uuid="103baeed-88d2-4828-8272-8d545241ad7c"/>
+				<reportElement x="99" y="19" width="190" height="20" uuid="103baeed-88d2-4828-8272-8d545241ad7c"/>
 				<textElement textAlignment="Left">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[RESUMEN GUARDIA]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="119" y="40" width="190" height="20" uuid="63f094f1-31d2-44c9-8239-9061b214cfe9"/>
+				<reportElement x="99" y="39" width="190" height="20" uuid="63f094f1-31d2-44c9-8239-9061b214cfe9"/>
 				<textFieldExpression><![CDATA[$P{dam}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="460" y="20" width="70" height="20" uuid="9ba146fa-f376-49ca-890c-eeafca2aead8"/>
+				<reportElement x="477" y="20" width="70" height="20" uuid="9ba146fa-f376-49ca-890c-eeafca2aead8"/>
 				<textFieldExpression><![CDATA[$P{date}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="119" y="60" width="190" height="20" uuid="c8f01fd5-655e-4c87-9f46-f287f29bca74"/>
+				<reportElement x="99" y="59" width="190" height="20" uuid="c8f01fd5-655e-4c87-9f46-f287f29bca74"/>
 				<textFieldExpression><![CDATA[$P{state}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
@@ -157,140 +176,97 @@
 		</band>
 	</title>
 	<detail>
-		<band height="93">
-			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="20" y="13" width="518" height="20" forecolor="#FFFFFF" backcolor="#2FA2C5" uuid="356878cc-b125-4fe1-a44b-9e2ad80a2848"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Personal]]></text>
-			</staticText>
-			<componentElement>
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="20" y="33" width="518" height="60" uuid="ea97cc90-af73-4c31-8267-b2f25f540a8a">
-					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
-				</reportElement>
-				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
-					<datasetRun subDataset="dataSet_staff" uuid="acb4f208-e4fd-4b2c-9c8b-6b8298ff58b6">
-						<dataSourceExpression><![CDATA[$P{staff}]]></dataSourceExpression>
-					</datasetRun>
-					<jr:column width="29" uuid="bee3a153-5d16-4869-88c7-a1ae61df48e1">
-						<jr:columnHeader height="30">
-							<staticText>
-								<reportElement x="2" y="5" width="14" height="20" uuid="34600fc6-3651-4254-8e41-0382c8134210"/>
-								<textElement textAlignment="Center">
-									<font isBold="true"/>
-								</textElement>
-								<text><![CDATA[ID]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell height="28">
-							<textField>
-								<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="29" height="28" uuid="7e25ac59-1dc7-4982-8522-1b3321634205"/>
-								<textElement textAlignment="Center"/>
-								<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="101" uuid="d51e3c24-46fd-47f9-8207-9467fe50d6c9">
-						<jr:columnHeader height="30">
-							<staticText>
-								<reportElement x="1" y="5" width="60" height="20" uuid="fde94d28-9005-479a-a8b9-cd0168334bd5"/>
-								<textElement textAlignment="Center">
-									<font isBold="true"/>
-								</textElement>
-								<text><![CDATA[Username]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell height="28">
-							<textField>
-								<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="101" height="28" uuid="5aa27f52-9c07-40d2-9ca1-a02d1f464696"/>
-								<textElement textAlignment="Center"/>
-								<textFieldExpression><![CDATA[$F{username}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="110" uuid="f0871f42-c14f-4832-932e-f3873863b0df">
-						<jr:columnHeader height="30">
-							<staticText>
-								<reportElement x="0" y="5" width="50" height="20" uuid="7c8d8402-59db-4145-a7fc-8cca5944d9d4"/>
-								<textElement textAlignment="Center">
-									<font isBold="true"/>
-								</textElement>
-								<text><![CDATA[Nombre]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell height="28">
-							<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
-								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-							</box>
-							<textField>
-								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="70" height="20" uuid="0535df0e-bd67-4474-9c9c-18e74b70aebe">
-									<property name="local_mesure_unitwidth" value="pixel"/>
-									<property name="com.jaspersoft.studio.unit.width" value="px"/>
-									<property name="local_mesure_unitheight" value="pixel"/>
-									<property name="com.jaspersoft.studio.unit.height" value="px"/>
-									<property name="local_mesure_unitx" value="pixel"/>
-									<property name="com.jaspersoft.studio.unit.x" value="px"/>
-									<property name="local_mesure_unity" value="pixel"/>
-									<property name="com.jaspersoft.studio.unit.y" value="px"/>
-								</reportElement>
-								<textElement textAlignment="Center"/>
-								<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="110" uuid="f8a4bb87-2151-4ff9-8b55-de21a28750db">
-						<jr:columnHeader height="30">
-							<staticText>
-								<reportElement x="0" y="4" width="70" height="20" uuid="2939e74d-be52-4c3e-9b6a-b32cf97d4b50"/>
-								<textElement textAlignment="Center">
-									<font isBold="true"/>
-								</textElement>
-								<text><![CDATA[Apellido]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell height="28">
-							<textField>
-								<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="28" uuid="dffbf647-aa5d-4ed4-be4a-c7cede701fca"/>
-								<textElement textAlignment="Center"/>
-								<textFieldExpression><![CDATA[$F{lastName}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="100" uuid="ffd9f976-202a-451b-bee4-ca074bd595b0">
-						<jr:columnHeader height="30">
-							<staticText>
-								<reportElement x="0" y="4" width="68" height="20" uuid="9c064039-8304-44bb-923a-492fd5a105ec"/>
-								<textElement textAlignment="Center">
-									<font isBold="true"/>
-								</textElement>
-								<text><![CDATA[Dni]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell height="28">
-							<textField>
-								<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="28" uuid="f2b0e8da-3fb2-48f6-80a2-c15dc87f885c"/>
-								<textElement textAlignment="Center"/>
-								<textFieldExpression><![CDATA[$F{dni}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-				</jr:table>
-			</componentElement>
+		<band height="358">
+			<pieChart>
+				<chart evaluationTime="Report">
+					<reportElement x="200" y="40" width="174" height="140" uuid="90e8c5ff-e561-41aa-a9f6-1d41f38eef8a"/>
+					<chartTitle>
+						<titleExpression><![CDATA[Matriculas]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="dataSetBoatLicence" uuid="b1c9a1a2-f7ea-416d-aaf5-5b0ad7e5daf5">
+							<dataSourceExpression><![CDATA[$P{dataSetBoatLicence}]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+					<keyExpression><![CDATA[$F{licenceType}]]></keyExpression>
+					<valueExpression><![CDATA[$F{valueLicenceType}]]></valueExpression>
+					<labelExpression><![CDATA[$F{licenceType}+""]]></labelExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+			<pieChart>
+				<chart evaluationTime="Report">
+					<reportElement x="380" y="40" width="174" height="140" uuid="f222feac-be0c-437d-a9c0-c6e2ce26c686"/>
+					<chartTitle>
+						<titleExpression><![CDATA[Tipo de embarcacion]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="dataSetBoatTypes" uuid="424be422-1d3f-42df-a840-1a82d4fec1b0">
+							<dataSourceExpression><![CDATA[$P{dataSetBoatTypes}]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+					<keyExpression><![CDATA[$F{nameBoatTypes}]]></keyExpression>
+					<valueExpression><![CDATA[$F{valueBoatTypes}]]></valueExpression>
+					<labelExpression><![CDATA[$F{nameBoatTypes}+""]]></labelExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+			<lineChart>
+				<chart evaluationTime="Report" theme="default">
+					<reportElement x="-2" y="218" width="556" height="140" uuid="976e06dd-5441-47f5-bd39-31d16936a93f"/>
+					<chartTitle>
+						<titleExpression><![CDATA[Total personas y embarcaciones]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="dataSetPersonHours" uuid="6e6bcdf1-3684-4a5a-815a-ac94d4ececd2">
+							<dataSourceExpression><![CDATA[$P{dataSetPersonHours}]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Horas Personales"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{timePersonHours}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{valuePersonHours}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<linePlot>
+					<plot labelRotation="315.0"/>
+					<categoryAxisFormat labelRotation="315.0">
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</linePlot>
+			</lineChart>
 		</band>
-		<band height="230" splitType="Stretch">
+		<band height="243" splitType="Stretch">
 			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="20" y="10" width="518" height="20" forecolor="#FFFFFF" backcolor="#32ACD1" uuid="75d6cb81-a8d6-4fe9-9331-1b7ce02f4489"/>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="120" width="554" height="20" forecolor="#FFFFFF" backcolor="#32ACD1" uuid="75d6cb81-a8d6-4fe9-9331-1b7ce02f4489"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Registros]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="20" y="30" width="518" height="80" uuid="c327c38a-d585-4feb-b184-1c140da52053">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="140" width="553" height="80" uuid="c327c38a-d585-4feb-b184-1c140da52053">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
@@ -438,26 +414,158 @@
 				</jr:table>
 			</componentElement>
 			<staticText>
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="280" y="113" width="130" height="20" uuid="f0124c54-d2d6-49f6-8b59-6664943b01e4"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="260" y="223" width="130" height="20" uuid="f0124c54-d2d6-49f6-8b59-6664943b01e4"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Total de personas :]]></text>
 			</staticText>
 			<textField>
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="410" y="113" width="120" height="20" uuid="fed1ab23-0d8b-4285-885f-8557ff14675e"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="390" y="223" width="120" height="20" uuid="fed1ab23-0d8b-4285-885f-8557ff14675e"/>
 				<textFieldExpression><![CDATA[$P{totalPersons}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="40" y="113" width="120" height="20" uuid="8f56f305-0731-455a-8aa2-a18071d3803d"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="20" y="223" width="120" height="20" uuid="8f56f305-0731-455a-8aa2-a18071d3803d"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Total de embarcaciones :]]></text>
 			</staticText>
 			<textField>
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="160" y="113" width="120" height="20" uuid="74bdbd27-cb1b-4e32-ab4c-842539611471"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="140" y="223" width="120" height="20" uuid="74bdbd27-cb1b-4e32-ab4c-842539611471"/>
 				<textFieldExpression><![CDATA[$P{totalBoats}]]></textFieldExpression>
 			</textField>
+			<textField pattern="HH:mm">
+				<reportElement x="433" y="215" width="24" height="20" uuid="cb569249-f813-4de0-9e29-207d671306cf"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="-1" y="40" width="518" height="60" uuid="ea97cc90-af73-4c31-8267-b2f25f540a8a">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<datasetRun subDataset="dataSet_staff" uuid="acb4f208-e4fd-4b2c-9c8b-6b8298ff58b6">
+						<dataSourceExpression><![CDATA[$P{staff}]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="29" uuid="bee3a153-5d16-4869-88c7-a1ae61df48e1">
+						<jr:columnHeader height="30">
+							<staticText>
+								<reportElement x="2" y="5" width="14" height="20" uuid="34600fc6-3651-4254-8e41-0382c8134210"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[ID]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="28">
+							<textField>
+								<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="29" height="28" uuid="7e25ac59-1dc7-4982-8522-1b3321634205"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="101" uuid="d51e3c24-46fd-47f9-8207-9467fe50d6c9">
+						<jr:columnHeader height="30">
+							<staticText>
+								<reportElement x="1" y="5" width="60" height="20" uuid="fde94d28-9005-479a-a8b9-cd0168334bd5"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Username]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="28">
+							<textField>
+								<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="101" height="28" uuid="5aa27f52-9c07-40d2-9ca1-a02d1f464696"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{username}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="110" uuid="f0871f42-c14f-4832-932e-f3873863b0df">
+						<jr:columnHeader height="30">
+							<staticText>
+								<reportElement x="0" y="5" width="50" height="20" uuid="7c8d8402-59db-4145-a7fc-8cca5944d9d4"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Nombre]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="28">
+							<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="70" height="20" uuid="0535df0e-bd67-4474-9c9c-18e74b70aebe">
+									<property name="local_mesure_unitwidth" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<property name="local_mesure_unitheight" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.height" value="px"/>
+									<property name="local_mesure_unitx" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.x" value="px"/>
+									<property name="local_mesure_unity" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.y" value="px"/>
+								</reportElement>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="110" uuid="f8a4bb87-2151-4ff9-8b55-de21a28750db">
+						<jr:columnHeader height="30">
+							<staticText>
+								<reportElement x="0" y="4" width="70" height="20" uuid="2939e74d-be52-4c3e-9b6a-b32cf97d4b50"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Apellido]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="28">
+							<textField>
+								<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="28" uuid="dffbf647-aa5d-4ed4-be4a-c7cede701fca"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{lastName}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="ffd9f976-202a-451b-bee4-ca074bd595b0">
+						<jr:columnHeader height="30">
+							<staticText>
+								<reportElement x="0" y="4" width="68" height="20" uuid="9c064039-8304-44bb-923a-492fd5a105ec"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Dni]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="28">
+							<textField>
+								<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="28" uuid="f2b0e8da-3fb2-48f6-80a2-c15dc87f885c"/>
+								<textElement textAlignment="Center"/>
+								<textFieldExpression><![CDATA[$F{dni}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="-1" y="20" width="554" height="20" forecolor="#FFFFFF" backcolor="#2FA2C5" uuid="356878cc-b125-4fe1-a44b-9e2ad80a2848"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Personal]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="54" splitType="Stretch"/>
+		<band height="80" splitType="Stretch"/>
 	</pageFooter>
+	<summary>
+		<band height="300"/>
+	</summary>
 </jasperReport>
