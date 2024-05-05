@@ -168,7 +168,7 @@ public class AuthService {
                 .dni(loguedUser.getDni())
                 .email((loguedUser.getEmail()))
                 .role(loguedUser.getRole())
-                // .imageFiles(loguedUser.getImageFiles())
+                .imageFiles(loguedUser.getImageFiles())
                 .userProfileImage(loguedUser.getUserProfileImage())
                 .authorities(loguedUser.getAuthorities())
                 .build();
