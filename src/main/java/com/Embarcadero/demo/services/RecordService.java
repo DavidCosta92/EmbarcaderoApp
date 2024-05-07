@@ -138,7 +138,7 @@ public class RecordService {
             recordBd.setSimpleBoat(updateDto.getSimpleBoat());
         } else if (updateDto.getSimpleBoat() == null && updateDto.getLicense() != null){ // solo puede cambiar de licenseCode!
             License newLicenseBd = licenseService.getByCode(updateDto.getLicense().getCode()); //  verificar que exista
-            if(! newLicenseBd.getState().equals(LicenseState.OK.name())) throw new ForbiddenAction("Matricula no esta activa, el estado actual es: "+newLicenseBd.getState().name()); //  verificar que este OK
+            if(! newLicenseBd.getState().equals(LicenseState.OK)) throw new ForbiddenAction("Matricula no esta activa, el estado actual es: "+newLicenseBd.getState().name()); //  verificar que este OK
             recordBd.setLicense(newLicenseBd);
         }
         if(updateDto.getPerson()!= null){
