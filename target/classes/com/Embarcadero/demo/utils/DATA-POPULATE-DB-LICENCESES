@@ -1,0 +1,45 @@
+
+// engine
+INSERT INTO `bd-embarcadero-app`.engine VALUES (1,'150','1122331122','MOTOR_INTERNO','Primer motor para prmer matricula'),(2,'100','1111111111','FUERA_DE_BORDA','Seg motor'),(3,'50','151616511','OTRO','mtor'),(4,'75','132135154','FUERA_DE_BORDA','asflcx'),(5,'99','84468053','MOTOR_INTERNO','grds'),(6,'80','685103512','OTRO','efds'),(7,'250','6544665','FUERA_DE_BORDA','aefd'),(8,'55','1431','MOTOR_INTERNO','dcs');
+
+// registered boats
+INSERT INTO `bd-embarcadero-app`.registered_boat VALUES (1,5,'primer bote para matricula','nautilus','el rojito','LANCHA',1),(2,5,'pgrvdc','asa','qw','LANCHA',2),(3,2,'vdcs','asda','eqr','LANCHA',3),(4,3,'gtf','asdas','tgefd','LANCHA',4),(5,5,'efdcz','ads','jyhgfb','LANCHA',5),(6,8,'wdsx','fdvc','hngfbv','LANCHA',6),(7,1,'ehtr','nautilus','wq','LANCHA',7),(8,8,'fvcsz','nautilus','ew','LANCHA',8),(9,5,'fvcdf','fvdc','thngfb','HIDROPEDAL',NULL),(10,3,'ikjmh','nautilus','rtfews ed','DOUBLE_KAYAK',NULL),(11,10,'veelero','dacx','sdd','VELERO',NULL),(12,5,'ves','wrd','rfeds','DOUBLE_KAYAK',NULL);
+
+// simple boats
+INSERT INTO `bd-embarcadero-app`.simple_boat VALUES (1,'Vela 14 mts rojo y blanco','Sin casco','KITESURF'),(2,'VDLWINSKC','nl sdcxz','SUP'),(3,'VDLWINSKC','nl sdcxz','SUP'),(4,'ROJITO','W SLCKX','SIMPLE_KAYAK'),(5,'ROJITO','W SLCKX','SIMPLE_KAYAK'),(6,'ROJITO','W SLCKX','SIMPLE_KAYAK'),(7,'wdsvfvc','ws','SUP'),(8,'wdsvfvc','ws','SUP'),(9,'rojo','roto','KITESURF'),(10,'rojo','roto','KITESURF'),(11,'rfbcs w','wds','SIMPLE_KAYAK'),(12,'rfbcs w','wds','SIMPLE_KAYAK'),(13,'rge','wed','KITESURF'),(14,'rge','wed','KITESURF'),(15,'efd','grwd','KITESURF'),(16,'efd','grwd','KITESURF'),(17,'tgrfd','jyyhgtrf','WINDSURF'),(18,'tgrfd','jyyhgtrf','WINDSURF'),(19,'rvdcsx','tgfvdsx','SUP'),(20,'rvdcsx','tgfvdsx','SUP');
+
+//  person
+INSERT INTO `bd-embarcadero-app`.person VALUES (1,'ascxasda asd','35924415','2644647572','Costas','facu','acsxzvb gvdef','2644647572'),(2,'efwdscxz','35924418','123456789','eds','scx','rtbgfvc x','123456789'),(3,'riv 542 e','35924411','2644308600','aballay','nico','knascxzk','2644308500'),(4,'dcsink','35924412','51515534355','fvte','dssdc','wrfv refd','13553115135'),(5,'odnsmc','35924413','154154154','skkdkdkdkkd','jajajajjaa','dc sxfgvbefv e','154154154'),(6,'correa','35857646','123351513153','cantoni','ailin','isnd','2646467572');
+
+//licences
+INSERT INTO `bd-embarcadero-app`.license (`id`,`code`,`state`,`notes`,`owner`,`registered_boat`)
+ VALUES (1,'msj01','OK','Primera matricula',3,1),
+(2,'msj02','OK','dsx',1,2),
+(3,'msj03','OK','wdcsx',2,3),
+(4,'msj04','OK','erwd',3,4),
+(5,'msj05','OK','wvdsc',4,5),
+(6,'msj06','OK','refvdc',5,6),
+(7,'msj07','OK','bfr',6,7),
+(8,'msj08','OK','gbedv',1,8),
+(9,'msj09','OK',NULL,2,9),
+(10,'msj10','OK','wedc',4,10),
+(11,'msj11','OK',NULL,5,11),
+(12,'msj12','OK',NULL,3,12);
+
+
+
+INSERT INTO `users` (`id`,`dni`,`email`,`first_name`,`last_name`,`password`,`phone`,`role`,`username`, `emergency_phone`) VALUES
+(1,'35924410','davidcst2991@gmail.com','David','Costa','$2a$10$7Hnh1fRdEQ0l1Qiqm4K4g.11zFhF5nfUYzkD5GBkYnks4JmTdMCcC','+542644647572','SUPER_ADMIN','davidCosta','2645872881'),
+(2,'35924413','davidcst29913@gmail.com','David','Costa','$2a$10$7Hnh1fRdEQ0l1Qiqm4K4g.11zFhF5nfUYzkD5GBkYnks4JmTdMCcC','+542644647572','SUPER_ADMIN','davidCosta3','2645872881'),
+(3,'35857646','ailin@gv.com','Ailin','Cantoni','$2a$10$OFgSR./EqNrGKo651rkwr.a8kkBf8L1TTJR3LnWlNsq7lDlAV5avO','264572885','LIFEGUARD','linkCooking',NULL),
+(4,'35924411','nick@algo.com','firstttt','lastttt','$2a$10$KnaIJflZZYZjgCtBsqQPLODzEzLXL7./ELb6P6AauSjlu/.rWGPyO','123456789','LIFEGUARD','nicccck',NULL),
+(5,'123123123','david123123123cst2991@gmail.com','David','David','$2a$10$kqRAH3n9eBmUlkbxoLVVseGo3pmQyuA.fATj1ijuIOPX8rsxv4Dle','0264154647572','USER','123123123',NULL),
+(6,'111111111','onlyTesting@gmail.com','testing','only','$2a$10$kqRAH3n9eBmUlkbxoLVVseGo3pmQyuA.fATj1ijuIOPX8rsxv4Dle','111111111','ADMIN','onlyTesting','111111111'),
+(7,'35924414','d1@gmail.com','David1','Costa1','$2a$10$7Hnh1fRdEQ0l1Qiqm4K4g.11zFhF5nfUYzkD5GBkYnks4JmTdMCcC','+542644647572','SUPER_ADMIN','davidCosta1','2645872881'),
+(8,'35857641','a1@gv.com','Ailin','Cantoni','$2a$10$OFgSR./EqNrGKo651rkwr.a8kkBf8L1TTJR3LnWlNsq7lDlAV5avO','264572885','LIFEGUARD','linkCooking1',NULL),
+(9,'35924412','n1@algo.com','firstttt','lastttt','$2a$10$KnaIJflZZYZjgCtBsqQPLODzEzLXL7./ELb6P6AauSjlu/.rWGPyO','123456789','LIFEGUARD','nicccck1',NULL),
+(10,'123123121','d2@gmail.com','David','David','$2a$10$kqRAH3n9eBmUlkbxoLVVseGo3pmQyuA.fATj1ijuIOPX8rsxv4Dle','0264154647572','USER','1231231231',NULL),
+(11,'111111112','O1@gmail.com','testing','only','$2a$10$kqRAH3n9eBmUlkbxoLVVseGo3pmQyuA.fATj1ijuIOPX8rsxv4Dle','111111111','ADMIN','onlyTesting1','111111111');
+
+
+
