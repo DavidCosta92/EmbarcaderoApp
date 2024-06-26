@@ -186,6 +186,7 @@
 
 
 	</dependencies>
+	<!--
 	<profiles>
 		<profile>
 			<id>dev</id>
@@ -201,7 +202,7 @@
 					<resource>
 						<directory>src/main/resources</directory>
 						<filtering>true</filtering>
-						<!-- en el build general excluyo todos los properties y aca agrego el activo -->
+						en el build general excluyo todos los properties y aca agrego el activo
 						<includes>
 							<include>application-dev.properties</include>
 						</includes>
@@ -224,7 +225,7 @@
 					<resource>
 						<directory>src/main/resources</directory>
 						<filtering>true</filtering>
-						<!-- en el build general excluyo todos los properties y aca agrego el activo -->
+						en el build general excluyo todos los properties y aca agrego el activo
 						<includes>
 							<include>application-prod.properties</include>
 						</includes>
@@ -233,10 +234,11 @@
 			</build>
 		</profile>
 	</profiles>
-
+		-->
 	<build>
 
 		<!-- EN LOS PROFILES SETEO QUE INCLUYA EL properties correcto, y aca que excluya el resto -->
+		<!--
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -246,6 +248,7 @@
 				</excludes>
 			</resource>
 		</resources>
+		-->
 
 		<plugins>
 			<plugin>
